@@ -1534,6 +1534,48 @@ export function RecruitmentFormFields({
             )}
           />
 
+          <Controller
+            control={control}
+            name="secondManagerUid"
+            render={({ field }) => (
+              <Field data-invalid={!!errors.secondManagerUid}>
+                <FieldLabel>
+                  {t.recruitmentForm.section1.secondManagerLabel}
+                </FieldLabel>
+                <Select
+                  value={field.value}
+                  onValueChange={uid => {
+                    field.onChange(uid);
+                    const manager = managers.find(m => m.uid === uid);
+                    setValue("secondManagerName", manager?.name ?? "");
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue
+                      placeholder={
+                        t.recruitmentForm.section1.secondManagerPlaceholder
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {managers.map(manager => (
+                      <SelectItem key={manager.uid} value={manager.uid}>
+                        {manager.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FieldError
+                  errors={
+                    errors.secondManagerUid
+                      ? [errors.secondManagerUid]
+                      : undefined
+                  }
+                />
+              </Field>
+            )}
+          />
+
           <FieldSeparator />
 
           <div className="grid gap-4 sm:grid-cols-2">

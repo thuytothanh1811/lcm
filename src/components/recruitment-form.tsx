@@ -50,6 +50,8 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
       signDate: todayIso(),
       managerUid: "",
       managerName: "",
+      secondManagerUid: "",
+      secondManagerName: "",
       bankName: "",
       permanentProvince: "",
       permanentWard: "",

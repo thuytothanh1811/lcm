@@ -23,6 +23,8 @@ export function buildRecruitmentSchema(
     email: z.email(t.emailInvalid),
     managerUid: z.string().min(1, t.managerRequired),
     managerName: z.string().min(1, t.managerRequired),
+    secondManagerUid: z.string().optional(),
+    secondManagerName: z.string().optional(),
 
     taxCode: z.string().optional(),
     averageMonthlyIncome: z.enum(
