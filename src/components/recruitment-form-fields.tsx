@@ -2351,7 +2351,7 @@ export function RecruitmentFormFields({
             {t.recruitmentForm.section10.templatesIntro}
           </p>
           <div className="mt-3 grid min-w-0 gap-4 sm:grid-cols-2">
-            <div className="min-w-0">
+            <div className="border-input min-w-0 sm:border-r sm:pr-4">
               <p className="text-foreground mb-2 text-sm font-medium">
                 {t.recruitmentForm.section10.candidateGroupLabel}
               </p>
