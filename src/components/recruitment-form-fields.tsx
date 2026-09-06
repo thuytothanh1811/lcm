@@ -593,59 +593,19 @@ export function RecruitmentFormFields({
     <>
       <SectionCard number={1} title={t.recruitmentForm.section1.title}>
         <FieldGroup>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field data-invalid={!!errors.fullName}>
-              <FieldLabel htmlFor="fullName">
-                {t.recruitmentForm.section1.fullName}
-              </FieldLabel>
-              <Input
-                id="fullName"
-                placeholder={t.recruitmentForm.section1.fullNamePlaceholder}
-                {...register("fullName")}
-              />
-              <FieldError
-                errors={errors.fullName ? [errors.fullName] : undefined}
-              />
-            </Field>
-
-            <Controller
-              control={control}
-              name="managerUid"
-              render={({ field }) => (
-                <Field data-invalid={!!errors.managerUid}>
-                  <FieldLabel>
-                    {t.recruitmentForm.section1.managerLabel}
-                  </FieldLabel>
-                  <Select
-                    value={field.value}
-                    onValueChange={uid => {
-                      field.onChange(uid);
-                      const manager = managers.find(m => m.uid === uid);
-                      setValue("managerName", manager?.name ?? "");
-                    }}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue
-                        placeholder={
-                          t.recruitmentForm.section1.managerPlaceholder
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {managers.map(manager => (
-                        <SelectItem key={manager.uid} value={manager.uid}>
-                          {manager.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FieldError
-                    errors={errors.managerUid ? [errors.managerUid] : undefined}
-                  />
-                </Field>
-              )}
+          <Field data-invalid={!!errors.fullName}>
+            <FieldLabel htmlFor="fullName">
+              {t.recruitmentForm.section1.fullName}
+            </FieldLabel>
+            <Input
+              id="fullName"
+              placeholder={t.recruitmentForm.section1.fullNamePlaceholder}
+              {...register("fullName")}
             />
-          </div>
+            <FieldError
+              errors={errors.fullName ? [errors.fullName] : undefined}
+            />
+          </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Controller
@@ -1568,6 +1528,42 @@ export function RecruitmentFormFields({
               )}
             </div>
           )}
+
+          <Controller
+            control={control}
+            name="managerUid"
+            render={({ field }) => (
+              <Field data-invalid={!!errors.managerUid}>
+                <FieldLabel>
+                  {t.recruitmentForm.section1.managerLabel}
+                </FieldLabel>
+                <Select
+                  value={field.value}
+                  onValueChange={uid => {
+                    field.onChange(uid);
+                    const manager = managers.find(m => m.uid === uid);
+                    setValue("managerName", manager?.name ?? "");
+                  }}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue
+                      placeholder={t.recruitmentForm.section1.managerPlaceholder}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {managers.map(manager => (
+                      <SelectItem key={manager.uid} value={manager.uid}>
+                        {manager.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FieldError
+                  errors={errors.managerUid ? [errors.managerUid] : undefined}
+                />
+              </Field>
+            )}
+          />
 
           <FieldSeparator />
 
