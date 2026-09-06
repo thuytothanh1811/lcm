@@ -765,41 +765,6 @@ export function RecruitmentFormFields({
           <div className="grid gap-4 sm:grid-cols-2">
             <Controller
               control={control}
-              name="averageMonthlyIncome"
-              render={({ field }) => (
-                <Field data-invalid={!!errors.averageMonthlyIncome}>
-                  <FieldLabel>
-                    {t.recruitmentForm.section1.averageMonthlyIncomeLabel}
-                  </FieldLabel>
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue
-                        placeholder={
-                          t.recruitmentForm.section1
-                            .averageMonthlyIncomePlaceholder
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {INCOME_OPTIONS.map(opt => (
-                        <SelectItem key={opt.value} value={opt.value}>
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FieldError
-                    errors={
-                      errors.averageMonthlyIncome
-                        ? [errors.averageMonthlyIncome]
-                        : undefined
-                    }
-                  />
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
               name="educationLevel"
               render={({ field }) => (
                 <Field data-invalid={!!errors.educationLevel}>
@@ -832,6 +797,41 @@ export function RecruitmentFormFields({
                 </Field>
               )}
             />
+            <Controller
+              control={control}
+              name="isCivilServant"
+              render={({ field }) => (
+                <Field>
+                  <FieldLabel>
+                    {t.recruitmentForm.section1.civilServantLabel}
+                  </FieldLabel>
+                  <RadioGroup
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    className="flex gap-6"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="no" id="civilServant-no" />
+                      <FieldLabel
+                        htmlFor="civilServant-no"
+                        className="font-normal"
+                      >
+                        {t.recruitmentForm.section1.civilServantNo}
+                      </FieldLabel>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="yes" id="civilServant-yes" />
+                      <FieldLabel
+                        htmlFor="civilServant-yes"
+                        className="font-normal"
+                      >
+                        {t.recruitmentForm.section1.civilServantYes}
+                      </FieldLabel>
+                    </div>
+                  </RadioGroup>
+                </Field>
+              )}
+            />
           </div>
           {educationLevel === "other" && (
             <Field>
@@ -844,42 +844,6 @@ export function RecruitmentFormFields({
               />
             </Field>
           )}
-
-          <Controller
-            control={control}
-            name="isCivilServant"
-            render={({ field }) => (
-              <Field>
-                <FieldLabel>
-                  {t.recruitmentForm.section1.civilServantLabel}
-                </FieldLabel>
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="no" id="civilServant-no" />
-                    <FieldLabel
-                      htmlFor="civilServant-no"
-                      className="font-normal"
-                    >
-                      {t.recruitmentForm.section1.civilServantNo}
-                    </FieldLabel>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="yes" id="civilServant-yes" />
-                    <FieldLabel
-                      htmlFor="civilServant-yes"
-                      className="font-normal"
-                    >
-                      {t.recruitmentForm.section1.civilServantYes}
-                    </FieldLabel>
-                  </div>
-                </RadioGroup>
-              </Field>
-            )}
-          />
           {isCivilServant === "yes" && (
             <>
               <Controller
@@ -932,6 +896,42 @@ export function RecruitmentFormFields({
               )}
             </>
           )}
+
+          <Controller
+            control={control}
+            name="averageMonthlyIncome"
+            render={({ field }) => (
+              <Field data-invalid={!!errors.averageMonthlyIncome}>
+                <FieldLabel>
+                  {t.recruitmentForm.section1.averageMonthlyIncomeLabel}
+                </FieldLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue
+                      placeholder={
+                        t.recruitmentForm.section1
+                          .averageMonthlyIncomePlaceholder
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {INCOME_OPTIONS.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FieldError
+                  errors={
+                    errors.averageMonthlyIncome
+                      ? [errors.averageMonthlyIncome]
+                      : undefined
+                  }
+                />
+              </Field>
+            )}
+          />
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field data-invalid={!!errors.accountHolderName}>
