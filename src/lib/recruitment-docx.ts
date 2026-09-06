@@ -131,7 +131,7 @@ class DocxBuilder {
       spacing: this.sp({ after: 50 }),
       children: [
         new TextRun({ text: label + ": " }),
-        new TextRun({ text: value || "", underline: {} }),
+        new TextRun({ text: value || "" }),
       ],
     });
   }
@@ -148,10 +148,10 @@ class DocxBuilder {
       spacing: this.sp({ after: 50 }),
       children: [
         new TextRun({ text: label1 + ": " }),
-        new TextRun({ text: value1 || "", underline: {} }),
+        new TextRun({ text: value1 || "" }),
         new TextRun({ text: "\t" }),
         new TextRun({ text: label2 + ": " }),
-        new TextRun({ text: value2 || "", underline: {} }),
+        new TextRun({ text: value2 || "" }),
       ],
     });
   }
