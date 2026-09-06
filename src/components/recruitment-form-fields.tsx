@@ -697,6 +697,15 @@ export function RecruitmentFormFields({
                 errors={errors.dateOfBirth ? [errors.dateOfBirth] : undefined}
               />
             </Field>
+            <Field>
+              <FieldLabel htmlFor="taxCode">
+                {t.recruitmentForm.section1.taxCode}
+              </FieldLabel>
+              <Input id="taxCode" {...register("taxCode")} />
+            </Field>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
             <Field data-invalid={!!errors.idNumber}>
               <FieldLabel htmlFor="idNumber">
                 {t.recruitmentForm.section1.idNumber}
@@ -710,25 +719,17 @@ export function RecruitmentFormFields({
                 errors={errors.idNumber ? [errors.idNumber] : undefined}
               />
             </Field>
+            <Field>
+              <FieldLabel htmlFor="oldIdNumber">
+                {t.recruitmentForm.section1.oldIdNumber}
+              </FieldLabel>
+              <Input
+                id="oldIdNumber"
+                placeholder={t.recruitmentForm.section1.oldIdNumberPlaceholder}
+                {...register("oldIdNumber")}
+              />
+            </Field>
           </div>
-
-          <Field>
-            <FieldLabel htmlFor="taxCode">
-              {t.recruitmentForm.section1.taxCode}
-            </FieldLabel>
-            <Input id="taxCode" {...register("taxCode")} />
-          </Field>
-
-          <Field>
-            <FieldLabel htmlFor="oldIdNumber">
-              {t.recruitmentForm.section1.oldIdNumber}
-            </FieldLabel>
-            <Input
-              id="oldIdNumber"
-              placeholder={t.recruitmentForm.section1.oldIdNumberPlaceholder}
-              {...register("oldIdNumber")}
-            />
-          </Field>
 
           <Field data-invalid={!!errors.mobile1}>
             <FieldLabel htmlFor="mobile1">
