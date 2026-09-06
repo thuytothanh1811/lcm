@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { IconSearch, IconUserPlus } from "@tabler/icons-react";
+import { IconArrowLeft, IconSearch, IconUserPlus } from "@tabler/icons-react";
 
 import { RecruitmentForm } from "@/components/recruitment-form";
 import { vi as dict } from "@/lib/i18n/dictionaries/vi";
@@ -18,7 +18,19 @@ export function RecruitmentEntryGate({
   const [mode, setMode] = useState<TMode>("landing");
 
   if (mode === "form") {
-    return <RecruitmentForm managers={managers} />;
+    return (
+      <div className="flex flex-col gap-4">
+        <button
+          type="button"
+          onClick={() => setMode("landing")}
+          className="flex w-fit items-center gap-1.5 text-sm text-white/70 hover:text-white"
+        >
+          <IconArrowLeft className="size-4" />
+          {dict.pages.recruitmentPublic.backButton}
+        </button>
+        <RecruitmentForm managers={managers} />
+      </div>
+    );
   }
 
   return (
