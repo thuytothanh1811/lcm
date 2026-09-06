@@ -127,6 +127,14 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
         <Button type="button" variant="outline" className="flex-1">
           {t.pages.recruitmentPublic.saveButton}
         </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="flex-1"
+          onClick={() => window.print()}
+        >
+          {t.pages.recruitmentPublic.printButton}
+        </Button>
         <Button type="submit" disabled={isSubmitting} className="flex-1">
           {isSubmitting ? t.recruitmentForm.submitting : t.recruitmentForm.submit}
         </Button>

@@ -1650,11 +1650,11 @@ export function RecruitmentFormFields({
               }
             />
           </Field>
-        </FieldGroup>
-      </SectionCard>
 
-      <SectionCard number={3} title={t.recruitmentForm.section5.title}>
-        <FieldGroup>
+          <FieldSeparator />
+          <FieldLegend className="mb-0">
+            {t.recruitmentForm.section5.title}
+          </FieldLegend>
           <Controller
             control={control}
             name="hasInsuranceExperience"
@@ -1794,11 +1794,11 @@ export function RecruitmentFormFields({
             <IconPlus className="size-4" />
             {t.recruitmentForm.section5.addCompany}
           </Button>
-        </FieldGroup>
-      </SectionCard>
 
-      <SectionCard number={4} title={t.recruitmentForm.section8.title}>
-        <FieldGroup>
+          <FieldSeparator />
+          <FieldLegend className="mb-0">
+            {t.recruitmentForm.section8.title}
+          </FieldLegend>
           {familyMemberFields.map((field, index) => (
             <div key={field.id} className="flex flex-col gap-4">
               <p className="text-sm font-medium">
@@ -1900,11 +1900,11 @@ export function RecruitmentFormFields({
               {t.recruitmentForm.section8.addMember}
             </Button>
           )}
-        </FieldGroup>
-      </SectionCard>
 
-      <SectionCard number={5} title={t.recruitmentForm.section7.title}>
-        <FieldGroup>
+          <FieldSeparator />
+          <FieldLegend className="mb-0">
+            {t.recruitmentForm.section7.title}
+          </FieldLegend>
           <div className="bg-muted text-muted-foreground rounded-lg p-4 text-sm">
             <span className="text-foreground font-semibold">
               {t.recruitmentForm.section7.definitionLabel}
@@ -2016,7 +2016,7 @@ export function RecruitmentFormFields({
         </FieldGroup>
       </SectionCard>
 
-      <SectionCard number={6} title={t.recruitmentForm.section9.title}>
+      <SectionCard number={3} title={t.recruitmentForm.section9.title}>
         <FieldGroup>
           <Controller
             control={control}
@@ -2341,7 +2341,7 @@ export function RecruitmentFormFields({
         </FieldGroup>
       </SectionCard>
 
-      <SectionCard number={7} title={t.recruitmentForm.section10.title}>
+      <SectionCard number={4} title={t.recruitmentForm.section10.title}>
         <div className="border-input bg-muted/30 rounded-lg border p-4">
           <p className="text-muted-foreground text-sm">
             {t.recruitmentForm.section10.templatesIntro}
@@ -2471,7 +2471,7 @@ export function RecruitmentFormFields({
         </Field>
       </SectionCard>
 
-      <SectionCard number={8} title={t.recruitmentForm.section11.title}>
+      <SectionCard number={5} title={t.recruitmentForm.section11.title}>
         <FieldGroup data-slot="checkbox-group">
           <Field orientation="horizontal" className="items-start">
             <Controller
