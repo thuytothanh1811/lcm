@@ -501,6 +501,8 @@ export const en: typeof vi = {
       title: "Attach application documents (handwritten, signed)",
       templatesIntro:
         "Download the templates below, print/fill and sign them, then photograph/scan and upload the signed copy in the upload area below.",
+      candidateGroupLabel: "Candidate",
+      managerGroupLabel: "Direct manager/SD/SH",
       description: (max: number) =>
         `Attach related images or documents (ID card, diplomas, CV...). Maximum ${max} files, each file no more than 5MB. Supported: JPG images, PNG images, WEBP images, HEIC images, PDF documents, DOC documents, DOCX documents.`,
       dropzoneTitle: "Click to select a file",

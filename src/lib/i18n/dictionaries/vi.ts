@@ -501,6 +501,8 @@ export const vi = {
       title: "Đính kèm hồ sơ đầu vào (bản viết tay, đã ký xác nhận)",
       templatesIntro:
         "Tải các mẫu phiếu bên dưới về, in/điền và ký tên, sau đó chụp/scan và tải bản đã ký lên ở mục upload phía dưới.",
+      candidateGroupLabel: "Ứng viên",
+      managerGroupLabel: "Quản lý trực tiếp/SD/SH",
       description: (max: number) =>
         `Đính kèm hình ảnh hoặc tài liệu liên quan (CCCD, bằng cấp, CV...). Tối đa ${max} file, mỗi file không quá 5MB. Hỗ trợ: Hình ảnh JPG, Hình ảnh PNG, Hình ảnh WEBP, Hình ảnh HEIC, Tài liệu PDF, Tài liệu DOC, Tài liệu DOCX.`,
       dropzoneTitle: "Nhấp để chọn file",
