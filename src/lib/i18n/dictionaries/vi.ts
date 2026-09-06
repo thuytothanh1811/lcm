@@ -113,6 +113,7 @@ export const vi = {
       heading: "Phiếu thông tin tuyển dụng",
       subtitle:
         "Vui lòng điền đầy đủ và chính xác thông tin bên dưới. Các trường có dấu * là bắt buộc.",
+      saveButton: "Lưu",
     },
   },
   users: {

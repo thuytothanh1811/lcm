@@ -116,6 +116,7 @@ export const en: typeof vi = {
       heading: "Recruitment information form",
       subtitle:
         "Please fill in the information below completely and accurately. Fields marked with * are required.",
+      saveButton: "Save",
     },
   },
   users: {
