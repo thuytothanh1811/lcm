@@ -367,7 +367,7 @@ export const vi = {
       taxCode: "Mã số thuế",
       averageMonthlyIncomeLabel: "Thu nhập bình quân 6 tháng gần nhất *",
       averageMonthlyIncomePlaceholder: "Chọn mức thu nhập",
-      potentialCustomers: "Số khách hàng tiềm năng *",
+      potentialCustomers: "Số lượng khách hàng tiềm năng *",
       educationLevelLabel: "Trình độ học vấn *",
       educationLevelPlaceholder: "Chọn trình độ học vấn",
       specifyOther: "Vui lòng ghi rõ",
