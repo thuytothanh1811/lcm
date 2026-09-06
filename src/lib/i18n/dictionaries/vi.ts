@@ -114,6 +114,7 @@ export const vi = {
       subtitle:
         "Vui lòng điền đầy đủ và chính xác thông tin bên dưới. Các trường có dấu * là bắt buộc.",
       saveButton: "Lưu",
+      printButton: "In",
       newEntryButton: "Nhập thông tin ứng viên mới",
       searchButton: "Tìm kiếm",
       backButton: "Quay lại",
@@ -238,7 +239,7 @@ export const vi = {
     thankYouBody:
       "Thông tin ứng tuyển của bạn đã được gửi thành công. Đội ngũ tuyển dụng Asahi Life sẽ liên hệ với bạn trong thời gian sớm nhất.",
     submitting: "Đang gửi...",
-    submit: "Gửi phiếu thông tin",
+    submit: "Nộp phiếu thông tin",
     maxFilesError: (n: number) => `Tối đa ${n} tệp.`,
     maxFileSizeError: "Mỗi tệp tối đa 5MB.",
     options: {
