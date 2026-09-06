@@ -212,34 +212,42 @@ const TEMPLATE_DOCUMENTS = [
   {
     file: "F-01_Phieu_thong_tin_tuyen_dung_VN.docx",
     label: "F-01 – Phiếu thông tin tuyển dụng",
+    group: null,
   },
   {
     file: "F-01_Phieu_thong_tin_tuyen_dung_VN_V2.docx",
     label: "F-01 – Phiếu thông tin tuyển dụng (V2)",
+    group: null,
   },
   {
     file: "F-03_Phieu_dang_ky_dai_ly_VN.docx",
     label: "F-03 – Phiếu đăng ký đại lý",
+    group: null,
   },
   {
     file: "F-04_Phieu_cam_ket_chu_ky_mau_VN.docx",
     label: "F-04 – Phiếu cam kết chữ ký mẫu",
+    group: null,
   },
   {
     file: "F-05_Phieu_danh_gia_ung_vien_VN.docx",
     label: "F-05 – Phiếu đánh giá ứng viên",
+    group: null,
   },
   {
     file: "F-06_Phieu_danh_gia_phe_duyet_tuyen_dung_VN.docx",
     label: "F-06 – Phiếu đánh giá phê duyệt tuyển dụng",
+    group: null,
   },
   {
     file: "F-07_Danh_muc_ho_so_VN.docx",
     label: "F-07 – Danh mục hồ sơ",
+    group: null,
   },
   {
     file: "F-08_Phieu_danh_gia_tai_ky_VN.docx",
     label: "F-08 – Phiếu đánh giá tái ký",
+    group: null,
   },
 ] as const;
 
@@ -2342,20 +2350,54 @@ export function RecruitmentFormFields({
           <p className="text-muted-foreground text-sm">
             {t.recruitmentForm.section10.templatesIntro}
           </p>
-          <ul className="mt-3 grid min-w-0 gap-2 sm:grid-cols-2">
-            {TEMPLATE_DOCUMENTS.map(doc => (
-              <li key={doc.file} className="min-w-0">
-                <a
-                  href={`/templates/${doc.file}`}
-                  download
-                  className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-2 rounded-md border px-3 py-2 text-sm"
-                >
-                  <IconDownload className="text-muted-foreground size-4 shrink-0" />
-                  <span className="min-w-0 flex-1 truncate">{doc.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-3 grid min-w-0 gap-4 sm:grid-cols-2">
+            <div className="min-w-0">
+              <p className="text-foreground mb-2 text-sm font-medium">
+                {t.recruitmentForm.section10.candidateGroupLabel}
+              </p>
+              <ul className="grid min-w-0 gap-2">
+                {TEMPLATE_DOCUMENTS.filter(
+                  doc => doc.group === "candidate"
+                ).map(doc => (
+                  <li key={doc.file} className="min-w-0">
+                    <a
+                      href={`/templates/${doc.file}`}
+                      download
+                      className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-2 rounded-md border px-3 py-2 text-sm"
+                    >
+                      <IconDownload className="text-muted-foreground size-4 shrink-0" />
+                      <span className="min-w-0 flex-1 truncate">
+                        {doc.label}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="min-w-0">
+              <p className="text-foreground mb-2 text-sm font-medium">
+                {t.recruitmentForm.section10.managerGroupLabel}
+              </p>
+              <ul className="grid min-w-0 gap-2">
+                {TEMPLATE_DOCUMENTS.filter(doc => doc.group === "manager").map(
+                  doc => (
+                    <li key={doc.file} className="min-w-0">
+                      <a
+                        href={`/templates/${doc.file}`}
+                        download
+                        className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-2 rounded-md border px-3 py-2 text-sm"
+                      >
+                        <IconDownload className="text-muted-foreground size-4 shrink-0" />
+                        <span className="min-w-0 flex-1 truncate">
+                          {doc.label}
+                        </span>
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
+          </div>
         </div>
 
         <Field>
