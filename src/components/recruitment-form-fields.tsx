@@ -731,32 +731,36 @@ export function RecruitmentFormFields({
             </Field>
           </div>
 
-          <Field data-invalid={!!errors.mobile1}>
-            <FieldLabel htmlFor="mobile1">
-              {t.recruitmentForm.section1.mobile1}
-            </FieldLabel>
-            <Input
-              id="mobile1"
-              placeholder={t.recruitmentForm.section1.mobile1Placeholder}
-              {...register("mobile1")}
-            />
-            <FieldError
-              errors={errors.mobile1 ? [errors.mobile1] : undefined}
-            />
-          </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field data-invalid={!!errors.mobile1}>
+              <FieldLabel htmlFor="mobile1">
+                {t.recruitmentForm.section1.mobile1}
+              </FieldLabel>
+              <Input
+                id="mobile1"
+                placeholder={t.recruitmentForm.section1.mobile1Placeholder}
+                {...register("mobile1")}
+              />
+              <FieldError
+                errors={errors.mobile1 ? [errors.mobile1] : undefined}
+              />
+            </Field>
 
-          <Field data-invalid={!!errors.email}>
-            <FieldLabel htmlFor="email">
-              {t.recruitmentForm.section1.email}
-            </FieldLabel>
-            <Input
-              id="email"
-              type="email"
-              placeholder={t.recruitmentForm.section1.emailPlaceholder}
-              {...register("email")}
-            />
-            <FieldError errors={errors.email ? [errors.email] : undefined} />
-          </Field>
+            <Field data-invalid={!!errors.email}>
+              <FieldLabel htmlFor="email">
+                {t.recruitmentForm.section1.email}
+              </FieldLabel>
+              <Input
+                id="email"
+                type="email"
+                placeholder={t.recruitmentForm.section1.emailPlaceholder}
+                {...register("email")}
+              />
+              <FieldError
+                errors={errors.email ? [errors.email] : undefined}
+              />
+            </Field>
+          </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Controller

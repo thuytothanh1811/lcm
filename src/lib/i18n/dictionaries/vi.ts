@@ -381,7 +381,7 @@ export const vi = {
       bankNameLabel: "Ngân hàng *",
       bankNamePlaceholder: "Chọn ngân hàng",
       branchLabel: "Chi nhánh *",
-      mobile1: "Di động 1 *",
+      mobile1: "Di động (chính chủ) *",
       mobile1Placeholder: "09xxxxxxxx",
       mobile2: "Di động 2",
       email: "Email *",

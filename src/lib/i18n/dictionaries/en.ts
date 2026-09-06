@@ -382,7 +382,7 @@ export const en: typeof vi = {
       bankNameLabel: "Bank *",
       bankNamePlaceholder: "Select a bank",
       branchLabel: "Branch *",
-      mobile1: "Mobile 1 *",
+      mobile1: "Mobile (own number) *",
       mobile1Placeholder: "09xxxxxxxx",
       mobile2: "Mobile 2",
       email: "Email *",
