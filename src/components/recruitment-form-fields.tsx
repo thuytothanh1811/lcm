@@ -619,7 +619,7 @@ export function RecruitmentFormFields({
                   <RadioGroup
                     value={field.value}
                     onValueChange={field.onChange}
-                    className="flex gap-6"
+                    className="border-input h-9 flex items-center gap-6 rounded-md border bg-transparent px-3 shadow-xs"
                   >
                     <div className="flex items-center gap-2">
                       <RadioGroupItem value="male" id="gender-male" />
