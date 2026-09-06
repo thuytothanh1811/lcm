@@ -11,6 +11,7 @@ export function buildRecruitmentSchema(
     idNumber: z.string().min(1, t.idNumberRequired),
     idIssueDate: z.string().optional(),
     idIssuePlace: z.string().optional(),
+    oldIdNumber: z.string().optional(),
     gender: z.enum(["male", "female"], {
       error: t.genderRequired,
     }),

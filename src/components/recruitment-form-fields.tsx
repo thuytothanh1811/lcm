@@ -712,55 +712,30 @@ export function RecruitmentFormFields({
             </Field>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field>
-              <Controller
-                control={control}
-                name="idIssueDate"
-                render={({ field }) => (
-                  <DatePicker
-                    id="idIssueDate"
-                    label={t.recruitmentForm.section1.idIssueDate}
-                    className="!mx-0 !max-w-none"
-                    initialDate={parseIsoDate(field.value)}
-                    onChange={date => field.onChange(toIsoDate(date))}
-                  />
-                )}
-              />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="idIssuePlace">
-                {t.recruitmentForm.section1.idIssuePlace}
-              </FieldLabel>
-              <Input
-                id="idIssuePlace"
-                placeholder={t.recruitmentForm.section1.idIssuePlacePlaceholder}
-                {...register("idIssuePlace")}
-              />
-            </Field>
-          </div>
+          <Field>
+            <FieldLabel htmlFor="oldIdNumber">
+              {t.recruitmentForm.section1.oldIdNumber}
+            </FieldLabel>
+            <Input
+              id="oldIdNumber"
+              placeholder={t.recruitmentForm.section1.oldIdNumberPlaceholder}
+              {...register("oldIdNumber")}
+            />
+          </Field>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field data-invalid={!!errors.mobile1}>
-              <FieldLabel htmlFor="mobile1">
-                {t.recruitmentForm.section1.mobile1}
-              </FieldLabel>
-              <Input
-                id="mobile1"
-                placeholder={t.recruitmentForm.section1.mobile1Placeholder}
-                {...register("mobile1")}
-              />
-              <FieldError
-                errors={errors.mobile1 ? [errors.mobile1] : undefined}
-              />
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="mobile2">
-                {t.recruitmentForm.section1.mobile2}
-              </FieldLabel>
-              <Input id="mobile2" {...register("mobile2")} />
-            </Field>
-          </div>
+          <Field data-invalid={!!errors.mobile1}>
+            <FieldLabel htmlFor="mobile1">
+              {t.recruitmentForm.section1.mobile1}
+            </FieldLabel>
+            <Input
+              id="mobile1"
+              placeholder={t.recruitmentForm.section1.mobile1Placeholder}
+              {...register("mobile1")}
+            />
+            <FieldError
+              errors={errors.mobile1 ? [errors.mobile1] : undefined}
+            />
+          </Field>
 
           <Field data-invalid={!!errors.email}>
             <FieldLabel htmlFor="email">
