@@ -210,9 +210,9 @@ type TRawDivision = {
 
 const TEMPLATE_DOCUMENTS = [
   {
-    file: "F-01_Phieu_thong_tin_tuyen_dung_VN.docx",
-    label: "F-01 – Phiếu thông tin tuyển dụng",
-    group: null,
+    file: "CT1_Phieu_Thong_Tin_Tuyen_Dung.docx",
+    label: "CT1 – Phiếu thông tin tuyển dụng",
+    group: "candidate",
   },
   {
     file: "F-01_Phieu_thong_tin_tuyen_dung_VN_V2.docx",
@@ -220,24 +220,24 @@ const TEMPLATE_DOCUMENTS = [
     group: null,
   },
   {
-    file: "F-03_Phieu_dang_ky_dai_ly_VN.docx",
-    label: "F-03 – Phiếu đăng ký đại lý",
-    group: null,
+    file: "CT02_Phieu_dang_ky_dai_ly_VN.docx",
+    label: "CT02 – Phiếu đăng ký đại lý",
+    group: "candidate",
   },
   {
-    file: "F-04_Phieu_cam_ket_chu_ky_mau_VN.docx",
-    label: "F-04 – Phiếu cam kết chữ ký mẫu",
-    group: null,
+    file: "CT3_Phieu_cam_ket_chu_ky_mau.docx",
+    label: "CT3 – Phiếu cam kết chữ ký mẫu",
+    group: "candidate",
   },
   {
-    file: "F-05_Phieu_danh_gia_ung_vien_VN.docx",
-    label: "F-05 – Phiếu đánh giá ứng viên",
-    group: null,
+    file: "CT04_Phieu_danh_gia_ung_vien.docx",
+    label: "CT04 – Phiếu đánh giá ứng viên",
+    group: "manager",
   },
   {
-    file: "F-06_Phieu_danh_gia_phe_duyet_tuyen_dung_VN.docx",
-    label: "F-06 – Phiếu đánh giá phê duyệt tuyển dụng",
-    group: null,
+    file: "CT05_Phieu_danh_gia_phe_duyet_tuyen_dung.docx",
+    label: "CT05 – Phiếu đánh giá phê duyệt tuyển dụng",
+    group: "manager",
   },
   {
     file: "F-07_Danh_muc_ho_so_VN.docx",
