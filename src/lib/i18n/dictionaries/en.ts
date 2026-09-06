@@ -117,6 +117,8 @@ export const en: typeof vi = {
       subtitle:
         "Please fill in the information below completely and accurately. Fields marked with * are required.",
       saveButton: "Save",
+      newEntryButton: "New entry",
+      searchButton: "Search",
     },
   },
   users: {

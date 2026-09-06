@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { vi } from "@/lib/i18n/dictionaries/vi";
-import { RecruitmentForm } from "@/components/recruitment-form";
+import { RecruitmentEntryGate } from "@/components/recruitment-entry-gate";
 import { listRecruitmentManagers } from "@/server/user-actions";
 
 // The public application form is always in Vietnamese, regardless of the
@@ -46,7 +46,7 @@ export default async function RecruitmentPage() {
           </div>
         </div>
 
-        <RecruitmentForm managers={managers} />
+        <RecruitmentEntryGate managers={managers} />
       </main>
     </div>
   );

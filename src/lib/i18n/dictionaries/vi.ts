@@ -114,6 +114,8 @@ export const vi = {
       subtitle:
         "Vui lòng điền đầy đủ và chính xác thông tin bên dưới. Các trường có dấu * là bắt buộc.",
       saveButton: "Lưu",
+      newEntryButton: "Nhập mới",
+      searchButton: "Tìm kiếm",
     },
   },
   users: {
