@@ -388,6 +388,8 @@ export const vi = {
       emailPlaceholder: "ban@email.com",
       managerLabel: "Họ và tên SH *",
       managerPlaceholder: "Chọn tên SH",
+      secondManagerLabel: "Họ và tên SD",
+      secondManagerPlaceholder: "Chọn tên SD",
     },
     section2: {
       title: "Thông tin tuyển dụng",

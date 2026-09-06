@@ -389,6 +389,8 @@ export const en: typeof vi = {
       emailPlaceholder: "you@email.com",
       managerLabel: "SH full name *",
       managerPlaceholder: "Select an SH",
+      secondManagerLabel: "SD full name",
+      secondManagerPlaceholder: "Select an SD",
     },
     section2: {
       title: "Recruitment information",
