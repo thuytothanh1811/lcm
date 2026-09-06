@@ -119,6 +119,7 @@ export const en: typeof vi = {
       saveButton: "Save",
       newEntryButton: "New entry",
       searchButton: "Search",
+      backButton: "Back",
     },
   },
   users: {

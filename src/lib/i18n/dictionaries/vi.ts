@@ -116,6 +116,7 @@ export const vi = {
       saveButton: "Lưu",
       newEntryButton: "Nhập mới",
       searchButton: "Tìm kiếm",
+      backButton: "Quay lại",
     },
   },
   users: {
