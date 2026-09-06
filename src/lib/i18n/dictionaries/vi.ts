@@ -376,7 +376,7 @@ export const vi = {
       civilServantYes: "Có",
       civilServantTypeLabel: "Loại hình công chức/viên chức",
       accountHolderNameLabel: "Chủ tài khoản ngân hàng (trùng tên CCCD) *",
-      accountHolderNamePlaceholder: "Tự động lấy theo Họ và tên",
+      accountHolderNamePlaceholder: "Nguyễn Văn A",
       bankAccountNumberLabel: "Số tài khoản (không phải số thẻ ATM) *",
       bankNameLabel: "Ngân hàng *",
       bankNamePlaceholder: "Chọn ngân hàng",
