@@ -106,7 +106,6 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      window.open(url, "_blank");
 
       setTimeout(() => URL.revokeObjectURL(url), 30000);
     } catch {
