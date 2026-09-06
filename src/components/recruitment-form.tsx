@@ -123,9 +123,14 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
 
       <FieldError>{formError}</FieldError>
 
-      <Button type="submit" disabled={isSubmitting} className="w-full">
-        {isSubmitting ? t.recruitmentForm.submitting : t.recruitmentForm.submit}
-      </Button>
+      <div className="flex gap-3">
+        <Button type="button" variant="outline" className="flex-1">
+          {t.pages.recruitmentPublic.saveButton}
+        </Button>
+        <Button type="submit" disabled={isSubmitting} className="flex-1">
+          {isSubmitting ? t.recruitmentForm.submitting : t.recruitmentForm.submit}
+        </Button>
+      </div>
     </form>
   );
 }
