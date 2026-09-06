@@ -113,11 +113,11 @@ export const en: typeof vi = {
     recruitmentPublic: {
       title: "Recruitment information form",
       logoAlt: "Asahi Life",
-      heading: "Recruitment information form",
+      heading: "Welcome to Asahi Life",
       subtitle:
         "Please fill in the information below completely and accurately. Fields marked with * are required.",
       saveButton: "Save",
-      newEntryButton: "New entry",
+      newEntryButton: "Enter new candidate information",
       searchButton: "Search",
       backButton: "Back",
     },

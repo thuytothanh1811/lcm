@@ -110,11 +110,11 @@ export const vi = {
     recruitmentPublic: {
       title: "Phiếu thông tin tuyển dụng",
       logoAlt: "Asahi Life",
-      heading: "Phiếu thông tin tuyển dụng",
+      heading: "Chào mừng Anh/ Chị đến với Asahi Life",
       subtitle:
         "Vui lòng điền đầy đủ và chính xác thông tin bên dưới. Các trường có dấu * là bắt buộc.",
       saveButton: "Lưu",
-      newEntryButton: "Nhập mới",
+      newEntryButton: "Nhập thông tin ứng viên mới",
       searchButton: "Tìm kiếm",
       backButton: "Quay lại",
     },
