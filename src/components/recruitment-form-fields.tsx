@@ -526,16 +526,11 @@ export function RecruitmentFormFields({
   const q3TargetAudience = watch("q3TargetAudience");
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
-  const fullName = watch("fullName");
 
   const permanentWards =
     provinces.find(p => p.name === permanentProvince)?.wards ?? [];
   const temporaryWards =
     provinces.find(p => p.name === temporaryProvince)?.wards ?? [];
-
-  useEffect(() => {
-    setValue("accountHolderName", fullName);
-  }, [fullName, setValue]);
 
   useEffect(() => {
     if (
@@ -762,38 +757,77 @@ export function RecruitmentFormFields({
             </Field>
           </div>
 
-          <Controller
-            control={control}
-            name="educationLevel"
-            render={({ field }) => (
-              <Field data-invalid={!!errors.educationLevel}>
-                <FieldLabel>
-                  {t.recruitmentForm.section1.educationLevelLabel}
-                </FieldLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue
-                      placeholder={
-                        t.recruitmentForm.section1.educationLevelPlaceholder
-                      }
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {EDUCATION_OPTIONS.map(opt => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FieldError
-                  errors={
-                    errors.educationLevel ? [errors.educationLevel] : undefined
-                  }
-                />
-              </Field>
-            )}
-          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Controller
+              control={control}
+              name="educationLevel"
+              render={({ field }) => (
+                <Field data-invalid={!!errors.educationLevel}>
+                  <FieldLabel>
+                    {t.recruitmentForm.section1.educationLevelLabel}
+                  </FieldLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue
+                        placeholder={
+                          t.recruitmentForm.section1.educationLevelPlaceholder
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {EDUCATION_OPTIONS.map(opt => (
+                        <SelectItem key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FieldError
+                    errors={
+                      errors.educationLevel
+                        ? [errors.educationLevel]
+                        : undefined
+                    }
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="isCivilServant"
+              render={({ field }) => (
+                <Field>
+                  <FieldLabel>
+                    {t.recruitmentForm.section1.civilServantLabel}
+                  </FieldLabel>
+                  <RadioGroup
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    className="border-input h-9 flex items-center gap-6 rounded-md border bg-transparent px-3 shadow-xs"
+                  >
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="no" id="civilServant-no" />
+                      <FieldLabel
+                        htmlFor="civilServant-no"
+                        className="font-normal"
+                      >
+                        {t.recruitmentForm.section1.civilServantNo}
+                      </FieldLabel>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="yes" id="civilServant-yes" />
+                      <FieldLabel
+                        htmlFor="civilServant-yes"
+                        className="font-normal"
+                      >
+                        {t.recruitmentForm.section1.civilServantYes}
+                      </FieldLabel>
+                    </div>
+                  </RadioGroup>
+                </Field>
+              )}
+            />
+          </div>
           {educationLevel === "other" && (
             <Field>
               <FieldLabel htmlFor="educationLevelOther">
@@ -805,42 +839,6 @@ export function RecruitmentFormFields({
               />
             </Field>
           )}
-
-          <Controller
-            control={control}
-            name="isCivilServant"
-            render={({ field }) => (
-              <Field>
-                <FieldLabel>
-                  {t.recruitmentForm.section1.civilServantLabel}
-                </FieldLabel>
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="border-input h-9 flex items-center gap-6 rounded-md border bg-transparent px-3 shadow-xs"
-                >
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="no" id="civilServant-no" />
-                    <FieldLabel
-                      htmlFor="civilServant-no"
-                      className="font-normal"
-                    >
-                      {t.recruitmentForm.section1.civilServantNo}
-                    </FieldLabel>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="yes" id="civilServant-yes" />
-                    <FieldLabel
-                      htmlFor="civilServant-yes"
-                      className="font-normal"
-                    >
-                      {t.recruitmentForm.section1.civilServantYes}
-                    </FieldLabel>
-                  </div>
-                </RadioGroup>
-              </Field>
-            )}
-          />
           {isCivilServant === "yes" && (
             <>
               <Controller
@@ -937,12 +935,10 @@ export function RecruitmentFormFields({
               </FieldLabel>
               <Input
                 id="accountHolderName"
-                disabled
                 placeholder={
                   t.recruitmentForm.section1.accountHolderNamePlaceholder
                 }
-                value={fullName ?? ""}
-                readOnly
+                {...register("accountHolderName")}
               />
               <FieldError
                 errors={
