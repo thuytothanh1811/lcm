@@ -2352,7 +2352,7 @@ export function RecruitmentFormFields({
           </p>
           <div className="mt-3 grid min-w-0 gap-4 sm:grid-cols-2">
             <div className="border-input min-w-0 sm:border-r sm:pr-4">
-              <p className="text-foreground mb-2 text-sm font-medium">
+              <p className="text-foreground mb-2 text-center text-sm font-medium">
                 {t.recruitmentForm.section10.candidateGroupLabel}
               </p>
               <ul className="grid min-w-0 gap-2">
@@ -2375,7 +2375,7 @@ export function RecruitmentFormFields({
               </ul>
             </div>
             <div className="min-w-0">
-              <p className="text-foreground mb-2 text-sm font-medium">
+              <p className="text-foreground mb-2 text-center text-sm font-medium">
                 {t.recruitmentForm.section10.managerGroupLabel}
               </p>
               <ul className="grid min-w-0 gap-2">
