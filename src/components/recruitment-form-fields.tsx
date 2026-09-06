@@ -713,6 +713,13 @@ export function RecruitmentFormFields({
           </div>
 
           <Field>
+            <FieldLabel htmlFor="taxCode">
+              {t.recruitmentForm.section1.taxCode}
+            </FieldLabel>
+            <Input id="taxCode" {...register("taxCode")} />
+          </Field>
+
+          <Field>
             <FieldLabel htmlFor="oldIdNumber">
               {t.recruitmentForm.section1.oldIdNumber}
             </FieldLabel>
@@ -748,13 +755,6 @@ export function RecruitmentFormFields({
               {...register("email")}
             />
             <FieldError errors={errors.email ? [errors.email] : undefined} />
-          </Field>
-
-          <Field>
-            <FieldLabel htmlFor="taxCode">
-              {t.recruitmentForm.section1.taxCode}
-            </FieldLabel>
-            <Input id="taxCode" {...register("taxCode")} />
           </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
