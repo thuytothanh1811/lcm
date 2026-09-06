@@ -2341,11 +2341,7 @@ export function RecruitmentFormFields({
         </FieldGroup>
       </SectionCard>
 
-      <SectionCard
-        number={7}
-        title={t.recruitmentForm.section10.title}
-        description={t.recruitmentForm.section10.description(MAX_FILES)}
-      >
+      <SectionCard number={7} title={t.recruitmentForm.section10.title}>
         <div className="border-input bg-muted/30 rounded-lg border p-4">
           <p className="text-muted-foreground text-sm">
             {t.recruitmentForm.section10.templatesIntro}
