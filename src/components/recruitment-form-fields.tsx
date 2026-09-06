@@ -1629,6 +1629,9 @@ export function RecruitmentFormFields({
             </FieldLabel>
             <Input
               id="potentialCustomers"
+              type="number"
+              inputMode="numeric"
+              min={0}
               {...register("potentialCustomers")}
             />
             <FieldError
@@ -1786,50 +1789,7 @@ export function RecruitmentFormFields({
         </FieldGroup>
       </SectionCard>
 
-      <SectionCard number={4} title={t.recruitmentForm.section6.title}>
-        <FieldGroup>
-          <Controller
-            control={control}
-            name="referralChannel"
-            render={({ field }) => (
-              <div className="grid gap-3 sm:grid-cols-2">
-                {REFERRAL_OPTIONS.map(opt => (
-                  <div key={opt.value} className="flex items-center gap-2">
-                    <Checkbox
-                      id={`referral-${opt.value}`}
-                      checked={(field.value ?? []).includes(opt.value)}
-                      onCheckedChange={checked => {
-                        const current = field.value ?? [];
-                        field.onChange(
-                          checked
-                            ? [...current, opt.value]
-                            : current.filter(v => v !== opt.value)
-                        );
-                      }}
-                    />
-                    <FieldLabel
-                      htmlFor={`referral-${opt.value}`}
-                      className="font-normal"
-                    >
-                      {opt.label}
-                    </FieldLabel>
-                  </div>
-                ))}
-              </div>
-            )}
-          />
-          {(watch("referralChannel") ?? []).includes("other") && (
-            <Field>
-              <FieldLabel htmlFor="referralOther">
-                {t.recruitmentForm.section2.specifyOther}
-              </FieldLabel>
-              <Input id="referralOther" {...register("referralOther")} />
-            </Field>
-          )}
-        </FieldGroup>
-      </SectionCard>
-
-      <SectionCard number={5} title={t.recruitmentForm.section8.title}>
+      <SectionCard number={4} title={t.recruitmentForm.section8.title}>
         <FieldGroup>
           {familyMemberFields.map((field, index) => (
             <div key={field.id} className="flex flex-col gap-4">
@@ -1935,7 +1895,7 @@ export function RecruitmentFormFields({
         </FieldGroup>
       </SectionCard>
 
-      <SectionCard number={6} title={t.recruitmentForm.section7.title}>
+      <SectionCard number={5} title={t.recruitmentForm.section7.title}>
         <FieldGroup>
           <div className="bg-muted text-muted-foreground rounded-lg p-4 text-sm">
             <span className="text-foreground font-semibold">
@@ -2048,7 +2008,7 @@ export function RecruitmentFormFields({
         </FieldGroup>
       </SectionCard>
 
-      <SectionCard number={7} title={t.recruitmentForm.section9.title}>
+      <SectionCard number={6} title={t.recruitmentForm.section9.title}>
         <FieldGroup>
           <Controller
             control={control}
@@ -2326,11 +2286,55 @@ export function RecruitmentFormFields({
               )}
             </>
           )}
+
+          <Controller
+            control={control}
+            name="referralChannel"
+            render={({ field }) => (
+              <Field data-slot="checkbox-group">
+                <FieldLabel>{t.recruitmentForm.section9.q7Label}</FieldLabel>
+                {REFERRAL_OPTIONS.map(opt => (
+                  <Field
+                    key={opt.value}
+                    orientation="horizontal"
+                    className="items-start"
+                  >
+                    <Checkbox
+                      id={`referral-${opt.value}`}
+                      checked={(field.value ?? []).includes(opt.value)}
+                      onCheckedChange={checked => {
+                        const current = field.value ?? [];
+                        field.onChange(
+                          checked
+                            ? [...current, opt.value]
+                            : current.filter(v => v !== opt.value)
+                        );
+                      }}
+                    />
+                    <FieldLabel
+                      htmlFor={`referral-${opt.value}`}
+                      className="font-normal"
+                    >
+                      {opt.label}
+                    </FieldLabel>
+                  </Field>
+                ))}
+              </Field>
+            )}
+          />
+          {(watch("referralChannel") ?? []).includes("other") && (
+            <Field>
+              <FieldLabel htmlFor="referralOther">
+                {t.recruitmentForm.section2.specifyOther}
+              </FieldLabel>
+              <Input id="referralOther" {...register("referralOther")} />
+            </Field>
+          )}
         </FieldGroup>
       </SectionCard>
 
       <SectionCard
-        number={8}
+        number={7}
         title={t.recruitmentForm.section10.title}
         description={t.recruitmentForm.section10.description(MAX_FILES)}
       >
@@ -2429,7 +2433,7 @@ export function RecruitmentFormFields({
         </Field>
       </SectionCard>
 
-      <SectionCard number={9} title={t.recruitmentForm.section11.title}>
+      <SectionCard number={8} title={t.recruitmentForm.section11.title}>
         <FieldGroup data-slot="checkbox-group">
           <Field orientation="horizontal" className="items-start">
             <Controller

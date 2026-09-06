@@ -490,6 +490,8 @@ export const vi = {
         "5) Anh chị Cam Kết tham gia các khóa học-Đào tạo nào dưới đây? *",
       q6Label:
         "6) Anh/chị mong Asahi Life hỗ trợ gì để thành công? (có thể chọn nhiều đáp án)",
+      q7Label:
+        "7) Ứng viên biết đến chương trình tuyển dụng qua (có thể chọn nhiều đáp án)",
       selectPlaceholder: "Chọn một đáp án",
       specifyOther: "Vui lòng ghi rõ",
       no: "Không",

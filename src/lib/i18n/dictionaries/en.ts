@@ -490,6 +490,8 @@ export const en: typeof vi = {
         "5) Are you willing to take part in the following training courses to develop yourself? *",
       q6Label:
         "6) What support do you hope Asahi Life provides so you can succeed, increase your income, have opportunities for advancement, and improve your skills and knowledge? (multiple answers allowed)",
+      q7Label:
+        "7) How the candidate learned about the recruitment program (multiple answers allowed)",
       selectPlaceholder: "Select an answer",
       specifyOther: "Please specify",
       no: "No",
