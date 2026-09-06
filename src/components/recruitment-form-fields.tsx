@@ -309,10 +309,6 @@ export function RecruitmentFormFields({
       value: "unit_manager",
       label: t.recruitmentForm.options.position.unit_manager,
     },
-    {
-      value: "district_manager",
-      label: t.recruitmentForm.options.position.district_manager,
-    },
     { value: "gad", label: t.recruitmentForm.options.position.gad },
     { value: "other", label: t.recruitmentForm.options.position.other },
   ] as const;
