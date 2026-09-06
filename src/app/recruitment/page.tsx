@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 
 import { vi } from "@/lib/i18n/dictionaries/vi";
 import { RecruitmentEntryGate } from "@/components/recruitment-entry-gate";
@@ -24,28 +23,6 @@ export default async function RecruitmentPage() {
       <div className="fixed inset-x-0 top-0 h-40 bg-gradient-to-b from-[oklch(0.283_0.121_260.9)]/80 to-transparent" />
 
       <main className="relative mx-auto max-w-3xl px-6 pb-10">
-        <div className="flex flex-col items-center gap-6 py-16 text-center text-white">
-          <div className="flex w-full items-center gap-2">
-            <Image
-              src="/brand/logo/ASAHI_SYMBOL.svg"
-              alt={dict.pages.recruitmentPublic.logoAlt}
-              width={39}
-              height={33}
-              className="size-6"
-              priority
-            />
-            <span className="text-lg font-semibold">Asahi Life</span>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h1 className="text-2xl font-semibold text-balance sm:text-3xl">
-              {dict.pages.recruitmentPublic.heading}
-            </h1>
-            <p className="mx-auto max-w-xl text-sm text-white/70">
-              {dict.pages.recruitmentPublic.subtitle}
-            </p>
-          </div>
-        </div>
-
         <RecruitmentEntryGate managers={managers} />
       </main>
     </div>
