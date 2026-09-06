@@ -4,11 +4,16 @@ import { useMemo, useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { FieldError } from "@/components/ui/field";
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { vi } from "@/lib/i18n/dictionaries/vi";
+import {
+  buildRecruitmentDocxBlob,
+  sanitizeFilename,
+} from "@/lib/recruitment-docx";
 import { submitRecruitmentForm } from "@/server/recruitment-actions";
 import type { TManagerOption } from "@/server/user-actions";
 import {
@@ -31,6 +36,7 @@ function todayIso(): string {
 export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isPreparingDocx, setIsPreparingDocx] = useState(false);
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
     []
@@ -41,6 +47,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
     control,
     watch,
     setValue,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<RecruitmentValues>({
     resolver: zodResolver(schema),
@@ -84,6 +91,30 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
       commitmentDataConsent: undefined,
     },
   });
+
+  const handleDownloadDocx = async () => {
+    setIsPreparingDocx(true);
+    try {
+      const values = getValues();
+      const blob = await buildRecruitmentDocxBlob(values, t);
+      const url = URL.createObjectURL(blob);
+      const filename = `Phieu-thong-tin-tuyen-dung-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.open(url, "_blank");
+
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    } catch {
+      toast.error(t.errors.recruitment.exportFailed);
+    } finally {
+      setIsPreparingDocx(false);
+    }
+  };
 
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
@@ -131,12 +162,15 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
           type="button"
           variant="outline"
           className="flex-1"
-          onClick={() => window.print()}
+          disabled={isPreparingDocx}
+          onClick={handleDownloadDocx}
         >
           {t.pages.recruitmentPublic.printButton}
         </Button>
         <Button type="submit" disabled={isSubmitting} className="flex-1">
-          {isSubmitting ? t.recruitmentForm.submitting : t.recruitmentForm.submit}
+          {isSubmitting
+            ? t.recruitmentForm.submitting
+            : t.recruitmentForm.submit}
         </Button>
       </div>
     </form>
