@@ -1320,6 +1320,48 @@ export function RecruitmentFormFields({
 
           <Controller
             control={control}
+            name="hasBasicAgentCertificate"
+            render={({ field }) => (
+              <Field>
+                <FieldLabel>
+                  {t.recruitmentForm.section2.basicAgentCertificateLabel}
+                </FieldLabel>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="flex gap-6"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem
+                      value="no"
+                      id="hasBasicAgentCertificate-no"
+                    />
+                    <FieldLabel
+                      htmlFor="hasBasicAgentCertificate-no"
+                      className="font-normal"
+                    >
+                      {t.recruitmentForm.section2.no}
+                    </FieldLabel>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem
+                      value="yes"
+                      id="hasBasicAgentCertificate-yes"
+                    />
+                    <FieldLabel
+                      htmlFor="hasBasicAgentCertificate-yes"
+                      className="font-normal"
+                    >
+                      {t.recruitmentForm.section2.yes}
+                    </FieldLabel>
+                  </div>
+                </RadioGroup>
+              </Field>
+            )}
+          />
+
+          <Controller
+            control={control}
             name="participatingProgram"
             render={({ field }) => (
               <Field>

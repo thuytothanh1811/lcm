@@ -64,6 +64,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
       permanentWard: "",
       isCivilServant: "no",
       civilServantType: [],
+      hasBasicAgentCertificate: "no",
       participatingProgram: "no",
       isRehire: "no",
       programTypes: [],

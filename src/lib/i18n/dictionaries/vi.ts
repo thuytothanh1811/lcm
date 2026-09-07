@@ -405,6 +405,8 @@ export const vi = {
       agencyTypePlaceholder: "Chọn loại hình",
       positionLabel: "Vị trí ứng tuyển *",
       specifyOther: "Vui lòng ghi rõ",
+      basicAgentCertificateLabel:
+        "Bạn đã có Chứng chỉ đại lý bảo hiểm cơ bản chưa?",
       programLabel: "Chương trình tham gia (MDRT, Thu hút nhân tài ...)",
       no: "Không",
       yes: "Có",

@@ -60,6 +60,8 @@ export function buildRecruitmentSchema(
     ),
     positionOther: z.string().optional(),
 
+    hasBasicAgentCertificate: z.enum(["no", "yes"]).optional(),
+
     participatingProgram: z.enum(["no", "yes"]).optional(),
     programTypes: z
       .array(

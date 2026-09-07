@@ -406,6 +406,8 @@ export const en: typeof vi = {
       agencyTypePlaceholder: "Select a type",
       positionLabel: "Position applied *",
       specifyOther: "Please specify",
+      basicAgentCertificateLabel:
+        "Do you already have the Basic Insurance Agent Certificate?",
       programLabel: "Participating program (MDRT, Talent attraction ...)",
       no: "No",
       yes: "Yes",
