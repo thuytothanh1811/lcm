@@ -119,6 +119,7 @@ export const vi = {
       printButton: "Tải chứng từ và ký",
       newEntryButton: "Nhập thông tin ứng viên mới",
       searchButton: "Tìm kiếm",
+      documentChecklistButton: "Danh mục hồ sơ cần nộp",
       backButton: "Quay lại",
     },
   },
@@ -414,6 +415,8 @@ export const vi = {
       agencyTypePlaceholder: "Chọn loại hình",
       positionLabel: "Vị trí ứng tuyển *",
       specifyOther: "Vui lòng ghi rõ",
+      basicAgentCertificateLabel:
+        "Bạn đã có Chứng chỉ đại lý bảo hiểm cơ bản chưa?",
       programLabel: "Chương trình tham gia (MDRT, Thu hút nhân tài ...)",
       no: "Không",
       yes: "Có",

@@ -464,12 +464,28 @@ export async function buildRecruitmentDocxBlob(
     );
   }
   b.push(b.bodyText("Vị trí ứng tuyển:", { bold: true, after: 40 }));
+  const positionPrintLabels = [
+    opt.position.agent,
+    opt.position.unit_manager,
+    opt.position.gad,
+    opt.position.other,
+  ];
   b.push(
     b.inlineChecks(
-      labelsOf(opt.position),
+      positionPrintLabels,
       labelsFor(
         opt.position,
         data.positionApplied ? [data.positionApplied] : []
+      )
+    )
+  );
+  b.push(b.bodyText(s2.basicAgentCertificateLabel, { bold: true, after: 40 }));
+  b.push(
+    b.inlineChecks(
+      [s2.no, s2.yes],
+      labelsFor(
+        { no: s2.no, yes: s2.yes },
+        data.hasBasicAgentCertificate ? [data.hasBasicAgentCertificate] : []
       )
     )
   );
@@ -645,58 +661,65 @@ export async function buildRecruitmentDocxBlob(
   b.push(b.field("Ngày ký", data.signDate));
   b.push(b.spacer(), b.spacer());
 
-  const sigWidth = Math.round(PAGE_W / 2) - 100;
+  const sigWidth = Math.round(PAGE_W / 2);
+  const sigHeaderCell = (text: string) =>
+    new TableCell({
+      width: { size: sigWidth, type: WidthType.DXA },
+      shading: { type: ShadingType.CLEAR, fill: BLUE, color: "auto" },
+      verticalAlign: VerticalAlign.CENTER,
+      margins: { top: 55, bottom: 55, left: 105, right: 105 },
+      children: [
+        new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: LINE_SPACING,
+          children: [new TextRun({ text, bold: true, color: WHITE })],
+        }),
+      ],
+    });
+  const sigBodyCell = (name: string | undefined, time: string | undefined) =>
+    new TableCell({
+      width: { size: sigWidth, type: WidthType.DXA },
+      margins: { top: 55, bottom: 55, left: 105, right: 105 },
+      children: [
+        new Paragraph({
+          spacing: { after: 90, ...LINE_SPACING },
+          children: [new TextRun({ text: "Chữ ký:", bold: true })],
+        }),
+        b.spacer(),
+        b.spacer(),
+        new Paragraph({
+          spacing: { after: 90, ...LINE_SPACING },
+          children: [
+            new TextRun({
+              text: `Tên: ${name || "…………………………………………………………."}`,
+            }),
+          ],
+        }),
+        new Paragraph({
+          spacing: LINE_SPACING,
+          children: [
+            new TextRun({
+              text: `Thời gian: ${time || "…………………………………………………."}`,
+            }),
+          ],
+        }),
+      ],
+    });
   b.push(
     new Table({
       width: { size: PAGE_W, type: WidthType.DXA },
       columnWidths: [sigWidth, sigWidth],
-      borders: {
-        top: { style: BorderStyle.NONE, size: 0, color: WHITE },
-        bottom: { style: BorderStyle.NONE, size: 0, color: WHITE },
-        left: { style: BorderStyle.NONE, size: 0, color: WHITE },
-        right: { style: BorderStyle.NONE, size: 0, color: WHITE },
-        insideHorizontal: { style: BorderStyle.NONE, size: 0, color: WHITE },
-        insideVertical: { style: BorderStyle.NONE, size: 0, color: WHITE },
-      },
       rows: [
         new TableRow({
           children: [
-            new TableCell({
-              width: { size: sigWidth, type: WidthType.DXA },
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  spacing: LINE_SPACING,
-                  children: [
-                    new TextRun({
-                      text: "Chữ ký & ghi rõ họ tên Ứng viên",
-                      bold: true,
-                    }),
-                  ],
-                }),
-                b.spacer(),
-                b.spacer(),
-                b.spacer(),
-              ],
-            }),
-            new TableCell({
-              width: { size: sigWidth, type: WidthType.DXA },
-              children: [
-                new Paragraph({
-                  alignment: AlignmentType.CENTER,
-                  spacing: LINE_SPACING,
-                  children: [
-                    new TextRun({
-                      text: "Chữ ký & ghi rõ họ tên Quản lý (SH/SD)",
-                      bold: true,
-                    }),
-                  ],
-                }),
-                b.spacer(),
-                b.spacer(),
-                b.spacer(),
-              ],
-            }),
+            sigHeaderCell("ỨNG VIÊN"),
+            sigHeaderCell("QUẢN LÝ TRỰC TIẾP"),
+          ],
+        }),
+        new TableRow({
+          children: [
+            sigBodyCell(data.fullName, data.signDate),
+            sigBodyCell(undefined, undefined),
           ],
         }),
       ],

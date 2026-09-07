@@ -210,33 +210,28 @@ type TRawDivision = {
 
 const TEMPLATE_DOCUMENTS = [
   {
-    file: "CT1_Phieu_Thong_Tin_Tuyen_Dung.docx",
-    label: "CT1 – Phiếu thông tin tuyển dụng",
-    group: "candidate",
-  },
-  {
     file: "F-01_Phieu_thong_tin_tuyen_dung_VN_V2.docx",
     label: "F-01 – Phiếu thông tin tuyển dụng (V2)",
     group: null,
   },
   {
-    file: "CT02_Phieu_dang_ky_dai_ly_VN.docx",
-    label: "CT02 – Phiếu đăng ký đại lý",
+    file: "CT02_Phieu_cam_ket_chu_ky_mau.docx",
+    label: "CT02 – Phiếu cam kết chữ ký mẫu",
     group: "candidate",
   },
   {
-    file: "CT3_Phieu_cam_ket_chu_ky_mau.docx",
-    label: "CT3 – Phiếu cam kết chữ ký mẫu",
-    group: "candidate",
-  },
-  {
-    file: "CT04_Phieu_danh_gia_ung_vien.docx",
-    label: "CT04 – Phiếu đánh giá ứng viên",
+    file: "CT03_Phieu_danh_gia_ung_vien.docx",
+    label: "CT03 – Phiếu đánh giá ứng viên",
     group: "manager",
   },
   {
-    file: "CT05_Phieu_danh_gia_phe_duyet_tuyen_dung.docx",
-    label: "CT05 – Phiếu đánh giá phê duyệt tuyển dụng",
+    file: "CT04_Phieu_danh_gia_phe_duyet_tuyen_dung.docx",
+    label: "CT04 – Phiếu đánh giá phê duyệt tuyển dụng",
+    group: "manager",
+  },
+  {
+    file: "CT05_Phieu_danh_gia_tai_ky.docx",
+    label: "CT05 – Phiếu đánh giá tái ký",
     group: "manager",
   },
   {
@@ -1330,6 +1325,48 @@ export function RecruitmentFormFields({
           )}
 
           <FieldSeparator />
+
+          <Controller
+            control={control}
+            name="hasBasicAgentCertificate"
+            render={({ field }) => (
+              <Field>
+                <FieldLabel>
+                  {t.recruitmentForm.section2.basicAgentCertificateLabel}
+                </FieldLabel>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="flex gap-6"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem
+                      value="no"
+                      id="hasBasicAgentCertificate-no"
+                    />
+                    <FieldLabel
+                      htmlFor="hasBasicAgentCertificate-no"
+                      className="font-normal"
+                    >
+                      {t.recruitmentForm.section2.no}
+                    </FieldLabel>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem
+                      value="yes"
+                      id="hasBasicAgentCertificate-yes"
+                    />
+                    <FieldLabel
+                      htmlFor="hasBasicAgentCertificate-yes"
+                      className="font-normal"
+                    >
+                      {t.recruitmentForm.section2.yes}
+                    </FieldLabel>
+                  </div>
+                </RadioGroup>
+              </Field>
+            )}
+          />
 
           <Controller
             control={control}
