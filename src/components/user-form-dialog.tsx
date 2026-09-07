@@ -98,15 +98,15 @@ function buildUserFormSchema(t: Dictionary, isEdit: boolean) {
 export type UserFormValues = z.infer<ReturnType<typeof buildUserFormSchema>>;
 export type UserEditValues = UserFormValues;
 
-// Org hierarchy: SD sits above SH, which sits above the direct manager (ad)
-// — each role only picks managers from the level(s) directly above it.
-// Admin sits outside this hierarchy entirely, so it has no manager fields.
+// Org hierarchy: SH sits above SD, which is the terminal/leaf role. Admin
+// sits outside the hierarchy for system permissions, but still carries
+// SD/SH tags (for org-chart/reporting purposes only).
 function getVisibleManagerFields(role: UserFormValues["role"]) {
   switch (role) {
+    case "admin":
+      return { sd: true, sh: true, direct: false };
     case "sh":
       return { sd: true, sh: false, direct: false };
-    case "ad":
-      return { sd: true, sh: true, direct: false };
     default:
       return { sd: false, sh: false, direct: false };
   }
@@ -142,7 +142,7 @@ export function UserFormDialog({
   } = useForm<UserFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      role: "ad",
+      role: "sd",
       email: "",
       password: "",
       name: "",
@@ -192,7 +192,7 @@ export function UserFormDialog({
             }
           : {
               name: "",
-              role: "ad",
+              role: "sd",
               email: "",
               password: "",
               managerSdUid: "",
@@ -304,13 +304,15 @@ export function UserFormDialog({
                       <SelectValue placeholder={t.users.form.rolePlaceholder} />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(t.permissions.roleLabels).map(
-                        ([value, label]) => (
+                      {Object.entries(t.permissions.roleLabels)
+                        // "ad" (Quản lý trực tiếp) is retired from new/edited
+                        // users but stays a valid role for existing accounts.
+                        .filter(([value]) => value !== "ad")
+                        .map(([value, label]) => (
                           <SelectItem key={value} value={value}>
                             {label}
                           </SelectItem>
-                        )
-                      )}
+                        ))}
                     </SelectContent>
                   </Select>
                 )}

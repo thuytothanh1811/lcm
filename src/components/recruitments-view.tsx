@@ -169,6 +169,15 @@ export function RecruitmentsView({
       );
       toast.error(result.error);
     } else {
+      if (result.data.candidateCode) {
+        setSubmissions(prev =>
+          prev.map(s =>
+            s.id === submission.id
+              ? { ...s, candidateCode: result.data.candidateCode }
+              : s
+          )
+        );
+      }
       toast.success(t.recruitmentsList.statusUpdated);
     }
     setUpdatingStatusId(null);

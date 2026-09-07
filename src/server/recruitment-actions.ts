@@ -440,7 +440,7 @@ export async function updateRecruitmentSubmissionStatus(
 export async function updateRecruitmentAdminStatus(
   id: string,
   status: string
-): Promise<ActionResult> {
+): Promise<ActionResult<{ candidateCode?: string }>> {
   const dict = await getDictionary();
   const user = await getSessionUser();
   if (!user) return { ok: false, error: dict.errors.notAuthenticated };
@@ -454,16 +454,19 @@ export async function updateRecruitmentAdminStatus(
   try {
     const ref = adminDb.collection(COLLECTION).doc(id);
     const updates: Record<string, unknown> = { adminStatus: status };
+    let candidateCode: string | undefined;
 
     if (status === "admin_agreed") {
       const doc = await ref.get();
-      if (!doc.data()?.candidateCode) {
-        updates.candidateCode = await nextCandidateCode();
+      candidateCode = doc.data()?.candidateCode as string | undefined;
+      if (!candidateCode) {
+        candidateCode = await nextCandidateCode();
+        updates.candidateCode = candidateCode;
       }
     }
 
     await ref.update(updates);
-    return { ok: true, data: null };
+    return { ok: true, data: { candidateCode } };
   } catch {
     return { ok: false, error: dict.errors.recruitment.statusUpdateFailed };
   }

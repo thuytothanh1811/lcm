@@ -127,30 +127,32 @@ export function createRecruitmentsColumns({
         row.original.positionApplied,
     },
     {
-      accessorKey: "managerName",
-      header: t.recruitmentsList.columns.manager,
+      accessorKey: "secondManagerName",
+      header: t.recruitmentsList.columns.secondManager,
     },
     {
       accessorKey: "sdManagerName",
       header: t.recruitmentsList.columns.sdManager,
     },
     {
-      accessorKey: "secondManagerName",
-      header: t.recruitmentsList.columns.secondManager,
-    },
-    {
       accessorKey: "status",
       header: t.recruitmentsList.columns.status,
       cell: ({ row }) => {
         const { status, statusUpdatedByRole } = row.original;
-        const adLabel =
-          statusUpdatedByRole === "ad" &&
-          (status === "agreed" || status === "rejected")
-            ? t.recruitmentsList.adStatusLabels[status]
+        const roleLabels = statusUpdatedByRole
+          ? (
+              t.recruitmentsList.roleStatusLabels as Partial<
+                Record<Role, { agreed: string; rejected: string }>
+              >
+            )[statusUpdatedByRole]
+          : undefined;
+        const roleLabel =
+          status === "agreed" || status === "rejected"
+            ? roleLabels?.[status]
             : undefined;
         return (
           <Badge variant={STATUS_VARIANTS[status]}>
-            {adLabel ?? t.recruitmentsList.statusLabels[status] ?? status}
+            {roleLabel ?? t.recruitmentsList.statusLabels[status] ?? status}
           </Badge>
         );
       },

@@ -525,21 +525,18 @@ export function RecruitmentFormFields({
   const q3TargetAudience = watch("q3TargetAudience");
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
-  const sdManagerUid = watch("sdManagerUid");
   const secondManagerUid = watch("secondManagerUid");
 
-  // Cascades top-down (SD -> SH -> direct manager): once an upline is
-  // picked, the next list narrows to only that upline's downline, but
-  // falls back to the full roster when nothing's picked yet so the
-  // required direct-manager field never dead-ends on an empty list.
-  const VISIBLE_SH_MANAGERS = sdManagerUid
-    ? managers.sh.filter(m => m.managerSdUid === sdManagerUid)
-    : managers.sh;
-  const VISIBLE_DIRECT_MANAGERS = managers.direct.filter(
-    m =>
-      (!sdManagerUid || m.managerSdUid === sdManagerUid) &&
-      (!secondManagerUid || m.managerShUid === secondManagerUid)
-  );
+  // Cascades top-down (SH -> SD): once an SH is picked, the SD list
+  // narrows to that SH's own linked SD, but falls back to the full roster
+  // when nothing's picked yet so the required SD field never dead-ends.
+  const VISIBLE_SD_MANAGERS = secondManagerUid
+    ? managers.sd.filter(
+        m =>
+          managers.sh.find(sh => sh.uid === secondManagerUid)?.managerSdUid ===
+          m.uid
+      )
+    : managers.sd;
 
   const permanentWards =
     provinces.find(p => p.name === permanentProvince)?.wards ?? [];
@@ -1558,53 +1555,6 @@ export function RecruitmentFormFields({
 
           <Controller
             control={control}
-            name="sdManagerUid"
-            render={({ field }) => (
-              <Field data-invalid={!!errors.sdManagerUid}>
-                <FieldLabel>
-                  {t.recruitmentForm.section1.sdManagerLabel}
-                </FieldLabel>
-                <Select
-                  value={field.value}
-                  onValueChange={uid => {
-                    field.onChange(uid);
-                    const manager = managers.sd.find(m => m.uid === uid);
-                    setValue("sdManagerName", manager?.name ?? "");
-                    // Downstream selections may no longer belong to the
-                    // newly picked SD, so clear them rather than leave a
-                    // stale SH/direct manager attached to the wrong SD.
-                    setValue("secondManagerUid", "");
-                    setValue("secondManagerName", "");
-                    setValue("managerUid", "");
-                    setValue("managerName", "");
-                  }}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue
-                      placeholder={
-                        t.recruitmentForm.section1.sdManagerPlaceholder
-                      }
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {managers.sd.map(manager => (
-                      <SelectItem key={manager.uid} value={manager.uid}>
-                        {manager.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FieldError
-                  errors={
-                    errors.sdManagerUid ? [errors.sdManagerUid] : undefined
-                  }
-                />
-              </Field>
-            )}
-          />
-
-          <Controller
-            control={control}
             name="secondManagerUid"
             render={({ field }) => (
               <Field data-invalid={!!errors.secondManagerUid}>
@@ -1615,14 +1565,12 @@ export function RecruitmentFormFields({
                   value={field.value}
                   onValueChange={uid => {
                     field.onChange(uid);
-                    const manager = VISIBLE_SH_MANAGERS.find(
-                      m => m.uid === uid
-                    );
+                    const manager = managers.sh.find(m => m.uid === uid);
                     setValue("secondManagerName", manager?.name ?? "");
-                    // The previously chosen direct manager may not report
-                    // to this SH, so clear it instead of leaving a mismatch.
-                    setValue("managerUid", "");
-                    setValue("managerName", "");
+                    // The previously chosen SD may not belong to the newly
+                    // picked SH, so clear it rather than leave a mismatch.
+                    setValue("sdManagerUid", "");
+                    setValue("sdManagerName", "");
                   }}
                 >
                   <SelectTrigger className="w-full">
@@ -1633,7 +1581,7 @@ export function RecruitmentFormFields({
                     />
                   </SelectTrigger>
                   <SelectContent>
-                    {VISIBLE_SH_MANAGERS.map(manager => (
+                    {managers.sh.map(manager => (
                       <SelectItem key={manager.uid} value={manager.uid}>
                         {manager.name}
                       </SelectItem>
@@ -1653,31 +1601,31 @@ export function RecruitmentFormFields({
 
           <Controller
             control={control}
-            name="managerUid"
+            name="sdManagerUid"
             render={({ field }) => (
-              <Field data-invalid={!!errors.managerUid}>
+              <Field data-invalid={!!errors.sdManagerUid}>
                 <FieldLabel>
-                  {t.recruitmentForm.section1.managerLabel}
+                  {t.recruitmentForm.section1.sdManagerLabel}
                 </FieldLabel>
                 <Select
                   value={field.value}
                   onValueChange={uid => {
                     field.onChange(uid);
-                    const manager = VISIBLE_DIRECT_MANAGERS.find(
+                    const manager = VISIBLE_SD_MANAGERS.find(
                       m => m.uid === uid
                     );
-                    setValue("managerName", manager?.name ?? "");
+                    setValue("sdManagerName", manager?.name ?? "");
                   }}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue
                       placeholder={
-                        t.recruitmentForm.section1.managerPlaceholder
+                        t.recruitmentForm.section1.sdManagerPlaceholder
                       }
                     />
                   </SelectTrigger>
                   <SelectContent>
-                    {VISIBLE_DIRECT_MANAGERS.map(manager => (
+                    {VISIBLE_SD_MANAGERS.map(manager => (
                       <SelectItem key={manager.uid} value={manager.uid}>
                         {manager.name}
                       </SelectItem>
@@ -1685,7 +1633,9 @@ export function RecruitmentFormFields({
                   </SelectContent>
                 </Select>
                 <FieldError
-                  errors={errors.managerUid ? [errors.managerUid] : undefined}
+                  errors={
+                    errors.sdManagerUid ? [errors.sdManagerUid] : undefined
+                  }
                 />
               </Field>
             )}
