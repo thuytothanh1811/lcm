@@ -166,11 +166,6 @@ export function RecruitmentDocumentChecklist() {
           (Quy trình xử lý online nên chỉ cần bộ phận LCM kiểm tra)
         </p>
       </div>
-
-      <div className="mt-10 flex flex-col items-end gap-1 text-sm">
-        <p className="font-semibold">Người kiểm tra (LCM)</p>
-        <p className="text-muted-foreground">(ký, ghi rõ họ tên)</p>
-      </div>
     </div>
   );
 }
