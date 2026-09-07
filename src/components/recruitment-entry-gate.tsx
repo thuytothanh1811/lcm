@@ -83,6 +83,16 @@ export function RecruitmentEntryGate({
         <div className="grid w-full gap-4 sm:grid-cols-3">
           <button
             type="button"
+            onClick={() => setMode("checklist")}
+            className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
+          >
+            <IconClipboardList className="size-8" />
+            <span className="text-lg font-semibold">
+              {dict.pages.recruitmentPublic.documentChecklistButton}
+            </span>
+          </button>
+          <button
+            type="button"
             onClick={() => setMode("form")}
             className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
           >
@@ -98,16 +108,6 @@ export function RecruitmentEntryGate({
             <IconSearch className="size-8" />
             <span className="text-lg font-semibold">
               {dict.pages.recruitmentPublic.searchButton}
-            </span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("checklist")}
-            className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
-          >
-            <IconClipboardList className="size-8" />
-            <span className="text-lg font-semibold">
-              {dict.pages.recruitmentPublic.documentChecklistButton}
             </span>
           </button>
         </div>

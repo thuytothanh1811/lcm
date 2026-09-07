@@ -1,8 +1,4 @@
-"use client";
-
-import { useState } from "react";
-
-import { Checkbox } from "@/components/ui/checkbox";
+import { IconCheck } from "@tabler/icons-react";
 
 const CHECKLIST_ROWS: {
   stt: number;
@@ -106,22 +102,16 @@ const CHECKLIST_ROWS: {
   },
 ];
 
-function ChecklistCell({
-  applicable,
-  checked,
-  onCheckedChange,
-}: {
-  applicable: boolean;
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) {
+function ChecklistCell({ applicable }: { applicable: boolean }) {
   return (
     <td className="border-border px-3 py-2 text-center align-middle">
       {applicable ? (
-        <Checkbox
-          checked={checked}
-          onCheckedChange={value => onCheckedChange(value === true)}
-        />
+        <span
+          aria-hidden
+          className="border-primary bg-primary text-primary-foreground mx-auto flex size-4 items-center justify-center rounded-[4px] border"
+        >
+          <IconCheck className="size-3.5" />
+        </span>
       ) : (
         <span className="text-muted-foreground">—</span>
       )}
@@ -130,17 +120,6 @@ function ChecklistCell({
 }
 
 export function RecruitmentDocumentChecklist() {
-  const [checkedCells, setCheckedCells] = useState<Set<string>>(new Set());
-
-  const toggleCell = (key: string, checked: boolean) => {
-    setCheckedCells(prev => {
-      const next = new Set(prev);
-      if (checked) next.add(key);
-      else next.delete(key);
-      return next;
-    });
-  };
-
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
       <div className="mb-6 flex flex-col items-center gap-1 text-center">
@@ -175,27 +154,9 @@ export function RecruitmentDocumentChecklist() {
                   {row.stt}
                 </td>
                 <td className="border-border border px-3 py-2">{row.label}</td>
-                <ChecklistCell
-                  applicable={row.lpUm}
-                  checked={checkedCells.has(`${row.stt}-lpUm`)}
-                  onCheckedChange={checked =>
-                    toggleCell(`${row.stt}-lpUm`, checked)
-                  }
-                />
-                <ChecklistCell
-                  applicable={row.mdrt}
-                  checked={checkedCells.has(`${row.stt}-mdrt`)}
-                  onCheckedChange={checked =>
-                    toggleCell(`${row.stt}-mdrt`, checked)
-                  }
-                />
-                <ChecklistCell
-                  applicable={row.gad}
-                  checked={checkedCells.has(`${row.stt}-gad`)}
-                  onCheckedChange={checked =>
-                    toggleCell(`${row.stt}-gad`, checked)
-                  }
-                />
+                <ChecklistCell applicable={row.lpUm} />
+                <ChecklistCell applicable={row.mdrt} />
+                <ChecklistCell applicable={row.gad} />
               </tr>
             ))}
           </tbody>
@@ -204,18 +165,19 @@ export function RecruitmentDocumentChecklist() {
 
       <div className="mt-6 space-y-1 text-sm">
         <p className="font-semibold">Lưu ý:</p>
-        <p>
-          <span className="font-medium">Xác nhận số điện thoại chính chủ:</span>{" "}
-          Soạn tin nhắn điện thoại với cú pháp: [TTTB] [Số CCCD/CMND] gửi 1414
-          HOẶC hình chụp từ VNEID
-        </p>
-        <p>
-          <span className="font-medium">Xác nhận Mã số thuế:</span> Hình chụp từ
-          eTax mobile
-        </p>
-        <p className="text-muted-foreground">
-          (Quy trình xử lý online nên chỉ cần bộ phận LCM kiểm tra)
-        </p>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>
+            <span className="font-medium">
+              Xác nhận số điện thoại chính chủ:
+            </span>{" "}
+            Soạn tin nhắn điện thoại với cú pháp: [TTTB] [Số CCCD/CMND] gửi 1414
+            HOẶC hình chụp từ VNEID
+          </li>
+          <li>
+            <span className="font-medium">Xác nhận Mã số thuế:</span> Hình chụp
+            từ eTax mobile
+          </li>
+        </ul>
       </div>
     </div>
   );
