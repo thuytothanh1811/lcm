@@ -256,6 +256,16 @@ export const en: typeof vi = {
     draftSaved: "Your information has been saved.",
     maxFilesError: (n: number) => `Maximum ${n} files.`,
     maxFileSizeError: "Each file must be 5MB or smaller.",
+    search: {
+      idNumberLabel: "ID number *",
+      idNumberPlaceholder: "9 or 12 digits",
+      button: "Search",
+      searching: "Searching...",
+      notFound: "No submission found for this ID number.",
+      resultName: "Full name",
+      resultStatus: "Status",
+      resultSubmittedAt: "Submitted",
+    },
     options: {
       channel: {
         agency: "Agency",

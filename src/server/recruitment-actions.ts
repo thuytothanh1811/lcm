@@ -149,6 +149,56 @@ export async function submitRecruitmentForm(
   }
 }
 
+export type TRecruitmentSearchResult = {
+  id: string;
+  fullName: string;
+  status: TRecruitmentStatus;
+  submittedAt: string;
+};
+
+// Public lookup by CCCD (idNumber) for a candidate to check their own
+// submission's status — no session required, so it intentionally returns
+// only a minimal summary rather than the full record (bank details, family
+// info, PEP declaration, etc. stay out of reach of anyone who just knows a
+// CCCD number).
+export async function searchRecruitmentByIdNumber(
+  idNumber: string
+): Promise<ActionResult<TRecruitmentSearchResult | null>> {
+  const dict = await getDictionary();
+  const trimmed = idNumber.trim();
+  if (!trimmed) {
+    return {
+      ok: false,
+      error: dict.recruitmentForm.validation.idNumberRequired,
+    };
+  }
+
+  try {
+    const snapshot = await adminDb
+      .collection(COLLECTION)
+      .where("idNumber", "==", trimmed)
+      .get();
+
+    if (snapshot.empty) return { ok: true, data: null };
+
+    const latest = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }) as TRecruitmentSubmission)
+      .sort((a, b) => b.submittedAt.localeCompare(a.submittedAt))[0];
+
+    return {
+      ok: true,
+      data: {
+        id: latest.id,
+        fullName: latest.fullName,
+        status: latest.status,
+        submittedAt: latest.submittedAt,
+      },
+    };
+  } catch {
+    return { ok: false, error: dict.errors.recruitment.listFailed };
+  }
+}
+
 export async function listRecruitmentSubmissions(): Promise<
   ActionResult<TRecruitmentSubmission[]>
 > {

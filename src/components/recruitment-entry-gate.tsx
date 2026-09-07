@@ -13,10 +13,11 @@ import {
 
 import { RecruitmentDocumentChecklist } from "@/components/recruitment-document-checklist";
 import { RecruitmentForm } from "@/components/recruitment-form";
+import { RecruitmentSearch } from "@/components/recruitment-search";
 import { vi as dict } from "@/lib/i18n/dictionaries/vi";
 import type { TManagerGroups } from "@/server/user-actions";
 
-type TMode = "landing" | "form" | "checklist";
+type TMode = "landing" | "form" | "checklist" | "search";
 
 export function RecruitmentEntryGate({
   managers,
@@ -45,9 +46,11 @@ export function RecruitmentEntryGate({
               ? dict.pages.recruitmentPublic.title
               : mode === "checklist"
                 ? dict.pages.recruitmentPublic.documentChecklistButton
-                : dict.pages.recruitmentPublic.heading}
+                : mode === "search"
+                  ? dict.pages.recruitmentPublic.searchButton
+                  : dict.pages.recruitmentPublic.heading}
           </h1>
-          {mode !== "checklist" && (
+          {mode !== "checklist" && mode !== "search" && (
             <p className="mx-auto max-w-xl text-sm text-white/70">
               {dict.pages.recruitmentPublic.subtitle}
             </p>
@@ -79,6 +82,18 @@ export function RecruitmentEntryGate({
           </button>
           <RecruitmentDocumentChecklist />
         </div>
+      ) : mode === "search" ? (
+        <div className="flex flex-col gap-4">
+          <button
+            type="button"
+            onClick={() => setMode("landing")}
+            className="flex w-fit items-center gap-1.5 text-sm text-white/70 hover:text-white"
+          >
+            <IconArrowLeft className="size-4" />
+            {dict.pages.recruitmentPublic.backButton}
+          </button>
+          <RecruitmentSearch />
+        </div>
       ) : (
         <div className="grid w-full gap-4 sm:grid-cols-3">
           <button
@@ -103,6 +118,7 @@ export function RecruitmentEntryGate({
           </button>
           <button
             type="button"
+            onClick={() => setMode("search")}
             className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
           >
             <IconSearch className="size-8" />

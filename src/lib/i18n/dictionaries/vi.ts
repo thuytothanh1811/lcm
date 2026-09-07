@@ -254,6 +254,16 @@ export const vi = {
     draftSaved: "Đã lưu phiếu thông tin.",
     maxFilesError: (n: number) => `Tối đa ${n} tệp.`,
     maxFileSizeError: "Mỗi tệp tối đa 5MB.",
+    search: {
+      idNumberLabel: "Số CCCD *",
+      idNumberPlaceholder: "9 hoặc 12 số",
+      button: "Tìm kiếm",
+      searching: "Đang tìm...",
+      notFound: "Không tìm thấy hồ sơ với số CCCD này.",
+      resultName: "Họ và tên",
+      resultStatus: "Trạng thái",
+      resultSubmittedAt: "Ngày nộp",
+    },
     options: {
       channel: {
         agency: "Agency",
