@@ -192,6 +192,7 @@ export const en: typeof vi = {
     deleteDialogDescription: (name?: string) =>
       `${name ?? "This candidate"}'s submission will be permanently deleted, including all attachments. This action cannot be undone.`,
     columns: {
+      candidateCode: "Candidate code",
       name: "Full name",
       phone: "Phone",
       email: "Email",

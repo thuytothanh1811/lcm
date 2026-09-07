@@ -190,6 +190,7 @@ export const vi = {
     deleteDialogDescription: (name?: string) =>
       `Hồ sơ của ${name ?? ""} sẽ bị xóa vĩnh viễn, bao gồm mọi tệp đính kèm. Hành động này không thể hoàn tác.`,
     columns: {
+      candidateCode: "Mã số ứng viên",
       name: "Họ và tên",
       phone: "Điện thoại",
       email: "Email",

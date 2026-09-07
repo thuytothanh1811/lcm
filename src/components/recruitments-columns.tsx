@@ -103,6 +103,11 @@ export function createRecruitmentsColumns({
 
   return [
     {
+      accessorKey: "candidateCode",
+      header: t.recruitmentsList.columns.candidateCode,
+      cell: ({ row }) => row.original.candidateCode ?? "—",
+    },
+    {
       accessorKey: "fullName",
       header: t.recruitmentsList.columns.name,
     },

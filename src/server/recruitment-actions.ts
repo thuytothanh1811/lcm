@@ -33,7 +33,31 @@ export type TRecruitmentSubmission = RecruitmentValues & {
   status: TRecruitmentStatus;
   statusUpdatedByRole?: Role;
   adminStatus?: TAdminStatus;
+  candidateCode?: string;
 };
+
+const COUNTERS_COLLECTION = "counters";
+const CANDIDATE_CODE_COUNTER_ID = "candidateCode";
+const CANDIDATE_CODE_LENGTH = 8;
+
+// Assigns the next sequential 8-digit candidate code (e.g. "00000001") via
+// a transaction on a shared counter doc, so two admins approving at the
+// same moment can't be handed the same number.
+async function nextCandidateCode(): Promise<string> {
+  const counterRef = adminDb
+    .collection(COUNTERS_COLLECTION)
+    .doc(CANDIDATE_CODE_COUNTER_ID);
+
+  const next = await adminDb.runTransaction(async tx => {
+    const snapshot = await tx.get(counterRef);
+    const current = (snapshot.data()?.value as number | undefined) ?? 0;
+    const value = current + 1;
+    tx.set(counterRef, { value });
+    return value;
+  });
+
+  return String(next).padStart(CANDIDATE_CODE_LENGTH, "0");
+}
 
 // Non-admin roles only ever see submissions scoped to their place in the
 // SD > SH > direct-manager hierarchy — sd sees everything under their SD,
@@ -428,9 +452,17 @@ export async function updateRecruitmentAdminStatus(
   }
 
   try {
-    await adminDb.collection(COLLECTION).doc(id).update({
-      adminStatus: status,
-    });
+    const ref = adminDb.collection(COLLECTION).doc(id);
+    const updates: Record<string, unknown> = { adminStatus: status };
+
+    if (status === "admin_agreed") {
+      const doc = await ref.get();
+      if (!doc.data()?.candidateCode) {
+        updates.candidateCode = await nextCandidateCode();
+      }
+    }
+
+    await ref.update(updates);
     return { ok: true, data: null };
   } catch {
     return { ok: false, error: dict.errors.recruitment.statusUpdateFailed };
