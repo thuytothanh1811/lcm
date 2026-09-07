@@ -118,6 +118,14 @@ export function createRecruitmentsColumns({
         row.original.positionApplied,
     },
     {
+      accessorKey: "sdManagerName",
+      header: t.recruitmentsList.columns.sdManager,
+    },
+    {
+      accessorKey: "secondManagerName",
+      header: t.recruitmentsList.columns.secondManager,
+    },
+    {
       accessorKey: "managerName",
       header: t.recruitmentsList.columns.manager,
     },

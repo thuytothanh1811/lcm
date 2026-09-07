@@ -15,7 +15,7 @@ import {
   sanitizeFilename,
 } from "@/lib/recruitment-docx";
 import { submitRecruitmentForm } from "@/server/recruitment-actions";
-import type { TManagerOption } from "@/server/user-actions";
+import type { TManagerGroups } from "@/server/user-actions";
 import {
   buildRecruitmentSchema,
   type RecruitmentValues,
@@ -33,7 +33,7 @@ function todayIso(): string {
   return `${year}-${month}-${day}`;
 }
 
-export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
+export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isPreparingDocx, setIsPreparingDocx] = useState(false);
@@ -59,6 +59,8 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
       managerName: "",
       secondManagerUid: "",
       secondManagerName: "",
+      sdManagerUid: "",
+      sdManagerName: "",
       bankName: "",
       permanentProvince: "",
       permanentWard: "",

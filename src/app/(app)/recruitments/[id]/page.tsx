@@ -34,7 +34,9 @@ export default async function RecruitmentDetailPage({
     notFound();
   }
 
-  const managers = managersResult.ok ? managersResult.data : [];
+  const managers = managersResult.ok
+    ? managersResult.data
+    : { sd: [], sh: [], direct: [] };
 
   return (
     <div className="flex flex-col gap-4">

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function RecruitmentPage() {
   const result = await listRecruitmentManagers();
-  const managers = result.ok ? result.data : [];
+  const managers = result.ok ? result.data : { sd: [], sh: [], direct: [] };
 
   return (
     <div className="relative min-h-svh overflow-hidden">

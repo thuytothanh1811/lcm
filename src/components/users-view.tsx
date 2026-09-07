@@ -56,6 +56,9 @@ export function UsersView({ initialUsers }: { initialUsers: TAppUser[] }) {
           name: values.name,
           role: values.role,
           password: values.password ? values.password : undefined,
+          managerSdUid: values.managerSdUid,
+          managerShUid: values.managerShUid,
+          managerDirectUid: values.managerDirectUid,
         });
         if (!result.ok) {
           toast.error(result.error);
@@ -64,7 +67,14 @@ export function UsersView({ initialUsers }: { initialUsers: TAppUser[] }) {
         setUsers(prev =>
           prev.map(u =>
             u.uid === editingUser.uid
-              ? { ...u, name: values.name, role: values.role }
+              ? {
+                  ...u,
+                  name: values.name,
+                  role: values.role,
+                  managerSdUid: values.managerSdUid || undefined,
+                  managerShUid: values.managerShUid || undefined,
+                  managerDirectUid: values.managerDirectUid || undefined,
+                }
               : u
           )
         );
@@ -123,6 +133,7 @@ export function UsersView({ initialUsers }: { initialUsers: TAppUser[] }) {
         open={formOpen}
         onOpenChange={setFormOpen}
         user={editingUser}
+        users={users}
         onSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />

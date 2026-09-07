@@ -41,14 +41,14 @@ import {
   type TAttachment,
   type TRecruitmentSubmission,
 } from "@/server/recruitment-actions";
-import type { TManagerOption } from "@/server/user-actions";
+import type { TManagerGroups } from "@/server/user-actions";
 
 export function RecruitmentDetailView({
   submission,
   managers,
 }: {
   submission: TRecruitmentSubmission;
-  managers: TManagerOption[];
+  managers: TManagerGroups;
 }) {
   const router = useRouter();
   const t = useDictionary();
