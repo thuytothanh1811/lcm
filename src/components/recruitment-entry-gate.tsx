@@ -4,7 +4,12 @@ import { useState } from "react";
 
 import Image from "next/image";
 
-import { IconArrowLeft, IconSearch, IconUserPlus } from "@tabler/icons-react";
+import {
+  IconArrowLeft,
+  IconClipboardList,
+  IconSearch,
+  IconUserPlus,
+} from "@tabler/icons-react";
 
 import { RecruitmentForm } from "@/components/recruitment-form";
 import { vi as dict } from "@/lib/i18n/dictionaries/vi";
@@ -58,7 +63,7 @@ export function RecruitmentEntryGate({
           <RecruitmentForm managers={managers} />
         </div>
       ) : (
-        <div className="grid w-full gap-4 sm:grid-cols-2">
+        <div className="grid w-full gap-4 sm:grid-cols-3">
           <button
             type="button"
             onClick={() => setMode("form")}
@@ -78,6 +83,17 @@ export function RecruitmentEntryGate({
               {dict.pages.recruitmentPublic.searchButton}
             </span>
           </button>
+          <a
+            href="/templates/F-07_Danh_muc_ho_so_VN.docx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
+          >
+            <IconClipboardList className="size-8" />
+            <span className="text-lg font-semibold">
+              {dict.pages.recruitmentPublic.documentChecklistButton}
+            </span>
+          </a>
         </div>
       )}
     </>

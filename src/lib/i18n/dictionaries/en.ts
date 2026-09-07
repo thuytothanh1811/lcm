@@ -120,6 +120,7 @@ export const en: typeof vi = {
       printButton: "Download document to sign",
       newEntryButton: "Enter new candidate information",
       searchButton: "Search",
+      documentChecklistButton: "Required document checklist",
       backButton: "Back",
     },
   },
