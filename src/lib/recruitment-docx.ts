@@ -440,6 +440,9 @@ export async function buildRecruitmentDocxBlob(
   if (data.secondManagerName) {
     b.push(b.field(s1.secondManagerLabel, data.secondManagerName));
   }
+  if (data.sdManagerName) {
+    b.push(b.field(s1.sdManagerLabel, data.sdManagerName));
+  }
 
   // ===== SECTION 2: THÔNG TIN TUYỂN DỤNG =====
   b.pageBreak();

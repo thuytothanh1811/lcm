@@ -1,5 +1,7 @@
 "use server";
 
+import { FieldValue } from "firebase-admin/firestore";
+
 import { adminAuth, adminDb } from "@/lib/firebase/admin";
 import { getSessionUser } from "@/lib/firebase/session";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -16,6 +18,9 @@ export type TAppUser = {
   name: string;
   role: Role;
   createdAt: string;
+  managerSdUid?: string;
+  managerShUid?: string;
+  managerDirectUid?: string;
 };
 
 async function requireAdmin() {
@@ -31,32 +36,63 @@ async function requireAdmin() {
   return { ok: true as const, user, dict };
 }
 
-export type TManagerOption = { uid: string; name: string };
+export type TManagerOption = {
+  uid: string;
+  name: string;
+  managerSdUid?: string;
+  managerShUid?: string;
+};
+
+export type TManagerGroups = {
+  sd: TManagerOption[];
+  sh: TManagerOption[];
+  direct: TManagerOption[];
+};
+
+async function listUsersByRole(
+  role: "sd" | "sh" | "ad"
+): Promise<TManagerOption[]> {
+  // Sorted client-side rather than via .orderBy("name") to avoid needing a
+  // composite Firestore index for this where+orderBy combination — each
+  // role's roster is small enough that this is negligible.
+  const snapshot = await adminDb
+    .collection(COLLECTION)
+    .where("role", "==", role)
+    .get();
+
+  return snapshot.docs
+    .map(doc => {
+      const data = doc.data();
+      return {
+        uid: doc.id,
+        name: data.name as string,
+        managerSdUid: data.managerSdUid as string | undefined,
+        managerShUid: data.managerShUid as string | undefined,
+      };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
 
 /**
  * Public (unauthenticated) — the recruitment application form needs to let
- * a candidate pick which AD (Quản lý Đại lý) they're applying under. This
- * intentionally exposes only { uid, name }, never email or role, and has
- * no requireAdmin() gate since anonymous candidates must be able to call it.
+ * a candidate pick their SD, SH, and direct (ad) managers. This intentionally
+ * exposes only { uid, name, managerSdUid, managerShUid } — never email or
+ * role — and has no requireAdmin() gate since anonymous candidates must be
+ * able to call it. managerSdUid/managerShUid let the form cascade each list
+ * down to the upline already chosen.
  */
 export async function listRecruitmentManagers(): Promise<
-  ActionResult<TManagerOption[]>
+  ActionResult<TManagerGroups>
 > {
   const dict = await getDictionary();
   try {
-    // Sorted client-side rather than via .orderBy("name") to avoid needing
-    // a composite Firestore index for this where+orderBy combination — the
-    // AD roster is small enough that this is negligible.
-    const snapshot = await adminDb
-      .collection(COLLECTION)
-      .where("role", "==", "ad")
-      .get();
+    const [sd, sh, direct] = await Promise.all([
+      listUsersByRole("sd"),
+      listUsersByRole("sh"),
+      listUsersByRole("ad"),
+    ]);
 
-    const managers = snapshot.docs
-      .map(doc => ({ uid: doc.id, name: doc.data().name as string }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-
-    return { ok: true, data: managers };
+    return { ok: true, data: { sd, sh, direct } };
   } catch {
     return { ok: false, error: dict.errors.users.managerListFailed };
   }
@@ -89,6 +125,9 @@ export async function createUser(input: {
   password: string;
   name: string;
   role: string;
+  managerSdUid?: string;
+  managerShUid?: string;
+  managerDirectUid?: string;
 }): Promise<ActionResult<TAppUser>> {
   const check = await requireAdmin();
   if (!check.ok) return check;
@@ -109,22 +148,22 @@ export async function createUser(input: {
     });
 
     const createdAt = new Date().toISOString();
-    await adminDb.collection(COLLECTION).doc(record.uid).set({
+    const data = {
       email: input.email,
       name: input.name,
       role: input.role,
       createdAt,
-    });
+      ...(input.managerSdUid ? { managerSdUid: input.managerSdUid } : {}),
+      ...(input.managerShUid ? { managerShUid: input.managerShUid } : {}),
+      ...(input.managerDirectUid
+        ? { managerDirectUid: input.managerDirectUid }
+        : {}),
+    };
+    await adminDb.collection(COLLECTION).doc(record.uid).set(data);
 
     return {
       ok: true,
-      data: {
-        uid: record.uid,
-        email: input.email,
-        name: input.name,
-        role: input.role,
-        createdAt,
-      },
+      data: { uid: record.uid, ...data },
     };
   } catch (error) {
     const code = (error as { code?: string }).code;
@@ -137,7 +176,14 @@ export async function createUser(input: {
 
 export async function updateUser(
   uid: string,
-  input: { name: string; role: string; password?: string }
+  input: {
+    name: string;
+    role: string;
+    password?: string;
+    managerSdUid?: string;
+    managerShUid?: string;
+    managerDirectUid?: string;
+  }
 ): Promise<ActionResult> {
   const check = await requireAdmin();
   if (!check.ok) return check;
@@ -151,10 +197,18 @@ export async function updateUser(
   }
 
   try {
-    await adminDb.collection(COLLECTION).doc(uid).update({
-      name: input.name,
-      role: input.role,
-    });
+    await adminDb
+      .collection(COLLECTION)
+      .doc(uid)
+      .update({
+        name: input.name,
+        role: input.role,
+        // Firestore's FieldValue.delete() clears a field the current role no
+        // longer uses instead of leaving a stale manager link behind.
+        managerSdUid: input.managerSdUid || FieldValue.delete(),
+        managerShUid: input.managerShUid || FieldValue.delete(),
+        managerDirectUid: input.managerDirectUid || FieldValue.delete(),
+      });
     await adminAuth.updateUser(uid, {
       displayName: input.name,
       ...(input.password ? { password: input.password } : {}),

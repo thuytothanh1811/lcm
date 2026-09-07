@@ -25,6 +25,8 @@ export function buildRecruitmentSchema(
     managerName: z.string().min(1, t.managerRequired),
     secondManagerUid: z.string().optional(),
     secondManagerName: z.string().optional(),
+    sdManagerUid: z.string().min(1, t.sdManagerRequired),
+    sdManagerName: z.string().min(1, t.sdManagerRequired),
 
     taxCode: z.string().optional(),
     averageMonthlyIncome: z.enum(

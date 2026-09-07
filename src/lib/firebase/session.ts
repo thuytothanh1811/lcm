@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 import { adminAuth, adminDb } from "@/lib/firebase/admin";
 import { SESSION_COOKIE_NAME } from "@/lib/firebase/session-cookie";
-import { type Role } from "@/lib/permissions";
+import { isRole, type Role } from "@/lib/permissions";
 
 const USERS_COLLECTION = "users";
 
@@ -54,7 +54,7 @@ async function resolveRole(
 
   if (doc.exists) {
     const role = doc.data()?.role;
-    return role === "ad" ? "ad" : "admin";
+    return isRole(role) ? role : "admin";
   }
 
   await ref.set({

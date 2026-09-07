@@ -14,14 +14,14 @@ import {
 import { RecruitmentDocumentChecklist } from "@/components/recruitment-document-checklist";
 import { RecruitmentForm } from "@/components/recruitment-form";
 import { vi as dict } from "@/lib/i18n/dictionaries/vi";
-import type { TManagerOption } from "@/server/user-actions";
+import type { TManagerGroups } from "@/server/user-actions";
 
 type TMode = "landing" | "form" | "checklist";
 
 export function RecruitmentEntryGate({
   managers,
 }: {
-  managers: TManagerOption[];
+  managers: TManagerGroups;
 }) {
   const [mode, setMode] = useState<TMode>("landing");
 

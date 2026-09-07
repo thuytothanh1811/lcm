@@ -88,23 +88,42 @@ function buildUserFormSchema(t: Dictionary, isEdit: boolean) {
           error: t.users.form.passwordRequirements,
         }),
     name: z.string().min(1, t.users.form.nameRequired),
-    role: z.enum(["admin", "ad"]),
+    role: z.enum(["admin", "sd", "sh", "ad"]),
+    managerSdUid: z.string().optional(),
+    managerShUid: z.string().optional(),
+    managerDirectUid: z.string().optional(),
   });
 }
 
 export type UserFormValues = z.infer<ReturnType<typeof buildUserFormSchema>>;
 export type UserEditValues = UserFormValues;
 
+// Org hierarchy: SD sits above SH, which sits above the direct manager (ad)
+// — each role only picks managers from the level(s) directly above it.
+// Admin sits outside this hierarchy entirely, so it has no manager fields.
+function getVisibleManagerFields(role: UserFormValues["role"]) {
+  switch (role) {
+    case "sh":
+      return { sd: true, sh: false, direct: false };
+    case "ad":
+      return { sd: true, sh: true, direct: false };
+    default:
+      return { sd: false, sh: false, direct: false };
+  }
+}
+
 export function UserFormDialog({
   open,
   onOpenChange,
   user,
+  users,
   onSubmit,
   isSubmitting,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   user: TAppUser | null;
+  users: TAppUser[];
   onSubmit: (values: UserFormValues | UserEditValues) => Promise<void>;
   isSubmitting: boolean;
 }) {
@@ -122,9 +141,24 @@ export function UserFormDialog({
     formState: { errors },
   } = useForm<UserFormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { role: "ad", email: "", password: "", name: "" },
+    defaultValues: {
+      role: "ad",
+      email: "",
+      password: "",
+      name: "",
+      managerSdUid: "",
+      managerShUid: "",
+      managerDirectUid: "",
+    },
   });
   const password = watch("password");
+  const role = watch("role");
+  const visibleManagerFields = getVisibleManagerFields(role);
+  const sdManagers = users.filter(u => u.role === "sd" && u.uid !== user?.uid);
+  const shManagers = users.filter(u => u.role === "sh" && u.uid !== user?.uid);
+  const directManagers = users.filter(
+    u => u.role === "ad" && u.uid !== user?.uid
+  );
 
   const handleGeneratePassword = () => {
     setValue("password", generateStrongPassword(), {
@@ -152,8 +186,19 @@ export function UserFormDialog({
               role: user.role,
               email: user.email,
               password: "",
+              managerSdUid: user.managerSdUid ?? "",
+              managerShUid: user.managerShUid ?? "",
+              managerDirectUid: user.managerDirectUid ?? "",
             }
-          : { name: "", role: "ad", email: "", password: "" }
+          : {
+              name: "",
+              role: "ad",
+              email: "",
+              password: "",
+              managerSdUid: "",
+              managerShUid: "",
+              managerDirectUid: "",
+            }
       );
     }
   }, [open, user, reset]);
@@ -272,6 +317,98 @@ export function UserFormDialog({
               />
               <FieldError errors={errors.role ? [errors.role] : undefined} />
             </Field>
+            {visibleManagerFields.sd && (
+              <Field data-invalid={!!errors.managerSdUid}>
+                <FieldLabel>{t.users.form.managerSdLabel}</FieldLabel>
+                <Controller
+                  control={control}
+                  name="managerSdUid"
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={t.users.form.managerPlaceholder}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {sdManagers.map(manager => (
+                          <SelectItem key={manager.uid} value={manager.uid}>
+                            {manager.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <FieldError
+                  errors={
+                    errors.managerSdUid ? [errors.managerSdUid] : undefined
+                  }
+                />
+              </Field>
+            )}
+            {visibleManagerFields.sh && (
+              <Field data-invalid={!!errors.managerShUid}>
+                <FieldLabel>{t.users.form.managerShLabel}</FieldLabel>
+                <Controller
+                  control={control}
+                  name="managerShUid"
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={t.users.form.managerPlaceholder}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {shManagers.map(manager => (
+                          <SelectItem key={manager.uid} value={manager.uid}>
+                            {manager.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <FieldError
+                  errors={
+                    errors.managerShUid ? [errors.managerShUid] : undefined
+                  }
+                />
+              </Field>
+            )}
+            {visibleManagerFields.direct && (
+              <Field data-invalid={!!errors.managerDirectUid}>
+                <FieldLabel>{t.users.form.managerDirectLabel}</FieldLabel>
+                <Controller
+                  control={control}
+                  name="managerDirectUid"
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={t.users.form.managerPlaceholder}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {directManagers.map(manager => (
+                          <SelectItem key={manager.uid} value={manager.uid}>
+                            {manager.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                <FieldError
+                  errors={
+                    errors.managerDirectUid
+                      ? [errors.managerDirectUid]
+                      : undefined
+                  }
+                />
+              </Field>
+            )}
           </FieldGroup>
 
           <DialogFooter>
