@@ -218,6 +218,7 @@ export const en: typeof vi = {
       other: "Other",
     },
     statusLabels: {
+      draft: "Saved",
       new: "New",
       agreed: "Agreed",
       rejected: "Not Agreed",
@@ -251,6 +252,8 @@ export const en: typeof vi = {
       "Your application has been submitted successfully. The Asahi Life recruitment team will contact you as soon as possible.",
     submitting: "Submitting...",
     submit: "Submit application",
+    saving: "Saving...",
+    draftSaved: "Your information has been saved.",
     maxFilesError: (n: number) => `Maximum ${n} files.`,
     maxFileSizeError: "Each file must be 5MB or smaller.",
     options: {

@@ -14,7 +14,13 @@ import {
 import type { Language } from "@/types/preferences/language";
 
 const COLLECTION = "recruitment_submissions";
-const STATUS_VALUES = ["new", "agreed", "rejected", "needs_documents"] as const;
+const STATUS_VALUES = [
+  "draft",
+  "new",
+  "agreed",
+  "rejected",
+  "needs_documents",
+] as const;
 export type TRecruitmentStatus = (typeof STATUS_VALUES)[number];
 const ADMIN_STATUS_VALUES = ["new", "admin_agreed", "admin_rejected"] as const;
 export type TAdminStatus = (typeof ADMIN_STATUS_VALUES)[number];
@@ -94,7 +100,8 @@ export async function uploadRecruitmentAttachment(
 
 export async function submitRecruitmentForm(
   values: RecruitmentValues,
-  locale?: Language
+  locale?: Language,
+  status: TRecruitmentStatus = "new"
 ): Promise<ActionResult<{ id: string }>> {
   const dict = await getDictionary(locale);
   const schema = buildRecruitmentSchema(dict.recruitmentForm.validation);
@@ -110,7 +117,7 @@ export async function submitRecruitmentForm(
       .doc(id)
       .set({
         ...parsed.data,
-        status: "new" satisfies TRecruitmentStatus,
+        status,
         submittedAt: new Date().toISOString(),
       });
 

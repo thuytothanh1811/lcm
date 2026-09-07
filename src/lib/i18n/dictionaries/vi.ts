@@ -216,6 +216,7 @@ export const vi = {
       other: "Khác",
     },
     statusLabels: {
+      draft: "Lưu",
       new: "Mới",
       agreed: "Đồng ý",
       rejected: "Không Đồng Ý",
@@ -249,6 +250,8 @@ export const vi = {
       "Thông tin ứng tuyển của bạn đã được gửi thành công. Đội ngũ tuyển dụng Asahi Life sẽ liên hệ với bạn trong thời gian sớm nhất.",
     submitting: "Đang gửi...",
     submit: "Nộp phiếu thông tin",
+    saving: "Đang lưu...",
+    draftSaved: "Đã lưu phiếu thông tin.",
     maxFilesError: (n: number) => `Tối đa ${n} tệp.`,
     maxFileSizeError: "Mỗi tệp tối đa 5MB.",
     options: {

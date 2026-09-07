@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import {
   IconCheck,
+  IconDeviceFloppy,
   IconDotsVertical,
   IconDownload,
   IconEye,
@@ -41,6 +42,7 @@ const STATUS_VARIANTS: Record<
   string,
   "default" | "secondary" | "destructive" | "outline"
 > = {
+  draft: "outline",
   new: "secondary",
   agreed: "default",
   rejected: "destructive",
@@ -57,6 +59,7 @@ const ADMIN_STATUS_VARIANTS: Record<
 };
 
 const STATUS_TRANSITIONS: Record<TRecruitmentStatus, TRecruitmentStatus[]> = {
+  draft: ["new", "agreed", "rejected", "needs_documents"],
   new: ["agreed", "rejected", "needs_documents"],
   needs_documents: ["agreed", "rejected"],
   agreed: ["rejected", "needs_documents"],
@@ -64,6 +67,7 @@ const STATUS_TRANSITIONS: Record<TRecruitmentStatus, TRecruitmentStatus[]> = {
 };
 
 const STATUS_ICONS: Record<TRecruitmentStatus, typeof IconCheck> = {
+  draft: IconDeviceFloppy,
   new: IconCheck,
   agreed: IconCheck,
   rejected: IconX,

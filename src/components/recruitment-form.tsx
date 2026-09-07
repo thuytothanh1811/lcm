@@ -37,6 +37,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isPreparingDocx, setIsPreparingDocx] = useState(false);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
     []
@@ -128,6 +129,21 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     setSubmitted(true);
   };
 
+  const onSaveDraft = async (values: RecruitmentValues) => {
+    setFormError(null);
+    setIsSavingDraft(true);
+    try {
+      const result = await submitRecruitmentForm(values, "vi", "draft");
+      if (!result.ok) {
+        setFormError(result.error);
+        return;
+      }
+      toast.success(t.recruitmentForm.draftSaved);
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
+
   if (submitted) {
     return (
       <div className="flex flex-col items-center gap-2 rounded-xl border bg-card p-10 text-center shadow-sm">
@@ -157,8 +173,16 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
       <FieldError>{formError}</FieldError>
 
       <div className="flex gap-3">
-        <Button type="button" variant="outline" className="flex-1">
-          {t.pages.recruitmentPublic.saveButton}
+        <Button
+          type="button"
+          variant="outline"
+          className="flex-1"
+          disabled={isSavingDraft}
+          onClick={handleSubmit(onSaveDraft)}
+        >
+          {isSavingDraft
+            ? t.recruitmentForm.saving
+            : t.pages.recruitmentPublic.saveButton}
         </Button>
         <Button
           type="button"
