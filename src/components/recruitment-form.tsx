@@ -98,9 +98,24 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
     try {
       const values = getValues();
       const blob = await buildRecruitmentDocxBlob(values, t);
-      const url = URL.createObjectURL(blob);
       const filename = `Phieu-thong-tin-tuyen-dung-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
 
+      // Mobile browsers (notably iOS Safari) don't reliably honor
+      // `<a download>` on a blob: URL, so hand the file to the native
+      // share sheet there instead — it lets the user save it to Files
+      // or share it directly.
+      const file = new File([blob], filename, {
+        type: blob.type,
+      });
+      if (
+        typeof navigator.canShare === "function" &&
+        navigator.canShare({ files: [file] })
+      ) {
+        await navigator.share({ files: [file] });
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = filename;
@@ -109,7 +124,8 @@ export function RecruitmentForm({ managers }: { managers: TManagerOption[] }) {
       link.remove();
 
       setTimeout(() => URL.revokeObjectURL(url), 30000);
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
       toast.error(t.errors.recruitment.exportFailed);
     } finally {
       setIsPreparingDocx(false);
