@@ -100,9 +100,9 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     try {
       const values = getValues();
       const blob = await buildRecruitmentDocxBlob(values, t);
-      const url = URL.createObjectURL(blob);
       const filename = `Phieu-thong-tin-tuyen-dung-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
 
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
       link.download = filename;
