@@ -111,9 +111,6 @@ export function RecruitmentDocumentChecklist() {
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
       <div className="mb-6 flex flex-col items-center gap-1 text-center">
-        <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-          CT-05
-        </p>
         <h2 className="text-xl font-semibold">DANH MỤC HỒ SƠ</h2>
       </div>
 
@@ -153,11 +150,6 @@ export function RecruitmentDocumentChecklist() {
           </tbody>
         </table>
       </div>
-
-      <p className="mt-4 text-sm">
-        Kết luận kiểm tra:&nbsp;&nbsp;☐ Hợp lệ – chuyển Phê duyệt&nbsp;&nbsp;
-        &nbsp;&nbsp;☐ Chưa hợp lệ – yêu cầu bổ sung
-      </p>
 
       <div className="mt-6 space-y-1 text-sm">
         <p className="font-semibold">Lưu ý:</p>
