@@ -1,3 +1,9 @@
+"use client";
+
+import { useState } from "react";
+
+import { Checkbox } from "@/components/ui/checkbox";
+
 const CHECKLIST_ROWS: {
   stt: number;
   label: string;
@@ -93,13 +99,22 @@ const CHECKLIST_ROWS: {
   },
 ];
 
-function ChecklistCell({ applicable }: { applicable: boolean }) {
+function ChecklistCell({
+  applicable,
+  checked,
+  onCheckedChange,
+}: {
+  applicable: boolean;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
+}) {
   return (
     <td className="border-border px-3 py-2 text-center align-middle">
       {applicable ? (
-        <span aria-hidden className="text-lg leading-none">
-          ☐
-        </span>
+        <Checkbox
+          checked={checked}
+          onCheckedChange={value => onCheckedChange(value === true)}
+        />
       ) : (
         <span className="text-muted-foreground">—</span>
       )}
@@ -108,6 +123,17 @@ function ChecklistCell({ applicable }: { applicable: boolean }) {
 }
 
 export function RecruitmentDocumentChecklist() {
+  const [checkedCells, setCheckedCells] = useState<Set<string>>(new Set());
+
+  const toggleCell = (key: string, checked: boolean) => {
+    setCheckedCells(prev => {
+      const next = new Set(prev);
+      if (checked) next.add(key);
+      else next.delete(key);
+      return next;
+    });
+  };
+
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
       <div className="mb-6 flex flex-col items-center gap-1 text-center">
@@ -142,9 +168,27 @@ export function RecruitmentDocumentChecklist() {
                   {row.stt}
                 </td>
                 <td className="border-border border px-3 py-2">{row.label}</td>
-                <ChecklistCell applicable={row.lpUm} />
-                <ChecklistCell applicable={row.mdrt} />
-                <ChecklistCell applicable={row.gad} />
+                <ChecklistCell
+                  applicable={row.lpUm}
+                  checked={checkedCells.has(`${row.stt}-lpUm`)}
+                  onCheckedChange={checked =>
+                    toggleCell(`${row.stt}-lpUm`, checked)
+                  }
+                />
+                <ChecklistCell
+                  applicable={row.mdrt}
+                  checked={checkedCells.has(`${row.stt}-mdrt`)}
+                  onCheckedChange={checked =>
+                    toggleCell(`${row.stt}-mdrt`, checked)
+                  }
+                />
+                <ChecklistCell
+                  applicable={row.gad}
+                  checked={checkedCells.has(`${row.stt}-gad`)}
+                  onCheckedChange={checked =>
+                    toggleCell(`${row.stt}-gad`, checked)
+                  }
+                />
               </tr>
             ))}
           </tbody>
