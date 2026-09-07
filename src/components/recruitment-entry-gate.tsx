@@ -15,6 +15,7 @@ import { RecruitmentDocumentChecklist } from "@/components/recruitment-document-
 import { RecruitmentForm } from "@/components/recruitment-form";
 import { RecruitmentSearch } from "@/components/recruitment-search";
 import { vi as dict } from "@/lib/i18n/dictionaries/vi";
+import type { RecruitmentValues } from "@/lib/validations/recruitment";
 import type { TManagerGroups } from "@/server/user-actions";
 
 type TMode = "landing" | "form" | "checklist" | "search";
@@ -25,6 +26,10 @@ export function RecruitmentEntryGate({
   managers: TManagerGroups;
 }) {
   const [mode, setMode] = useState<TMode>("landing");
+  const [resumeDraft, setResumeDraft] = useState<{
+    id: string;
+    values: Partial<RecruitmentValues>;
+  } | null>(null);
 
   return (
     <>
@@ -62,13 +67,21 @@ export function RecruitmentEntryGate({
         <div className="flex flex-col gap-4">
           <button
             type="button"
-            onClick={() => setMode("landing")}
+            onClick={() => {
+              setResumeDraft(null);
+              setMode("landing");
+            }}
             className="flex w-fit items-center gap-1.5 text-sm text-white/70 hover:text-white"
           >
             <IconArrowLeft className="size-4" />
             {dict.pages.recruitmentPublic.backButton}
           </button>
-          <RecruitmentForm managers={managers} />
+          <RecruitmentForm
+            key={resumeDraft?.id ?? "new"}
+            managers={managers}
+            initialValues={resumeDraft?.values}
+            submissionId={resumeDraft?.id}
+          />
         </div>
       ) : mode === "checklist" ? (
         <div className="flex flex-col gap-4">
@@ -92,7 +105,12 @@ export function RecruitmentEntryGate({
             <IconArrowLeft className="size-4" />
             {dict.pages.recruitmentPublic.backButton}
           </button>
-          <RecruitmentSearch />
+          <RecruitmentSearch
+            onResumeDraft={(id, values) => {
+              setResumeDraft({ id, values });
+              setMode("form");
+            }}
+          />
         </div>
       ) : (
         <div className="grid w-full gap-4 sm:grid-cols-3">
@@ -108,7 +126,10 @@ export function RecruitmentEntryGate({
           </button>
           <button
             type="button"
-            onClick={() => setMode("form")}
+            onClick={() => {
+              setResumeDraft(null);
+              setMode("form");
+            }}
             className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
           >
             <IconUserPlus className="size-8" />

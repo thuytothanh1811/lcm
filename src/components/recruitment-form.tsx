@@ -33,7 +33,15 @@ function todayIso(): string {
   return `${year}-${month}-${day}`;
 }
 
-export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
+export function RecruitmentForm({
+  managers,
+  initialValues,
+  submissionId,
+}: {
+  managers: TManagerGroups;
+  initialValues?: Partial<RecruitmentValues>;
+  submissionId?: string;
+}) {
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isPreparingDocx, setIsPreparingDocx] = useState(false);
@@ -95,6 +103,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
       attachments: [],
       commitmentVoluntary: undefined,
       commitmentDataConsent: undefined,
+      ...initialValues,
     },
   });
 
@@ -123,7 +132,12 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
 
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
-    const result = await submitRecruitmentForm(values, "vi");
+    const result = await submitRecruitmentForm(
+      values,
+      "vi",
+      "new",
+      submissionId
+    );
     if (!result.ok) {
       setFormError(result.error);
       return;
@@ -145,7 +159,12 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
 
     setIsSavingDraft(true);
     try {
-      const result = await submitRecruitmentForm(values, "vi", "draft");
+      const result = await submitRecruitmentForm(
+        values,
+        "vi",
+        "draft",
+        submissionId
+      );
       if (!result.ok) {
         setFormError(result.error);
         return;

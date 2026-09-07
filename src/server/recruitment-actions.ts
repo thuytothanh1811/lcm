@@ -114,7 +114,8 @@ export async function uploadRecruitmentAttachment(
 export async function submitRecruitmentForm(
   values: RecruitmentValues,
   locale?: Language,
-  status: TRecruitmentStatus = "new"
+  status: TRecruitmentStatus = "new",
+  existingId?: string
 ): Promise<ActionResult<{ id: string }>> {
   const dict = await getDictionary(locale);
   const schema =
@@ -127,20 +128,35 @@ export async function submitRecruitmentForm(
   }
 
   try {
-    const id = randomUUID();
-    await adminDb
-      .collection(COLLECTION)
-      .doc(id)
-      .set({
-        // Firestore rejects explicit `undefined` values (the draft schema
-        // leaves most fields optional) — round-tripping through JSON
-        // drops those keys instead of failing the write.
-        ...JSON.parse(JSON.stringify(parsed.data)),
-        status,
-        submittedAt: new Date().toISOString(),
-      });
+    const ref = existingId
+      ? adminDb.collection(COLLECTION).doc(existingId)
+      : adminDb.collection(COLLECTION).doc();
 
-    return { ok: true, data: { id } };
+    if (existingId) {
+      // Lightweight ownership check: resuming a draft only reaches this
+      // path with an existingId learned from a prior CCCD lookup, so
+      // require the CCCD in the payload to still match what's on file —
+      // that keeps a crafted request from overwriting an unrelated record
+      // by guessing its id.
+      const existing = await ref.get();
+      if (
+        !existing.exists ||
+        existing.data()?.idNumber !== parsed.data.idNumber
+      ) {
+        return { ok: false, error: dict.errors.forbidden };
+      }
+    }
+
+    await ref.set({
+      // Firestore rejects explicit `undefined` values (the draft schema
+      // leaves most fields optional) — round-tripping through JSON
+      // drops those keys instead of failing the write.
+      ...JSON.parse(JSON.stringify(parsed.data)),
+      status,
+      submittedAt: new Date().toISOString(),
+    });
+
+    return { ok: true, data: { id: ref.id } };
   } catch {
     return {
       ok: false,
@@ -149,21 +165,25 @@ export async function submitRecruitmentForm(
   }
 }
 
-export type TRecruitmentSearchResult = {
-  id: string;
-  fullName: string;
-  status: TRecruitmentStatus;
-  submittedAt: string;
-};
+export type TRecruitmentLookupResult =
+  | { kind: "not_found" }
+  | { kind: "draft"; id: string; values: RecruitmentValues }
+  | {
+      kind: "submitted";
+      fullName: string;
+      status: TRecruitmentStatus;
+      submittedAt: string;
+    };
 
-// Public lookup by CCCD (idNumber) for a candidate to check their own
-// submission's status — no session required, so it intentionally returns
-// only a minimal summary rather than the full record (bank details, family
-// info, PEP declaration, etc. stay out of reach of anyone who just knows a
-// CCCD number).
-export async function searchRecruitmentByIdNumber(
+// Public lookup by CCCD (idNumber) — no session required. A submission
+// still in "draft" comes back in full so the candidate can resume filling
+// it in; anything already submitted/processed only comes back as a minimal
+// status summary (bank details, family info, PEP declaration, etc. stay
+// out of reach of anyone who just knows a CCCD number once it's no longer
+// their own in-progress draft).
+export async function lookupRecruitmentByIdNumber(
   idNumber: string
-): Promise<ActionResult<TRecruitmentSearchResult | null>> {
+): Promise<ActionResult<TRecruitmentLookupResult>> {
   const dict = await getDictionary();
   const trimmed = idNumber.trim();
   if (!trimmed) {
@@ -179,16 +199,33 @@ export async function searchRecruitmentByIdNumber(
       .where("idNumber", "==", trimmed)
       .get();
 
-    if (snapshot.empty) return { ok: true, data: null };
+    if (snapshot.empty) return { ok: true, data: { kind: "not_found" } };
 
     const latest = snapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() }) as TRecruitmentSubmission)
       .sort((a, b) => b.submittedAt.localeCompare(a.submittedAt))[0];
 
+    if (latest.status === "draft") {
+      const values = { ...latest } as Partial<TRecruitmentSubmission>;
+      delete values.id;
+      delete values.status;
+      delete values.submittedAt;
+      delete values.statusUpdatedByRole;
+      delete values.adminStatus;
+      return {
+        ok: true,
+        data: {
+          kind: "draft",
+          id: latest.id,
+          values: values as RecruitmentValues,
+        },
+      };
+    }
+
     return {
       ok: true,
       data: {
-        id: latest.id,
+        kind: "submitted",
         fullName: latest.fullName,
         status: latest.status,
         submittedAt: latest.submittedAt,

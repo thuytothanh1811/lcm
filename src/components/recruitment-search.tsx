@@ -9,10 +9,10 @@ import { Input } from "@/components/ui/input";
 import { vi as dict } from "@/lib/i18n/dictionaries/vi";
 import { formatDate } from "@/lib/utils";
 import {
-  searchRecruitmentByIdNumber,
-  type TRecruitmentSearchResult,
+  lookupRecruitmentByIdNumber,
   type TRecruitmentStatus,
 } from "@/server/recruitment-actions";
+import type { RecruitmentValues } from "@/lib/validations/recruitment";
 
 const STATUS_VARIANTS: Record<
   TRecruitmentStatus,
@@ -25,12 +25,22 @@ const STATUS_VARIANTS: Record<
   needs_documents: "outline",
 };
 
-export function RecruitmentSearch() {
+type TSubmittedSummary = {
+  fullName: string;
+  status: TRecruitmentStatus;
+  submittedAt: string;
+};
+
+export function RecruitmentSearch({
+  onResumeDraft,
+}: {
+  onResumeDraft: (id: string, values: Partial<RecruitmentValues>) => void;
+}) {
   const [idNumber, setIdNumber] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSearching, setIsSearching] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [result, setResult] = useState<TRecruitmentSearchResult | null>(null);
+  const [notFound, setNotFound] = useState(false);
+  const [summary, setSummary] = useState<TSubmittedSummary | null>(null);
 
   const t = dict.recruitmentForm.search;
 
@@ -41,17 +51,28 @@ export function RecruitmentSearch() {
       return;
     }
     setError(null);
+    setNotFound(false);
+    setSummary(null);
     setIsSearching(true);
     try {
-      const response = await searchRecruitmentByIdNumber(idNumber.trim());
+      const response = await lookupRecruitmentByIdNumber(idNumber.trim());
       if (!response.ok) {
         setError(response.error);
-        setResult(null);
-        setHasSearched(false);
         return;
       }
-      setResult(response.data);
-      setHasSearched(true);
+
+      if (response.data.kind === "not_found") {
+        setNotFound(true);
+      } else if (response.data.kind === "draft") {
+        // Jump straight into the form, pre-filled with what was saved.
+        onResumeDraft(response.data.id, response.data.values);
+      } else {
+        setSummary({
+          fullName: response.data.fullName,
+          status: response.data.status,
+          submittedAt: response.data.submittedAt,
+        });
+      }
     } finally {
       setIsSearching(false);
     }
@@ -82,32 +103,32 @@ export function RecruitmentSearch() {
         </Button>
       </form>
 
-      {hasSearched && (
+      {notFound && (
         <div className="mt-6 border-t pt-6">
-          {result ? (
-            <dl className="grid gap-3 text-sm">
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-muted-foreground">{t.resultName}</dt>
-                <dd className="font-medium">{result.fullName}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-muted-foreground">{t.resultStatus}</dt>
-                <dd>
-                  <Badge variant={STATUS_VARIANTS[result.status]}>
-                    {dict.recruitmentsList.statusLabels[result.status]}
-                  </Badge>
-                </dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-muted-foreground">{t.resultSubmittedAt}</dt>
-                <dd className="font-medium">
-                  {formatDate(result.submittedAt)}
-                </dd>
-              </div>
-            </dl>
-          ) : (
-            <p className="text-muted-foreground text-sm">{t.notFound}</p>
-          )}
+          <p className="text-muted-foreground text-sm">{t.notFound}</p>
+        </div>
+      )}
+
+      {summary && (
+        <div className="mt-6 border-t pt-6">
+          <dl className="grid gap-3 text-sm">
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-muted-foreground">{t.resultName}</dt>
+              <dd className="font-medium">{summary.fullName}</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-muted-foreground">{t.resultStatus}</dt>
+              <dd>
+                <Badge variant={STATUS_VARIANTS[summary.status]}>
+                  {dict.recruitmentsList.statusLabels[summary.status]}
+                </Badge>
+              </dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-muted-foreground">{t.resultSubmittedAt}</dt>
+              <dd className="font-medium">{formatDate(summary.submittedAt)}</dd>
+            </div>
+          </dl>
         </div>
       )}
     </div>
