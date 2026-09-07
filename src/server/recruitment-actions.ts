@@ -34,6 +34,18 @@ export type TRecruitmentSubmission = RecruitmentValues & {
   adminStatus?: TAdminStatus;
 };
 
+// Non-admin roles only ever see submissions scoped to their place in the
+// SD > SH > direct-manager hierarchy — sd sees everything under their SD,
+// sh sees everything under their SH, ad sees only their own submissions.
+// Admin has no entry here and sees everything.
+const OWNERSHIP_FIELD: Partial<
+  Record<Role, "sdManagerUid" | "secondManagerUid" | "managerUid">
+> = {
+  sd: "sdManagerUid",
+  sh: "secondManagerUid",
+  ad: "managerUid",
+};
+
 async function requireRecruitmentAccess() {
   const dict = await getDictionary();
   const user = await getSessionUser();
@@ -138,13 +150,15 @@ export async function listRecruitmentSubmissions(): Promise<
   const { dict, user } = check;
 
   try {
-    if (user.role === "ad") {
-      // Equality filter on managerUid + orderBy submittedAt would need a
-      // composite Firestore index, so sort/limit client-side instead — each
-      // AD's own submission count is small enough for this to be cheap.
+    const ownershipField = OWNERSHIP_FIELD[user.role];
+    if (ownershipField) {
+      // Equality filter on the ownership field + orderBy submittedAt would
+      // need a composite Firestore index, so sort/limit client-side instead
+      // — each manager's scoped submission count is small enough for this
+      // to be cheap.
       const snapshot = await adminDb
         .collection(COLLECTION)
-        .where("managerUid", "==", user.uid)
+        .where(ownershipField, "==", user.uid)
         .get();
 
       const submissions = snapshot.docs
@@ -184,7 +198,8 @@ export async function getRecruitmentSubmission(
       return { ok: false, error: dict.errors.recruitment.notFound };
     }
     const data = doc.data();
-    if (user.role === "ad" && data?.managerUid !== user.uid) {
+    const ownershipField = OWNERSHIP_FIELD[user.role];
+    if (ownershipField && data?.[ownershipField] !== user.uid) {
       return { ok: false, error: dict.errors.forbidden };
     }
 
@@ -212,10 +227,11 @@ export async function getRecruitmentSubmissionsByIds(
       ...uniqueIds.map(id => adminDb.collection(COLLECTION).doc(id))
     );
 
+    const ownershipField = OWNERSHIP_FIELD[user.role];
     const submissions = docs
       .filter(doc => doc.exists)
       .map(doc => ({ id: doc.id, ...doc.data() }) as TRecruitmentSubmission)
-      .filter(s => user.role !== "ad" || s.managerUid === user.uid);
+      .filter(s => !ownershipField || s[ownershipField] === user.uid);
 
     return { ok: true, data: submissions };
   } catch {
@@ -239,9 +255,10 @@ export async function updateRecruitmentSubmission(
 
   try {
     const ref = adminDb.collection(COLLECTION).doc(id);
-    if (user.role === "ad") {
+    const ownershipField = OWNERSHIP_FIELD[user.role];
+    if (ownershipField) {
       const doc = await ref.get();
-      if (doc.data()?.managerUid !== user.uid) {
+      if (doc.data()?.[ownershipField] !== user.uid) {
         return { ok: false, error: dict.errors.forbidden };
       }
     }
@@ -288,9 +305,10 @@ export async function updateRecruitmentSubmissionStatus(
 
   try {
     const ref = adminDb.collection(COLLECTION).doc(id);
-    if (user.role === "ad") {
+    const ownershipField = OWNERSHIP_FIELD[user.role];
+    if (ownershipField) {
       const doc = await ref.get();
-      if (doc.data()?.managerUid !== user.uid) {
+      if (doc.data()?.[ownershipField] !== user.uid) {
         return { ok: false, error: dict.errors.forbidden };
       }
     }
@@ -335,7 +353,8 @@ export async function deleteRecruitmentSubmission(
   try {
     const ref = adminDb.collection(COLLECTION).doc(id);
     const doc = await ref.get();
-    if (user.role === "ad" && doc.data()?.managerUid !== user.uid) {
+    const ownershipField = OWNERSHIP_FIELD[user.role];
+    if (ownershipField && doc.data()?.[ownershipField] !== user.uid) {
       return { ok: false, error: dict.errors.forbidden };
     }
     const attachments =
