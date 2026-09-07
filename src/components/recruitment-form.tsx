@@ -49,6 +49,8 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     watch,
     setValue,
     getValues,
+    setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<RecruitmentValues>({
     resolver: zodResolver(schema),
@@ -129,8 +131,18 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     setSubmitted(true);
   };
 
-  const onSaveDraft = async (values: RecruitmentValues) => {
+  const handleSaveDraft = async () => {
     setFormError(null);
+    const values = getValues();
+    if (!values.idNumber?.trim()) {
+      setError("idNumber", {
+        type: "manual",
+        message: t.recruitmentForm.validation.idNumberRequired,
+      });
+      return;
+    }
+    clearErrors("idNumber");
+
     setIsSavingDraft(true);
     try {
       const result = await submitRecruitmentForm(values, "vi", "draft");
@@ -178,7 +190,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
           variant="outline"
           className="flex-1"
           disabled={isSavingDraft}
-          onClick={handleSubmit(onSaveDraft)}
+          onClick={handleSaveDraft}
         >
           {isSavingDraft
             ? t.recruitmentForm.saving

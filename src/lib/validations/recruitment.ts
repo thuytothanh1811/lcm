@@ -288,6 +288,210 @@ export function buildRecruitmentSchema(
   });
 }
 
+// Used by the "Lưu" (save draft) button: this isn't the official
+// submission yet, so every field is optional except the CCCD (idNumber),
+// which is required because it's what staff use to look the draft back up
+// later. `.partial()` alone doesn't achieve this — react-hook-form always
+// sends defined values ("" / []) rather than `undefined`, so a `.min(1)`
+// or required-enum constraint on a field would still fire even when that
+// field is "optional" — so each field below is redeclared without its
+// length/required constraint instead of reusing the full schema.
+export function buildRecruitmentDraftSchema(
+  t: Dictionary["recruitmentForm"]["validation"]
+) {
+  return z.object({
+    fullName: z.string().optional(),
+    dateOfBirth: z.string().optional(),
+    idNumber: z.string().min(1, t.idNumberRequired),
+    idIssueDate: z.string().optional(),
+    idIssuePlace: z.string().optional(),
+    oldIdNumber: z.string().optional(),
+    gender: z.enum(["male", "female"]).optional(),
+    maritalStatus: z
+      .enum(["single", "married", "divorced", "widowed"])
+      .optional(),
+    mobile1: z.string().optional(),
+    mobile2: z.string().optional(),
+    email: z.string().optional(),
+    managerUid: z.string().optional(),
+    managerName: z.string().optional(),
+    secondManagerUid: z.string().optional(),
+    secondManagerName: z.string().optional(),
+    sdManagerUid: z.string().optional(),
+    sdManagerName: z.string().optional(),
+
+    taxCode: z.string().optional(),
+    averageMonthlyIncome: z
+      .enum(["under5m", "from5to10m", "from10to20m", "from20to50m", "over50m"])
+      .optional(),
+    potentialCustomers: z.string().optional(),
+    educationLevel: z
+      .enum(["thpt", "trungCap", "caoDang", "daiHoc", "sauDaiHoc", "other"])
+      .optional(),
+    educationLevelOther: z.string().optional(),
+    isCivilServant: z.enum(["no", "yes"]).optional(),
+    civilServantType: z
+      .array(z.enum(["teacher", "police", "doctor", "other"]))
+      .optional(),
+    civilServantTypeOther: z.string().optional(),
+
+    accountHolderName: z.string().optional(),
+    bankAccountNumber: z.string().optional(),
+    bankName: z.string().optional(),
+    branch: z.string().optional(),
+
+    channel: z.enum(["agency", "other"]).optional(),
+    channelOther: z.string().optional(),
+    agencyType: z.enum(["full_time", "part_time"]).optional(),
+
+    positionApplied: z
+      .enum(["agent", "unit_manager", "district_manager", "gad", "other"])
+      .optional(),
+    positionOther: z.string().optional(),
+
+    hasBasicAgentCertificate: z.enum(["no", "yes"]).optional(),
+
+    participatingProgram: z.enum(["no", "yes"]).optional(),
+    programTypes: z
+      .array(
+        z.enum([
+          "near_mdrt_700m",
+          "mdrt",
+          "mdrt_2_years",
+          "cot_mdrt_3_years",
+          "gad_buyout",
+          "other",
+        ])
+      )
+      .optional(),
+    programTypesOther: z.string().optional(),
+
+    isRehire: z.enum(["no", "yes"]).optional(),
+    rehireFromDate: z.string().optional(),
+    rehireToDate: z.string().optional(),
+    rehireChannel: z.enum(["agency", "other"]).optional(),
+    rehireChannelOther: z.string().optional(),
+
+    recruiterCode: z.string().optional(),
+    recruiterName: z.string().optional(),
+    recruiterIdNumber: z.string().optional(),
+    referrerCode: z.string().optional(),
+    referrerName: z.string().optional(),
+    referrerIdNumber: z.string().optional(),
+
+    permanentProvince: z.string().optional(),
+    permanentWard: z.string().optional(),
+    permanentStreetAddress: z.string().optional(),
+
+    sameAsPermanentAddress: z.enum(["same", "different"]).optional(),
+    temporaryProvince: z.string().optional(),
+    temporaryWard: z.string().optional(),
+    temporaryStreetAddress: z.string().optional(),
+
+    hasInsuranceExperience: z.enum(["no", "yes"]).optional(),
+    workHistory: z
+      .array(
+        z.object({
+          fromDate: z.string().optional(),
+          toDate: z.string().optional(),
+          title: z.string().optional(),
+          companyNameAddress: z.string().optional(),
+        })
+      )
+      .optional(),
+
+    referralChannel: z
+      .array(
+        z.enum([
+          "ads",
+          "fanpage",
+          "website",
+          "friend_colleague_referral",
+          "other",
+        ])
+      )
+      .optional(),
+    referralOther: z.string().optional(),
+
+    hasPepRelationship: z.enum(["no", "yes"]).optional(),
+    pepRelationship: z.string().optional(),
+    pepFullName: z.string().optional(),
+    pepPosition: z.string().optional(),
+    pepOrganization: z.string().optional(),
+
+    familyMembers: z
+      .array(
+        z.object({
+          name: z.string().optional(),
+          birthYear: z.string().optional(),
+          relationship: z.string().optional(),
+          occupation: z.string().optional(),
+        })
+      )
+      .optional(),
+
+    q1Experience: z
+      .array(z.enum(["family", "friend_colleague", "heard_no_detail", "none"]))
+      .optional(),
+    q2View: z
+      .array(
+        z.enum([
+          "financial_protection",
+          "savings_investment",
+          "important_not_explored",
+          "other",
+        ])
+      )
+      .optional(),
+    q2ViewOther: z.string().optional(),
+    q3TargetAudience: z
+      .array(
+        z.enum([
+          "main_earner",
+          "young_children",
+          "debt_loan",
+          "retirement_age",
+          "everyone",
+          "other",
+        ])
+      )
+      .optional(),
+    q3TargetAudienceOther: z.string().optional(),
+    q4FirstTenPeople: z.string().optional(),
+    q5Training: z
+      .array(z.enum(["lpfc", "sales_skills", "sales_management"]))
+      .optional(),
+    q6Support: z
+      .array(
+        z.enum([
+          "product_training",
+          "manager_coaching",
+          "compensation_benefits",
+          "other",
+        ])
+      )
+      .optional(),
+    q6SupportOther: z.string().optional(),
+
+    attachments: z
+      .array(
+        z.object({
+          storagePath: z.string(),
+          fileName: z.string(),
+          size: z.number(),
+          contentType: z.string(),
+        })
+      )
+      .optional(),
+
+    commitmentVoluntary: z.boolean().optional(),
+    commitmentDataConsent: z.boolean().optional(),
+    confirmationConsent: z.enum(["no", "yes"]).optional(),
+    confirmationMethod: z.enum(["handwritten"]).optional(),
+    signDate: z.string().optional(),
+  });
+}
+
 export type RecruitmentValues = z.infer<
   ReturnType<typeof buildRecruitmentSchema>
 >;

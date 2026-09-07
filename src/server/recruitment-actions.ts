@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { canAccessRecruitments, type Role } from "@/lib/permissions";
 import { ActionResult } from "@/lib/types";
 import {
+  buildRecruitmentDraftSchema,
   buildRecruitmentSchema,
   type RecruitmentValues,
 } from "@/lib/validations/recruitment";
@@ -116,7 +117,10 @@ export async function submitRecruitmentForm(
   status: TRecruitmentStatus = "new"
 ): Promise<ActionResult<{ id: string }>> {
   const dict = await getDictionary(locale);
-  const schema = buildRecruitmentSchema(dict.recruitmentForm.validation);
+  const schema =
+    status === "draft"
+      ? buildRecruitmentDraftSchema(dict.recruitmentForm.validation)
+      : buildRecruitmentSchema(dict.recruitmentForm.validation);
   const parsed = schema.safeParse(values);
   if (!parsed.success) {
     return { ok: false, error: dict.errors.recruitment.invalidData };
@@ -128,7 +132,10 @@ export async function submitRecruitmentForm(
       .collection(COLLECTION)
       .doc(id)
       .set({
-        ...parsed.data,
+        // Firestore rejects explicit `undefined` values (the draft schema
+        // leaves most fields optional) — round-tripping through JSON
+        // drops those keys instead of failing the write.
+        ...JSON.parse(JSON.stringify(parsed.data)),
         status,
         submittedAt: new Date().toISOString(),
       });
