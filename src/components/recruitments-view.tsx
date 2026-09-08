@@ -17,6 +17,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table/data-table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { createRecruitmentsColumns } from "@/components/recruitments-columns";
 import { useDictionary } from "@/hooks/use-dictionary";
 import type { Role } from "@/lib/permissions";
@@ -25,9 +34,7 @@ import {
   updateRecruitmentAdminStatus,
   updateRecruitmentSdStatus,
   updateRecruitmentShStatus,
-  updateRecruitmentSubmissionStatus,
   type TAdminStatus,
-  type TRecruitmentStatus,
   type TRecruitmentSubmission,
   type TSdStatus,
   type TShStatus,
@@ -111,42 +118,36 @@ export function RecruitmentsView({
     }
   };
 
-  const handleStatusChange = async (
-    submission: TRecruitmentSubmission,
-    status: TRecruitmentStatus
-  ) => {
-    const previousStatus = submission.status;
-    const previousStatusUpdatedByRole = submission.statusUpdatedByRole;
-    setUpdatingStatusId(submission.id);
-    setSubmissions(prev =>
-      prev.map(s =>
-        s.id === submission.id
-          ? { ...s, status, statusUpdatedByRole: currentUserRole }
-          : s
-      )
-    );
+  const [documentsNoteTarget, setDocumentsNoteTarget] = useState<{
+    submission: TRecruitmentSubmission;
+    kind: "sh" | "sd";
+  } | null>(null);
+  const [documentsNoteValue, setDocumentsNoteValue] = useState("");
 
-    const result = await updateRecruitmentSubmissionStatus(
-      submission.id,
-      status
-    );
-    if (!result.ok) {
-      setSubmissions(prev =>
-        prev.map(s =>
-          s.id === submission.id
-            ? {
-                ...s,
-                status: previousStatus,
-                statusUpdatedByRole: previousStatusUpdatedByRole,
-              }
-            : s
-        )
-      );
-      toast.error(result.error);
-    } else {
-      toast.success(t.recruitmentsList.statusUpdated);
+  const handleRequestShDocumentsNote = (submission: TRecruitmentSubmission) => {
+    setDocumentsNoteTarget({ submission, kind: "sh" });
+    setDocumentsNoteValue(submission.shDocumentsNote ?? "");
+  };
+
+  const handleRequestSdDocumentsNote = (submission: TRecruitmentSubmission) => {
+    setDocumentsNoteTarget({ submission, kind: "sd" });
+    setDocumentsNoteValue(submission.sdDocumentsNote ?? "");
+  };
+
+  const handleConfirmDocumentsNote = async () => {
+    if (!documentsNoteTarget) return;
+    const trimmed = documentsNoteValue.trim();
+    if (!trimmed) {
+      toast.error(t.recruitmentsList.documentsNoteDialog.required);
+      return;
     }
-    setUpdatingStatusId(null);
+    const { submission, kind } = documentsNoteTarget;
+    setDocumentsNoteTarget(null);
+    if (kind === "sh") {
+      await handleShStatusChange(submission, "sh_needs_documents", trimmed);
+    } else {
+      await handleSdStatusChange(submission, "sd_needs_documents", trimmed);
+    }
   };
 
   const handleAdminStatusChange = async (
@@ -189,19 +190,42 @@ export function RecruitmentsView({
 
   const handleShStatusChange = async (
     submission: TRecruitmentSubmission,
-    shStatus: TShStatus
+    shStatus: TShStatus,
+    documentsNote?: string
   ) => {
     const previousShStatus = submission.shStatus;
+    const previousNote = submission.shDocumentsNote;
     setUpdatingStatusId(submission.id);
     setSubmissions(prev =>
-      prev.map(s => (s.id === submission.id ? { ...s, shStatus } : s))
+      prev.map(s =>
+        s.id === submission.id
+          ? {
+              ...s,
+              shStatus,
+              shDocumentsNote:
+                shStatus === "sh_needs_documents"
+                  ? documentsNote
+                  : s.shDocumentsNote,
+            }
+          : s
+      )
     );
 
-    const result = await updateRecruitmentShStatus(submission.id, shStatus);
+    const result = await updateRecruitmentShStatus(
+      submission.id,
+      shStatus,
+      documentsNote
+    );
     if (!result.ok) {
       setSubmissions(prev =>
         prev.map(s =>
-          s.id === submission.id ? { ...s, shStatus: previousShStatus } : s
+          s.id === submission.id
+            ? {
+                ...s,
+                shStatus: previousShStatus,
+                shDocumentsNote: previousNote,
+              }
+            : s
         )
       );
       toast.error(result.error);
@@ -213,19 +237,42 @@ export function RecruitmentsView({
 
   const handleSdStatusChange = async (
     submission: TRecruitmentSubmission,
-    sdStatus: TSdStatus
+    sdStatus: TSdStatus,
+    documentsNote?: string
   ) => {
     const previousSdStatus = submission.sdStatus;
+    const previousNote = submission.sdDocumentsNote;
     setUpdatingStatusId(submission.id);
     setSubmissions(prev =>
-      prev.map(s => (s.id === submission.id ? { ...s, sdStatus } : s))
+      prev.map(s =>
+        s.id === submission.id
+          ? {
+              ...s,
+              sdStatus,
+              sdDocumentsNote:
+                sdStatus === "sd_needs_documents"
+                  ? documentsNote
+                  : s.sdDocumentsNote,
+            }
+          : s
+      )
     );
 
-    const result = await updateRecruitmentSdStatus(submission.id, sdStatus);
+    const result = await updateRecruitmentSdStatus(
+      submission.id,
+      sdStatus,
+      documentsNote
+    );
     if (!result.ok) {
       setSubmissions(prev =>
         prev.map(s =>
-          s.id === submission.id ? { ...s, sdStatus: previousSdStatus } : s
+          s.id === submission.id
+            ? {
+                ...s,
+                sdStatus: previousSdStatus,
+                sdDocumentsNote: previousNote,
+              }
+            : s
         )
       );
       toast.error(result.error);
@@ -241,10 +288,11 @@ export function RecruitmentsView({
     onDelete: setDeleting,
     onDownload: handleDownload,
     downloadingId,
-    onStatusChange: handleStatusChange,
     onAdminStatusChange: handleAdminStatusChange,
     onShStatusChange: handleShStatusChange,
+    onRequestShDocumentsNote: handleRequestShDocumentsNote,
     onSdStatusChange: handleSdStatusChange,
+    onRequestSdDocumentsNote: handleRequestSdDocumentsNote,
     updatingStatusId,
   });
 
@@ -296,6 +344,40 @@ export function RecruitmentsView({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <Dialog
+        open={!!documentsNoteTarget}
+        onOpenChange={open => !open && setDocumentsNoteTarget(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {t.recruitmentsList.documentsNoteDialog.title}
+            </DialogTitle>
+            <DialogDescription>
+              {t.recruitmentsList.documentsNoteDialog.description}
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={documentsNoteValue}
+            onChange={e => setDocumentsNoteValue(e.target.value)}
+            placeholder={t.recruitmentsList.documentsNoteDialog.placeholder}
+            rows={4}
+          />
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setDocumentsNoteTarget(null)}
+            >
+              {t.recruitmentsList.documentsNoteDialog.cancel}
+            </Button>
+            <Button type="button" onClick={handleConfirmDocumentsNote}>
+              {t.recruitmentsList.documentsNoteDialog.confirm}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
