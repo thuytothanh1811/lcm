@@ -46,6 +46,7 @@ export default async function RecruitmentDetailPage({
       <RecruitmentDetailView
         submission={submissionResult.data}
         managers={managers}
+        role={sessionUser.role}
       />
     </div>
   );

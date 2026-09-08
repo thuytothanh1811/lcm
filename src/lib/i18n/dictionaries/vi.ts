@@ -72,8 +72,8 @@ export const vi = {
   permissions: {
     roleLabels: {
       admin: "Quản trị Admin",
-      sd: "Quản lý - SD",
       sh: "Quản lý - SH",
+      sd: "Quản lý - SD",
       ad: "Quản lý trực tiếp",
     },
   },
@@ -197,9 +197,10 @@ export const vi = {
       position: "Vị trí ứng tuyển",
       sdManager: "SD",
       secondManager: "SH",
-      manager: "Quản lý trực tiếp",
       status: "Trạng thái",
-      adminStatus: "Tình trạng ứng viên",
+      shStatus: "Trạng Thái - SH",
+      sdStatus: "Trạng Thái - SD",
+      adminStatus: "Trạng Thái - Admin",
       submittedAt: "Ngày nộp",
     },
     actions: "Thao tác",
@@ -223,14 +224,25 @@ export const vi = {
       rejected: "Không Đồng Ý",
       needs_documents: "Bổ sung chứng từ",
     },
-    adStatusLabels: {
-      agreed: "AD đã quản lý",
-      rejected: "AD Không Đồng ý",
+    roleStatusLabels: {
+      ad: { agreed: "AD đã quản lý", rejected: "AD Không Đồng ý" },
+      sh: { agreed: "SH Đồng Ý", rejected: "SH Không Đồng Ý" },
+      sd: { agreed: "SD Đồng Ý", rejected: "SD Không Đồng Ý" },
     },
     adminStatusLabels: {
       new: "Mới",
       admin_agreed: "Admin Đồng Ý",
       admin_rejected: "Admin Không Đồng Ý",
+    },
+    shStatusLabels: {
+      new: "Mới",
+      sh_agreed: "SH Đồng Ý",
+      sh_rejected: "SH Không Đồng Ý",
+    },
+    sdStatusLabels: {
+      new: "Mới",
+      sd_agreed: "SD Đồng Ý",
+      sd_rejected: "SD Không Đồng Ý",
     },
   },
   recruitmentDetailView: {
@@ -418,8 +430,7 @@ export const vi = {
       sdManagerPlaceholder: "Chọn tên SD",
       secondManagerLabel: "Họ và tên SH",
       secondManagerPlaceholder: "Chọn tên SH",
-      managerLabel: "Họ và tên Quản lý trực tiếp *",
-      managerPlaceholder: "Chọn tên quản lý trực tiếp",
+      managerLabel: "Họ và tên Quản lý trực tiếp",
     },
     section2: {
       title: "Thông tin tuyển dụng",
@@ -563,7 +574,6 @@ export const vi = {
       emailInvalid: "Vui lòng nhập địa chỉ email hợp lệ",
       genderRequired: "Vui lòng chọn giới tính",
       maritalStatusRequired: "Vui lòng chọn tình trạng hôn nhân",
-      managerRequired: "Vui lòng chọn tên quản lý",
       sdManagerRequired: "Vui lòng chọn tên SD",
       channelRequired: "Vui lòng chọn kênh",
       positionRequired: "Vui lòng chọn vị trí ứng tuyển",

@@ -74,8 +74,8 @@ export const en: typeof vi = {
   permissions: {
     roleLabels: {
       admin: "Administrator",
-      sd: "SD Manager",
       sh: "SH Manager",
+      sd: "SD Manager",
       ad: "Direct Manager",
     },
   },
@@ -199,9 +199,10 @@ export const en: typeof vi = {
       position: "Position applied",
       sdManager: "SD Manager",
       secondManager: "SH Manager",
-      manager: "Direct manager",
       status: "Status",
-      adminStatus: "Applicant status",
+      shStatus: "SH Status",
+      sdStatus: "SD Status",
+      adminStatus: "Admin Status",
       submittedAt: "Submitted",
     },
     actions: "Actions",
@@ -225,14 +226,25 @@ export const en: typeof vi = {
       rejected: "Not Agreed",
       needs_documents: "Additional Documents Required",
     },
-    adStatusLabels: {
-      agreed: "AD handled",
-      rejected: "AD not agreed",
+    roleStatusLabels: {
+      ad: { agreed: "AD handled", rejected: "AD not agreed" },
+      sh: { agreed: "SH Agreed", rejected: "SH Not Agreed" },
+      sd: { agreed: "SD Agreed", rejected: "SD Not Agreed" },
     },
     adminStatusLabels: {
       new: "New",
       admin_agreed: "Admin Agreed",
       admin_rejected: "Admin Rejected",
+    },
+    shStatusLabels: {
+      new: "New",
+      sh_agreed: "SH Agreed",
+      sh_rejected: "SH Rejected",
+    },
+    sdStatusLabels: {
+      new: "New",
+      sd_agreed: "SD Agreed",
+      sd_rejected: "SD Rejected",
     },
   },
   recruitmentDetailView: {
@@ -419,8 +431,7 @@ export const en: typeof vi = {
       sdManagerPlaceholder: "Select an SD",
       secondManagerLabel: "SH full name",
       secondManagerPlaceholder: "Select an SH",
-      managerLabel: "Direct manager full name *",
-      managerPlaceholder: "Select a direct manager",
+      managerLabel: "Direct manager full name",
     },
     section2: {
       title: "Recruitment information",
@@ -563,7 +574,6 @@ export const en: typeof vi = {
       emailInvalid: "Please enter a valid email address",
       genderRequired: "Please select your gender",
       maritalStatusRequired: "Please select your marital status",
-      managerRequired: "Please select a manager",
       sdManagerRequired: "Please select an SD",
       channelRequired: "Please select a channel",
       positionRequired: "Please select a position",

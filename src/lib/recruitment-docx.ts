@@ -436,12 +436,14 @@ export async function buildRecruitmentDocxBlob(
     b.push(b.field("Phường/Xã", data.temporaryWard));
     b.push(b.field("Số nhà, tên đường", data.temporaryStreetAddress));
   }
-  b.push(b.field(s1.managerLabel.replace(" *", ""), data.managerName));
+  if (data.sdManagerName) {
+    b.push(b.field(s1.sdManagerLabel, data.sdManagerName));
+  }
   if (data.secondManagerName) {
     b.push(b.field(s1.secondManagerLabel, data.secondManagerName));
   }
-  if (data.sdManagerName) {
-    b.push(b.field(s1.sdManagerLabel, data.sdManagerName));
+  if (data.managerName) {
+    b.push(b.field(s1.managerLabel, data.managerName));
   }
 
   // ===== SECTION 2: THÔNG TIN TUYỂN DỤNG =====
