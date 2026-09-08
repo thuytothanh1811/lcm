@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { sendPasswordResetEmail } from "firebase/auth";
 import { toast } from "sonner";
 
 import {
@@ -23,6 +24,7 @@ import {
 } from "@/components/user-form-dialog";
 import { createUsersColumns } from "@/components/users-columns";
 import { useDictionary } from "@/hooks/use-dictionary";
+import { auth } from "@/lib/firebase/client";
 import {
   createUser,
   deleteUser,
@@ -81,13 +83,33 @@ export function UsersView({ initialUsers }: { initialUsers: TAppUser[] }) {
         toast.success(t.users.updated);
       } else {
         const createValues = values as UserFormValues;
-        const result = await createUser(createValues);
+        const result = await createUser({
+          email: createValues.email,
+          name: createValues.name,
+          role: createValues.role,
+          managerSdUid: createValues.managerSdUid,
+          managerShUid: createValues.managerShUid,
+          managerDirectUid: createValues.managerDirectUid,
+        });
         if (!result.ok) {
           toast.error(result.error);
           return;
         }
         setUsers(prev => [result.data, ...prev]);
         toast.success(t.users.created);
+
+        // The account exists with a random password nobody has seen, so the
+        // owner needs this link to set their own. A delivery failure isn't
+        // fatal — the account is already created and the admin can resend.
+        try {
+          // Picks Firebase's Vietnamese email template; it falls back to
+          // English on its own if that locale isn't configured.
+          auth.languageCode = "vi";
+          await sendPasswordResetEmail(auth, createValues.email);
+          toast.success(t.users.passwordEmailSent(createValues.email));
+        } catch {
+          toast.error(t.users.passwordEmailFailed);
+        }
       }
       setFormOpen(false);
     } finally {

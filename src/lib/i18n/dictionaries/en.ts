@@ -130,6 +130,10 @@ export const en: typeof vi = {
     updated: "User updated",
     created: "User created",
     deleted: "User deleted",
+    passwordEmailSent: (email: string) =>
+      `Password setup email sent to ${email}`,
+    passwordEmailFailed:
+      "The account was created but the password setup email failed to send.",
     addButton: "Add user",
     empty: "No users yet.",
     deleteDialogTitle: "Delete user?",
@@ -148,6 +152,8 @@ export const en: typeof vi = {
       createTitle: "Add user",
       editDescription: "Update the user's name and role.",
       createDescription: "Create a new login account for the system.",
+      createPasswordEmailNote:
+        "We'll email this address so the user can set their own password. You don't need to enter one.",
       email: "Email",
       password: "Password",
       newPasswordLabel: "New password",
