@@ -90,7 +90,7 @@ const CHECKLIST_ROWS: {
     label: "Giấy chứng nhận MDRT của hiệp hội",
     lpUm: false,
     mdrt: true,
-    gad: true,
+    gad: false,
   },
   {
     stt: 13,
