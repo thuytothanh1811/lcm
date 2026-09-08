@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import {
   IconCheck,
-  IconDeviceFloppy,
   IconDotsVertical,
   IconDownload,
   IconEye,
@@ -24,32 +23,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { Role } from "@/lib/permissions";
 import { formatDate } from "@/lib/utils";
 import type {
   TAdminStatus,
-  TRecruitmentStatus,
   TRecruitmentSubmission,
   TSdStatus,
   TShStatus,
 } from "@/server/recruitment-actions";
-
-const STATUS_VARIANTS: Record<
-  string,
-  "default" | "secondary" | "destructive" | "outline"
-> = {
-  draft: "outline",
-  new: "secondary",
-  agreed: "default",
-  rejected: "destructive",
-  needs_documents: "outline",
-};
 
 const ADMIN_STATUS_VARIANTS: Record<
   string,
@@ -67,6 +49,7 @@ const SH_STATUS_VARIANTS: Record<
   new: "secondary",
   sh_agreed: "default",
   sh_rejected: "destructive",
+  sh_needs_documents: "outline",
 };
 
 const SD_STATUS_VARIANTS: Record<
@@ -76,22 +59,7 @@ const SD_STATUS_VARIANTS: Record<
   new: "secondary",
   sd_agreed: "default",
   sd_rejected: "destructive",
-};
-
-const STATUS_TRANSITIONS: Record<TRecruitmentStatus, TRecruitmentStatus[]> = {
-  draft: ["new", "agreed", "rejected", "needs_documents"],
-  new: ["agreed", "rejected", "needs_documents"],
-  needs_documents: ["agreed", "rejected"],
-  agreed: ["rejected", "needs_documents"],
-  rejected: ["agreed", "needs_documents"],
-};
-
-const STATUS_ICONS: Record<TRecruitmentStatus, typeof IconCheck> = {
-  draft: IconDeviceFloppy,
-  new: IconCheck,
-  agreed: IconCheck,
-  rejected: IconX,
-  needs_documents: IconFileText,
+  sd_needs_documents: "outline",
 };
 
 export function createRecruitmentsColumns({
@@ -100,10 +68,11 @@ export function createRecruitmentsColumns({
   onDelete,
   onDownload,
   downloadingId,
-  onStatusChange,
   onAdminStatusChange,
   onShStatusChange,
+  onRequestShDocumentsNote,
   onSdStatusChange,
+  onRequestSdDocumentsNote,
   updatingStatusId,
 }: {
   t: Dictionary;
@@ -111,10 +80,6 @@ export function createRecruitmentsColumns({
   onDelete: (submission: TRecruitmentSubmission) => void;
   onDownload: (submission: TRecruitmentSubmission) => void;
   downloadingId: string | null;
-  onStatusChange: (
-    submission: TRecruitmentSubmission,
-    status: TRecruitmentStatus
-  ) => void;
   onAdminStatusChange: (
     submission: TRecruitmentSubmission,
     status: TAdminStatus
@@ -123,10 +88,12 @@ export function createRecruitmentsColumns({
     submission: TRecruitmentSubmission,
     status: TShStatus
   ) => void;
+  onRequestShDocumentsNote: (submission: TRecruitmentSubmission) => void;
   onSdStatusChange: (
     submission: TRecruitmentSubmission,
     status: TSdStatus
   ) => void;
+  onRequestSdDocumentsNote: (submission: TRecruitmentSubmission) => void;
   updatingStatusId: string | null;
 }): ColumnDef<TRecruitmentSubmission & { id: string }>[] {
   const isAdmin = role === "admin";
@@ -166,29 +133,6 @@ export function createRecruitmentsColumns({
       accessorKey: "sdManagerName",
       header: t.recruitmentsList.columns.sdManager,
     },
-    {
-      accessorKey: "status",
-      header: t.recruitmentsList.columns.status,
-      cell: ({ row }) => {
-        const { status, statusUpdatedByRole } = row.original;
-        const roleLabels = statusUpdatedByRole
-          ? (
-              t.recruitmentsList.roleStatusLabels as Partial<
-                Record<Role, { agreed: string; rejected: string }>
-              >
-            )[statusUpdatedByRole]
-          : undefined;
-        const roleLabel =
-          status === "agreed" || status === "rejected"
-            ? roleLabels?.[status]
-            : undefined;
-        return (
-          <Badge variant={STATUS_VARIANTS[status]}>
-            {roleLabel ?? t.recruitmentsList.statusLabels[status] ?? status}
-          </Badge>
-        );
-      },
-    },
     ...(isAdmin || isSh
       ? [
           {
@@ -202,6 +146,12 @@ export function createRecruitmentsColumns({
                 </Badge>
               );
             },
+          },
+          {
+            accessorKey: "shDocumentsNote",
+            header: t.recruitmentsList.columns.shDocumentsNote,
+            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) =>
+              row.original.shDocumentsNote ?? "—",
           },
         ]
       : []),
@@ -218,6 +168,12 @@ export function createRecruitmentsColumns({
                 </Badge>
               );
             },
+          },
+          {
+            accessorKey: "sdDocumentsNote",
+            header: t.recruitmentsList.columns.sdDocumentsNote,
+            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) =>
+              row.original.sdDocumentsNote ?? "—",
           },
         ]
       : []),
@@ -248,7 +204,6 @@ export function createRecruitmentsColumns({
       cell: ({ row }) => {
         const isUpdatingStatus = updatingStatusId === row.original.id;
         const isDownloading = downloadingId === row.original.id;
-        const transitions = STATUS_TRANSITIONS[row.original.status] ?? [];
         const adminStatus = row.original.adminStatus ?? "new";
         const shStatus = row.original.shStatus ?? "new";
         const sdStatus = row.original.sdStatus ?? "new";
@@ -257,158 +212,6 @@ export function createRecruitmentsColumns({
         const isFinalized = adminStatus === "admin_agreed";
         return (
           <div className="flex justify-end gap-1">
-            {isAdmin && (
-              <>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={isUpdatingStatus || isFinalized}
-                      onClick={() =>
-                        onAdminStatusChange(row.original, "admin_agreed")
-                      }
-                    >
-                      <IconCheck className="size-4" />
-                      <span className="sr-only">
-                        {t.recruitmentsList.adminStatusLabels.admin_agreed}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {t.recruitmentsList.adminStatusLabels.admin_agreed}
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        adminStatus === "admin_rejected"
-                      }
-                      onClick={() =>
-                        onAdminStatusChange(row.original, "admin_rejected")
-                      }
-                    >
-                      <IconX className="size-4" />
-                      <span className="sr-only">
-                        {t.recruitmentsList.adminStatusLabels.admin_rejected}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {t.recruitmentsList.adminStatusLabels.admin_rejected}
-                  </TooltipContent>
-                </Tooltip>
-              </>
-            )}
-            {isSh && (
-              <>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        shStatus === "sh_agreed"
-                      }
-                      onClick={() =>
-                        onShStatusChange(row.original, "sh_agreed")
-                      }
-                    >
-                      <IconCheck className="size-4" />
-                      <span className="sr-only">
-                        {t.recruitmentsList.shStatusLabels.sh_agreed}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {t.recruitmentsList.shStatusLabels.sh_agreed}
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        shStatus === "sh_rejected"
-                      }
-                      onClick={() =>
-                        onShStatusChange(row.original, "sh_rejected")
-                      }
-                    >
-                      <IconX className="size-4" />
-                      <span className="sr-only">
-                        {t.recruitmentsList.shStatusLabels.sh_rejected}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {t.recruitmentsList.shStatusLabels.sh_rejected}
-                  </TooltipContent>
-                </Tooltip>
-              </>
-            )}
-            {isSd && (
-              <>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        sdStatus === "sd_agreed"
-                      }
-                      onClick={() =>
-                        onSdStatusChange(row.original, "sd_agreed")
-                      }
-                    >
-                      <IconCheck className="size-4" />
-                      <span className="sr-only">
-                        {t.recruitmentsList.sdStatusLabels.sd_agreed}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {t.recruitmentsList.sdStatusLabels.sd_agreed}
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        sdStatus === "sd_rejected"
-                      }
-                      onClick={() =>
-                        onSdStatusChange(row.original, "sd_rejected")
-                      }
-                    >
-                      <IconX className="size-4" />
-                      <span className="sr-only">
-                        {t.recruitmentsList.sdStatusLabels.sd_rejected}
-                      </span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {t.recruitmentsList.sdStatusLabels.sd_rejected}
-                  </TooltipContent>
-                </Tooltip>
-              </>
-            )}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -435,21 +238,117 @@ export function createRecruitmentsColumns({
                   <IconDownload className="size-4" />
                   {t.recruitmentsList.downloadSr}
                 </DropdownMenuItem>
-                {transitions.length > 0 && <DropdownMenuSeparator />}
-                {transitions.map(target => {
-                  const Icon = STATUS_ICONS[target];
-                  const label = t.recruitmentsList.statusLabels[target];
-                  return (
+                {isAdmin && (
+                  <>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      key={target}
-                      disabled={isFinalized}
-                      onSelect={() => onStatusChange(row.original, target)}
+                      disabled={isUpdatingStatus || isFinalized}
+                      onSelect={() =>
+                        onAdminStatusChange(row.original, "admin_agreed")
+                      }
                     >
-                      <Icon className="size-4" />
-                      {label}
+                      <IconCheck className="size-4" />
+                      {t.recruitmentsList.adminStatusLabels.admin_agreed}
                     </DropdownMenuItem>
-                  );
-                })}
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        adminStatus === "admin_rejected"
+                      }
+                      onSelect={() =>
+                        onAdminStatusChange(row.original, "admin_rejected")
+                      }
+                    >
+                      <IconX className="size-4" />
+                      {t.recruitmentsList.adminStatusLabels.admin_rejected}
+                    </DropdownMenuItem>
+                  </>
+                )}
+                {isSh && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        shStatus === "sh_agreed"
+                      }
+                      onSelect={() =>
+                        onShStatusChange(row.original, "sh_agreed")
+                      }
+                    >
+                      <IconCheck className="size-4" />
+                      {t.recruitmentsList.shStatusLabels.sh_agreed}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        shStatus === "sh_rejected"
+                      }
+                      onSelect={() =>
+                        onShStatusChange(row.original, "sh_rejected")
+                      }
+                    >
+                      <IconX className="size-4" />
+                      {t.recruitmentsList.shStatusLabels.sh_rejected}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        shStatus === "sh_needs_documents"
+                      }
+                      onSelect={() => onRequestShDocumentsNote(row.original)}
+                    >
+                      <IconFileText className="size-4" />
+                      {t.recruitmentsList.shStatusLabels.sh_needs_documents}
+                    </DropdownMenuItem>
+                  </>
+                )}
+                {isSd && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        sdStatus === "sd_agreed"
+                      }
+                      onSelect={() =>
+                        onSdStatusChange(row.original, "sd_agreed")
+                      }
+                    >
+                      <IconCheck className="size-4" />
+                      {t.recruitmentsList.sdStatusLabels.sd_agreed}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        sdStatus === "sd_rejected"
+                      }
+                      onSelect={() =>
+                        onSdStatusChange(row.original, "sd_rejected")
+                      }
+                    >
+                      <IconX className="size-4" />
+                      {t.recruitmentsList.sdStatusLabels.sd_rejected}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        sdStatus === "sd_needs_documents"
+                      }
+                      onSelect={() => onRequestSdDocumentsNote(row.original)}
+                    >
+                      <IconFileText className="size-4" />
+                      {t.recruitmentsList.sdStatusLabels.sd_needs_documents}
+                    </DropdownMenuItem>
+                  </>
+                )}
                 {isAdmin && (
                   <>
                     <DropdownMenuSeparator />

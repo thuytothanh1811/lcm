@@ -18,7 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { useDictionary } from "@/hooks/use-dictionary";
 import type { Role } from "@/lib/permissions";
@@ -56,6 +57,12 @@ export function RecruitmentDetailView({
   const router = useRouter();
   const t = useDictionary();
   const [status, setStatus] = useState(submission.status);
+  const [needsDocumentsNote, setNeedsDocumentsNote] = useState(
+    submission.needsDocumentsNote ?? ""
+  );
+  const [documentsNoteError, setDocumentsNoteError] = useState<string | null>(
+    null
+  );
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -88,6 +95,11 @@ export function RecruitmentDetailView({
   };
 
   const onSubmit = async (values: RecruitmentValues) => {
+    if (status === "needs_documents" && !needsDocumentsNote.trim()) {
+      setDocumentsNoteError(t.recruitmentDetailView.documentsNoteRequired);
+      return;
+    }
+    setDocumentsNoteError(null);
     setIsSaving(true);
     try {
       const result = await updateRecruitmentSubmission(submission.id, values);
@@ -95,10 +107,14 @@ export function RecruitmentDetailView({
         toast.error(result.error);
         return;
       }
-      if (status !== submission.status) {
+      if (
+        status !== submission.status ||
+        needsDocumentsNote !== (submission.needsDocumentsNote ?? "")
+      ) {
         const statusResult = await updateRecruitmentSubmissionStatus(
           submission.id,
-          status
+          status,
+          needsDocumentsNote.trim()
         );
         if (!statusResult.ok) {
           toast.error(statusResult.error);
@@ -157,6 +173,28 @@ export function RecruitmentDetailView({
               {formatDate(submission.submittedAt)}
             </p>
           </Field>
+          {status === "needs_documents" && (
+            <Field
+              data-invalid={!!documentsNoteError}
+              className="sm:col-span-2"
+            >
+              <FieldLabel>
+                {t.recruitmentDetailView.documentsNoteLabel}
+              </FieldLabel>
+              <Textarea
+                value={needsDocumentsNote}
+                onChange={e => {
+                  setNeedsDocumentsNote(e.target.value);
+                  if (documentsNoteError) setDocumentsNoteError(null);
+                }}
+                placeholder={t.recruitmentDetailView.documentsNotePlaceholder}
+                rows={3}
+              />
+              {documentsNoteError && (
+                <FieldError>{documentsNoteError}</FieldError>
+              )}
+            </Field>
+          )}
         </div>
       </div>
 

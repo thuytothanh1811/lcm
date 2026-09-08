@@ -25,9 +25,19 @@ const STATUS_VALUES = [
 export type TRecruitmentStatus = (typeof STATUS_VALUES)[number];
 const ADMIN_STATUS_VALUES = ["new", "admin_agreed", "admin_rejected"] as const;
 export type TAdminStatus = (typeof ADMIN_STATUS_VALUES)[number];
-const SH_STATUS_VALUES = ["new", "sh_agreed", "sh_rejected"] as const;
+const SH_STATUS_VALUES = [
+  "new",
+  "sh_agreed",
+  "sh_rejected",
+  "sh_needs_documents",
+] as const;
 export type TShStatus = (typeof SH_STATUS_VALUES)[number];
-const SD_STATUS_VALUES = ["new", "sd_agreed", "sd_rejected"] as const;
+const SD_STATUS_VALUES = [
+  "new",
+  "sd_agreed",
+  "sd_rejected",
+  "sd_needs_documents",
+] as const;
 export type TSdStatus = (typeof SD_STATUS_VALUES)[number];
 const SIGNED_URL_TTL_MS = 15 * 60 * 1000;
 
@@ -40,6 +50,9 @@ export type TRecruitmentSubmission = RecruitmentValues & {
   shStatus?: TShStatus;
   sdStatus?: TSdStatus;
   candidateCode?: string;
+  needsDocumentsNote?: string;
+  shDocumentsNote?: string;
+  sdDocumentsNote?: string;
 };
 
 const COUNTERS_COLLECTION = "counters";
@@ -417,7 +430,8 @@ export async function getRecruitmentAttachmentUrl(
 
 export async function updateRecruitmentSubmissionStatus(
   id: string,
-  status: string
+  status: string,
+  needsDocumentsNote?: string
 ): Promise<ActionResult> {
   const check = await requireRecruitmentAccess();
   if (!check.ok) return check;
@@ -425,6 +439,9 @@ export async function updateRecruitmentSubmissionStatus(
 
   if (!STATUS_VALUES.includes(status as TRecruitmentStatus)) {
     return { ok: false, error: dict.errors.recruitment.invalidStatus };
+  }
+  if (status === "needs_documents" && !needsDocumentsNote?.trim()) {
+    return { ok: false, error: dict.errors.recruitment.documentsNoteRequired };
   }
 
   try {
@@ -436,7 +453,14 @@ export async function updateRecruitmentSubmissionStatus(
         return { ok: false, error: dict.errors.forbidden };
       }
     }
-    await ref.update({ status, statusUpdatedByRole: user.role });
+    const updates: Record<string, unknown> = {
+      status,
+      statusUpdatedByRole: user.role,
+    };
+    if (status === "needs_documents") {
+      updates.needsDocumentsNote = needsDocumentsNote?.trim();
+    }
+    await ref.update(updates);
     return { ok: true, data: null };
   } catch {
     return { ok: false, error: dict.errors.recruitment.statusUpdateFailed };
@@ -483,7 +507,8 @@ export async function updateRecruitmentAdminStatus(
 // role's decision is never silently overwritten by another's.
 export async function updateRecruitmentShStatus(
   id: string,
-  status: string
+  status: string,
+  documentsNote?: string
 ): Promise<ActionResult> {
   const dict = await getDictionary();
   const user = await getSessionUser();
@@ -494,6 +519,9 @@ export async function updateRecruitmentShStatus(
   if (!SH_STATUS_VALUES.includes(status as TShStatus)) {
     return { ok: false, error: dict.errors.recruitment.invalidStatus };
   }
+  if (status === "sh_needs_documents" && !documentsNote?.trim()) {
+    return { ok: false, error: dict.errors.recruitment.documentsNoteRequired };
+  }
 
   try {
     const ref = adminDb.collection(COLLECTION).doc(id);
@@ -501,7 +529,11 @@ export async function updateRecruitmentShStatus(
     if (doc.data()?.secondManagerUid !== user.uid) {
       return { ok: false, error: dict.errors.forbidden };
     }
-    await ref.update({ shStatus: status });
+    const updates: Record<string, unknown> = { shStatus: status };
+    if (status === "sh_needs_documents") {
+      updates.shDocumentsNote = documentsNote?.trim();
+    }
+    await ref.update(updates);
     return { ok: true, data: null };
   } catch {
     return { ok: false, error: dict.errors.recruitment.statusUpdateFailed };
@@ -510,7 +542,8 @@ export async function updateRecruitmentShStatus(
 
 export async function updateRecruitmentSdStatus(
   id: string,
-  status: string
+  status: string,
+  documentsNote?: string
 ): Promise<ActionResult> {
   const dict = await getDictionary();
   const user = await getSessionUser();
@@ -521,6 +554,9 @@ export async function updateRecruitmentSdStatus(
   if (!SD_STATUS_VALUES.includes(status as TSdStatus)) {
     return { ok: false, error: dict.errors.recruitment.invalidStatus };
   }
+  if (status === "sd_needs_documents" && !documentsNote?.trim()) {
+    return { ok: false, error: dict.errors.recruitment.documentsNoteRequired };
+  }
 
   try {
     const ref = adminDb.collection(COLLECTION).doc(id);
@@ -528,7 +564,11 @@ export async function updateRecruitmentSdStatus(
     if (doc.data()?.sdManagerUid !== user.uid) {
       return { ok: false, error: dict.errors.forbidden };
     }
-    await ref.update({ sdStatus: status });
+    const updates: Record<string, unknown> = { sdStatus: status };
+    if (status === "sd_needs_documents") {
+      updates.sdDocumentsNote = documentsNote?.trim();
+    }
+    await ref.update(updates);
     return { ok: true, data: null };
   } catch {
     return { ok: false, error: dict.errors.recruitment.statusUpdateFailed };
