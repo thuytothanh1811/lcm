@@ -459,6 +459,7 @@ export const en: typeof vi = {
       specifyOther: "Please specify",
       basicAgentCertificateLabel:
         "Do you already have the Basic Insurance Agent Certificate?",
+      basicAgentCertificateCheckLink: "Check here",
       programLabel: "Participating program (MDRT, Talent attraction ...)",
       no: "No",
       yes: "Yes",

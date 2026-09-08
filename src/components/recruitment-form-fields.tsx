@@ -1328,8 +1328,16 @@ export function RecruitmentFormFields({
             name="hasBasicAgentCertificate"
             render={({ field }) => (
               <Field>
-                <FieldLabel>
+                <FieldLabel className="flex-wrap">
                   {t.recruitmentForm.section2.basicAgentCertificateLabel}
+                  <a
+                    href="https://vidi-e.mof.gov.vn/tracuu.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-normal underline underline-offset-4 hover:no-underline"
+                  >
+                    {t.recruitmentForm.section2.basicAgentCertificateCheckLink}
+                  </a>
                 </FieldLabel>
                 <RadioGroup
                   value={field.value}
