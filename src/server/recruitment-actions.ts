@@ -23,7 +23,12 @@ const STATUS_VALUES = [
   "needs_documents",
 ] as const;
 export type TRecruitmentStatus = (typeof STATUS_VALUES)[number];
-const ADMIN_STATUS_VALUES = ["new", "admin_agreed", "admin_rejected"] as const;
+const ADMIN_STATUS_VALUES = [
+  "new",
+  "admin_agreed",
+  "admin_rejected",
+  "admin_needs_documents",
+] as const;
 export type TAdminStatus = (typeof ADMIN_STATUS_VALUES)[number];
 const SH_STATUS_VALUES = [
   "new",
@@ -53,6 +58,7 @@ export type TRecruitmentSubmission = RecruitmentValues & {
   needsDocumentsNote?: string;
   shDocumentsNote?: string;
   sdDocumentsNote?: string;
+  adminDocumentsNote?: string;
 };
 
 const COUNTERS_COLLECTION = "counters";
@@ -469,7 +475,8 @@ export async function updateRecruitmentSubmissionStatus(
 
 export async function updateRecruitmentAdminStatus(
   id: string,
-  status: string
+  status: string,
+  documentsNote?: string
 ): Promise<ActionResult<{ candidateCode?: string }>> {
   const dict = await getDictionary();
   const user = await getSessionUser();
@@ -479,6 +486,9 @@ export async function updateRecruitmentAdminStatus(
   }
   if (!ADMIN_STATUS_VALUES.includes(status as TAdminStatus)) {
     return { ok: false, error: dict.errors.recruitment.invalidStatus };
+  }
+  if (status === "admin_needs_documents" && !documentsNote?.trim()) {
+    return { ok: false, error: dict.errors.recruitment.documentsNoteRequired };
   }
 
   try {
@@ -493,6 +503,9 @@ export async function updateRecruitmentAdminStatus(
         candidateCode = await nextCandidateCode();
         updates.candidateCode = candidateCode;
       }
+    }
+    if (status === "admin_needs_documents") {
+      updates.adminDocumentsNote = documentsNote?.trim();
     }
 
     await ref.update(updates);

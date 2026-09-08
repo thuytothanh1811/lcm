@@ -204,6 +204,7 @@ export const vi = {
       documentsNote: "Ghi chú bổ sung chứng từ",
       shDocumentsNote: "Ghi chú bổ sung chứng từ - SH",
       sdDocumentsNote: "Ghi chú bổ sung chứng từ - SD",
+      adminDocumentsNote: "Ghi chú bổ sung chứng từ - Admin",
       submittedAt: "Ngày nộp",
     },
     actions: "Thao tác",
@@ -244,6 +245,7 @@ export const vi = {
       new: "Mới",
       admin_agreed: "Admin Đồng Ý",
       admin_rejected: "Admin Không Đồng Ý",
+      admin_needs_documents: "Bổ sung chứng từ - Admin",
     },
     shStatusLabels: {
       new: "Mới",

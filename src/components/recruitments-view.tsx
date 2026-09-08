@@ -120,9 +120,16 @@ export function RecruitmentsView({
 
   const [documentsNoteTarget, setDocumentsNoteTarget] = useState<{
     submission: TRecruitmentSubmission;
-    kind: "sh" | "sd";
+    kind: "admin" | "sh" | "sd";
   } | null>(null);
   const [documentsNoteValue, setDocumentsNoteValue] = useState("");
+
+  const handleRequestAdminDocumentsNote = (
+    submission: TRecruitmentSubmission
+  ) => {
+    setDocumentsNoteTarget({ submission, kind: "admin" });
+    setDocumentsNoteValue(submission.adminDocumentsNote ?? "");
+  };
 
   const handleRequestShDocumentsNote = (submission: TRecruitmentSubmission) => {
     setDocumentsNoteTarget({ submission, kind: "sh" });
@@ -143,7 +150,13 @@ export function RecruitmentsView({
     }
     const { submission, kind } = documentsNoteTarget;
     setDocumentsNoteTarget(null);
-    if (kind === "sh") {
+    if (kind === "admin") {
+      await handleAdminStatusChange(
+        submission,
+        "admin_needs_documents",
+        trimmed
+      );
+    } else if (kind === "sh") {
       await handleShStatusChange(submission, "sh_needs_documents", trimmed);
     } else {
       await handleSdStatusChange(submission, "sd_needs_documents", trimmed);
@@ -152,23 +165,41 @@ export function RecruitmentsView({
 
   const handleAdminStatusChange = async (
     submission: TRecruitmentSubmission,
-    adminStatus: TAdminStatus
+    adminStatus: TAdminStatus,
+    documentsNote?: string
   ) => {
     const previousAdminStatus = submission.adminStatus;
+    const previousNote = submission.adminDocumentsNote;
     setUpdatingStatusId(submission.id);
     setSubmissions(prev =>
-      prev.map(s => (s.id === submission.id ? { ...s, adminStatus } : s))
+      prev.map(s =>
+        s.id === submission.id
+          ? {
+              ...s,
+              adminStatus,
+              adminDocumentsNote:
+                adminStatus === "admin_needs_documents"
+                  ? documentsNote
+                  : s.adminDocumentsNote,
+            }
+          : s
+      )
     );
 
     const result = await updateRecruitmentAdminStatus(
       submission.id,
-      adminStatus
+      adminStatus,
+      documentsNote
     );
     if (!result.ok) {
       setSubmissions(prev =>
         prev.map(s =>
           s.id === submission.id
-            ? { ...s, adminStatus: previousAdminStatus }
+            ? {
+                ...s,
+                adminStatus: previousAdminStatus,
+                adminDocumentsNote: previousNote,
+              }
             : s
         )
       );
@@ -289,6 +320,7 @@ export function RecruitmentsView({
     onDownload: handleDownload,
     downloadingId,
     onAdminStatusChange: handleAdminStatusChange,
+    onRequestAdminDocumentsNote: handleRequestAdminDocumentsNote,
     onShStatusChange: handleShStatusChange,
     onRequestShDocumentsNote: handleRequestShDocumentsNote,
     onSdStatusChange: handleSdStatusChange,

@@ -206,6 +206,7 @@ export const en: typeof vi = {
       documentsNote: "Documents Note",
       shDocumentsNote: "SH Documents Note",
       sdDocumentsNote: "SD Documents Note",
+      adminDocumentsNote: "Admin Documents Note",
       submittedAt: "Submitted",
     },
     actions: "Actions",
@@ -246,6 +247,7 @@ export const en: typeof vi = {
       new: "New",
       admin_agreed: "Admin Agreed",
       admin_rejected: "Admin Rejected",
+      admin_needs_documents: "Admin Additional Documents Required",
     },
     shStatusLabels: {
       new: "New",
