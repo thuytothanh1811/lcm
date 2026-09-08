@@ -442,6 +442,7 @@ export const vi = {
       specifyOther: "Vui lòng ghi rõ",
       basicAgentCertificateLabel:
         "Bạn đã có Chứng chỉ đại lý bảo hiểm cơ bản chưa?",
+      basicAgentCertificateCheckLink: "Kiểm tra tại đây",
       programLabel: "Chương trình tham gia (MDRT, Thu hút nhân tài ...)",
       no: "Không",
       yes: "Có",
