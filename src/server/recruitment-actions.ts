@@ -25,6 +25,10 @@ const STATUS_VALUES = [
 export type TRecruitmentStatus = (typeof STATUS_VALUES)[number];
 const ADMIN_STATUS_VALUES = ["new", "admin_agreed", "admin_rejected"] as const;
 export type TAdminStatus = (typeof ADMIN_STATUS_VALUES)[number];
+const SH_STATUS_VALUES = ["new", "sh_agreed", "sh_rejected"] as const;
+export type TShStatus = (typeof SH_STATUS_VALUES)[number];
+const SD_STATUS_VALUES = ["new", "sd_agreed", "sd_rejected"] as const;
+export type TSdStatus = (typeof SD_STATUS_VALUES)[number];
 const SIGNED_URL_TTL_MS = 15 * 60 * 1000;
 
 export type TRecruitmentSubmission = RecruitmentValues & {
@@ -33,6 +37,8 @@ export type TRecruitmentSubmission = RecruitmentValues & {
   status: TRecruitmentStatus;
   statusUpdatedByRole?: Role;
   adminStatus?: TAdminStatus;
+  shStatus?: TShStatus;
+  sdStatus?: TSdStatus;
   candidateCode?: string;
 };
 
@@ -472,6 +478,63 @@ export async function updateRecruitmentAdminStatus(
   }
 }
 
+// SH and SD each own an independent status track — separate from the
+// shared status field (ad's workflow) and from adminStatus — so one
+// role's decision is never silently overwritten by another's.
+export async function updateRecruitmentShStatus(
+  id: string,
+  status: string
+): Promise<ActionResult> {
+  const dict = await getDictionary();
+  const user = await getSessionUser();
+  if (!user) return { ok: false, error: dict.errors.notAuthenticated };
+  if (user.role !== "sh") {
+    return { ok: false, error: dict.errors.forbidden };
+  }
+  if (!SH_STATUS_VALUES.includes(status as TShStatus)) {
+    return { ok: false, error: dict.errors.recruitment.invalidStatus };
+  }
+
+  try {
+    const ref = adminDb.collection(COLLECTION).doc(id);
+    const doc = await ref.get();
+    if (doc.data()?.secondManagerUid !== user.uid) {
+      return { ok: false, error: dict.errors.forbidden };
+    }
+    await ref.update({ shStatus: status });
+    return { ok: true, data: null };
+  } catch {
+    return { ok: false, error: dict.errors.recruitment.statusUpdateFailed };
+  }
+}
+
+export async function updateRecruitmentSdStatus(
+  id: string,
+  status: string
+): Promise<ActionResult> {
+  const dict = await getDictionary();
+  const user = await getSessionUser();
+  if (!user) return { ok: false, error: dict.errors.notAuthenticated };
+  if (user.role !== "sd") {
+    return { ok: false, error: dict.errors.forbidden };
+  }
+  if (!SD_STATUS_VALUES.includes(status as TSdStatus)) {
+    return { ok: false, error: dict.errors.recruitment.invalidStatus };
+  }
+
+  try {
+    const ref = adminDb.collection(COLLECTION).doc(id);
+    const doc = await ref.get();
+    if (doc.data()?.sdManagerUid !== user.uid) {
+      return { ok: false, error: dict.errors.forbidden };
+    }
+    await ref.update({ sdStatus: status });
+    return { ok: true, data: null };
+  } catch {
+    return { ok: false, error: dict.errors.recruitment.statusUpdateFailed };
+  }
+}
+
 export async function deleteRecruitmentSubmission(
   id: string
 ): Promise<ActionResult> {
@@ -479,13 +542,13 @@ export async function deleteRecruitmentSubmission(
   if (!check.ok) return check;
   const { dict, user } = check;
 
+  if (user.role !== "admin") {
+    return { ok: false, error: dict.errors.forbidden };
+  }
+
   try {
     const ref = adminDb.collection(COLLECTION).doc(id);
     const doc = await ref.get();
-    const ownershipField = OWNERSHIP_FIELD[user.role];
-    if (ownershipField && doc.data()?.[ownershipField] !== user.uid) {
-      return { ok: false, error: dict.errors.forbidden };
-    }
     const attachments =
       (doc.data()?.attachments as TRecruitmentSubmission["attachments"]) ?? [];
 

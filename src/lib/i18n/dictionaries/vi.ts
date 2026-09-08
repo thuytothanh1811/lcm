@@ -198,7 +198,9 @@ export const vi = {
       sdManager: "SD",
       secondManager: "SH",
       status: "Trạng thái",
-      adminStatus: "Tình trạng ứng viên",
+      shStatus: "Trạng Thái - SH",
+      sdStatus: "Trạng Thái - SD",
+      adminStatus: "Trạng Thái - Admin",
       submittedAt: "Ngày nộp",
     },
     actions: "Thao tác",
@@ -231,6 +233,16 @@ export const vi = {
       new: "Mới",
       admin_agreed: "Admin Đồng Ý",
       admin_rejected: "Admin Không Đồng Ý",
+    },
+    shStatusLabels: {
+      new: "Mới",
+      sh_agreed: "SH Đồng Ý",
+      sh_rejected: "SH Không Đồng Ý",
+    },
+    sdStatusLabels: {
+      new: "Mới",
+      sd_agreed: "SD Đồng Ý",
+      sd_rejected: "SD Không Đồng Ý",
     },
   },
   recruitmentDetailView: {

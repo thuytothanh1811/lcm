@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { useDictionary } from "@/hooks/use-dictionary";
+import type { Role } from "@/lib/permissions";
 import { formatDate } from "@/lib/utils";
 import {
   buildRecruitmentSchema,
@@ -46,9 +47,11 @@ import type { TManagerGroups } from "@/server/user-actions";
 export function RecruitmentDetailView({
   submission,
   managers,
+  role,
 }: {
   submission: TRecruitmentSubmission;
   managers: TManagerGroups;
+  role: Role;
 }) {
   const router = useRouter();
   const t = useDictionary();
@@ -56,6 +59,8 @@ export function RecruitmentDetailView({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  // Once admin has agreed, the decision is final — freeze editing.
+  const isFinalized = submission.adminStatus === "admin_agreed";
 
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
@@ -167,15 +172,21 @@ export function RecruitmentDetailView({
       />
 
       <div className="flex items-center justify-between gap-2">
+        {role === "admin" && (
+          <Button
+            type="button"
+            variant="destructive"
+            disabled={isDeleting}
+            onClick={() => setConfirmDelete(true)}
+          >
+            {t.recruitmentDetailView.deleteButton}
+          </Button>
+        )}
         <Button
-          type="button"
-          variant="destructive"
-          disabled={isDeleting}
-          onClick={() => setConfirmDelete(true)}
+          type="submit"
+          disabled={isSaving || isFinalized}
+          className="ms-auto"
         >
-          {t.recruitmentDetailView.deleteButton}
-        </Button>
-        <Button type="submit" disabled={isSaving}>
           {isSaving
             ? t.recruitmentDetailView.saving
             : t.recruitmentDetailView.saveButton}

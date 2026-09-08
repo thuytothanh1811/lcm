@@ -200,7 +200,9 @@ export const en: typeof vi = {
       sdManager: "SD Manager",
       secondManager: "SH Manager",
       status: "Status",
-      adminStatus: "Applicant status",
+      shStatus: "SH Status",
+      sdStatus: "SD Status",
+      adminStatus: "Admin Status",
       submittedAt: "Submitted",
     },
     actions: "Actions",
@@ -233,6 +235,16 @@ export const en: typeof vi = {
       new: "New",
       admin_agreed: "Admin Agreed",
       admin_rejected: "Admin Rejected",
+    },
+    shStatusLabels: {
+      new: "New",
+      sh_agreed: "SH Agreed",
+      sh_rejected: "SH Rejected",
+    },
+    sdStatusLabels: {
+      new: "New",
+      sd_agreed: "SD Agreed",
+      sd_rejected: "SD Rejected",
     },
   },
   recruitmentDetailView: {

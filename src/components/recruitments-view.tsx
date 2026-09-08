@@ -23,10 +23,14 @@ import type { Role } from "@/lib/permissions";
 import {
   deleteRecruitmentSubmission,
   updateRecruitmentAdminStatus,
+  updateRecruitmentSdStatus,
+  updateRecruitmentShStatus,
   updateRecruitmentSubmissionStatus,
   type TAdminStatus,
   type TRecruitmentStatus,
   type TRecruitmentSubmission,
+  type TSdStatus,
+  type TShStatus,
 } from "@/server/recruitment-actions";
 
 export function RecruitmentsView({
@@ -183,6 +187,54 @@ export function RecruitmentsView({
     setUpdatingStatusId(null);
   };
 
+  const handleShStatusChange = async (
+    submission: TRecruitmentSubmission,
+    shStatus: TShStatus
+  ) => {
+    const previousShStatus = submission.shStatus;
+    setUpdatingStatusId(submission.id);
+    setSubmissions(prev =>
+      prev.map(s => (s.id === submission.id ? { ...s, shStatus } : s))
+    );
+
+    const result = await updateRecruitmentShStatus(submission.id, shStatus);
+    if (!result.ok) {
+      setSubmissions(prev =>
+        prev.map(s =>
+          s.id === submission.id ? { ...s, shStatus: previousShStatus } : s
+        )
+      );
+      toast.error(result.error);
+    } else {
+      toast.success(t.recruitmentsList.statusUpdated);
+    }
+    setUpdatingStatusId(null);
+  };
+
+  const handleSdStatusChange = async (
+    submission: TRecruitmentSubmission,
+    sdStatus: TSdStatus
+  ) => {
+    const previousSdStatus = submission.sdStatus;
+    setUpdatingStatusId(submission.id);
+    setSubmissions(prev =>
+      prev.map(s => (s.id === submission.id ? { ...s, sdStatus } : s))
+    );
+
+    const result = await updateRecruitmentSdStatus(submission.id, sdStatus);
+    if (!result.ok) {
+      setSubmissions(prev =>
+        prev.map(s =>
+          s.id === submission.id ? { ...s, sdStatus: previousSdStatus } : s
+        )
+      );
+      toast.error(result.error);
+    } else {
+      toast.success(t.recruitmentsList.statusUpdated);
+    }
+    setUpdatingStatusId(null);
+  };
+
   const columns = createRecruitmentsColumns({
     t,
     role: currentUserRole,
@@ -191,6 +243,8 @@ export function RecruitmentsView({
     downloadingId,
     onStatusChange: handleStatusChange,
     onAdminStatusChange: handleAdminStatusChange,
+    onShStatusChange: handleShStatusChange,
+    onSdStatusChange: handleSdStatusChange,
     updatingStatusId,
   });
 

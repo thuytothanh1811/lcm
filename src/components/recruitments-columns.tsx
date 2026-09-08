@@ -36,6 +36,8 @@ import type {
   TAdminStatus,
   TRecruitmentStatus,
   TRecruitmentSubmission,
+  TSdStatus,
+  TShStatus,
 } from "@/server/recruitment-actions";
 
 const STATUS_VARIANTS: Record<
@@ -56,6 +58,24 @@ const ADMIN_STATUS_VARIANTS: Record<
   new: "secondary",
   admin_agreed: "default",
   admin_rejected: "destructive",
+};
+
+const SH_STATUS_VARIANTS: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  new: "secondary",
+  sh_agreed: "default",
+  sh_rejected: "destructive",
+};
+
+const SD_STATUS_VARIANTS: Record<
+  string,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  new: "secondary",
+  sd_agreed: "default",
+  sd_rejected: "destructive",
 };
 
 const STATUS_TRANSITIONS: Record<TRecruitmentStatus, TRecruitmentStatus[]> = {
@@ -82,6 +102,8 @@ export function createRecruitmentsColumns({
   downloadingId,
   onStatusChange,
   onAdminStatusChange,
+  onShStatusChange,
+  onSdStatusChange,
   updatingStatusId,
 }: {
   t: Dictionary;
@@ -97,9 +119,19 @@ export function createRecruitmentsColumns({
     submission: TRecruitmentSubmission,
     status: TAdminStatus
   ) => void;
+  onShStatusChange: (
+    submission: TRecruitmentSubmission,
+    status: TShStatus
+  ) => void;
+  onSdStatusChange: (
+    submission: TRecruitmentSubmission,
+    status: TSdStatus
+  ) => void;
   updatingStatusId: string | null;
 }): ColumnDef<TRecruitmentSubmission & { id: string }>[] {
   const isAdmin = role === "admin";
+  const isSh = role === "sh";
+  const isSd = role === "sd";
 
   return [
     {
@@ -157,6 +189,38 @@ export function createRecruitmentsColumns({
         );
       },
     },
+    ...(isAdmin || isSh
+      ? [
+          {
+            accessorKey: "shStatus",
+            header: t.recruitmentsList.columns.shStatus,
+            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) => {
+              const shStatus = row.original.shStatus ?? "new";
+              return (
+                <Badge variant={SH_STATUS_VARIANTS[shStatus]}>
+                  {t.recruitmentsList.shStatusLabels[shStatus]}
+                </Badge>
+              );
+            },
+          },
+        ]
+      : []),
+    ...(isAdmin || isSd
+      ? [
+          {
+            accessorKey: "sdStatus",
+            header: t.recruitmentsList.columns.sdStatus,
+            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) => {
+              const sdStatus = row.original.sdStatus ?? "new";
+              return (
+                <Badge variant={SD_STATUS_VARIANTS[sdStatus]}>
+                  {t.recruitmentsList.sdStatusLabels[sdStatus]}
+                </Badge>
+              );
+            },
+          },
+        ]
+      : []),
     ...(isAdmin
       ? [
           {
@@ -186,6 +250,11 @@ export function createRecruitmentsColumns({
         const isDownloading = downloadingId === row.original.id;
         const transitions = STATUS_TRANSITIONS[row.original.status] ?? [];
         const adminStatus = row.original.adminStatus ?? "new";
+        const shStatus = row.original.shStatus ?? "new";
+        const sdStatus = row.original.sdStatus ?? "new";
+        // Once admin has agreed, the decision is final — freeze every
+        // status control so nobody can change it out from under admin.
+        const isFinalized = adminStatus === "admin_agreed";
         return (
           <div className="flex justify-end gap-1">
             {isAdmin && (
@@ -195,9 +264,7 @@ export function createRecruitmentsColumns({
                     <Button
                       variant="ghost"
                       size="icon-sm"
-                      disabled={
-                        isUpdatingStatus || adminStatus === "admin_agreed"
-                      }
+                      disabled={isUpdatingStatus || isFinalized}
                       onClick={() =>
                         onAdminStatusChange(row.original, "admin_agreed")
                       }
@@ -218,7 +285,9 @@ export function createRecruitmentsColumns({
                       variant="ghost"
                       size="icon-sm"
                       disabled={
-                        isUpdatingStatus || adminStatus === "admin_rejected"
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        adminStatus === "admin_rejected"
                       }
                       onClick={() =>
                         onAdminStatusChange(row.original, "admin_rejected")
@@ -232,6 +301,110 @@ export function createRecruitmentsColumns({
                   </TooltipTrigger>
                   <TooltipContent>
                     {t.recruitmentsList.adminStatusLabels.admin_rejected}
+                  </TooltipContent>
+                </Tooltip>
+              </>
+            )}
+            {isSh && (
+              <>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        shStatus === "sh_agreed"
+                      }
+                      onClick={() =>
+                        onShStatusChange(row.original, "sh_agreed")
+                      }
+                    >
+                      <IconCheck className="size-4" />
+                      <span className="sr-only">
+                        {t.recruitmentsList.shStatusLabels.sh_agreed}
+                      </span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {t.recruitmentsList.shStatusLabels.sh_agreed}
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        shStatus === "sh_rejected"
+                      }
+                      onClick={() =>
+                        onShStatusChange(row.original, "sh_rejected")
+                      }
+                    >
+                      <IconX className="size-4" />
+                      <span className="sr-only">
+                        {t.recruitmentsList.shStatusLabels.sh_rejected}
+                      </span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {t.recruitmentsList.shStatusLabels.sh_rejected}
+                  </TooltipContent>
+                </Tooltip>
+              </>
+            )}
+            {isSd && (
+              <>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        sdStatus === "sd_agreed"
+                      }
+                      onClick={() =>
+                        onSdStatusChange(row.original, "sd_agreed")
+                      }
+                    >
+                      <IconCheck className="size-4" />
+                      <span className="sr-only">
+                        {t.recruitmentsList.sdStatusLabels.sd_agreed}
+                      </span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {t.recruitmentsList.sdStatusLabels.sd_agreed}
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      disabled={
+                        isUpdatingStatus ||
+                        isFinalized ||
+                        sdStatus === "sd_rejected"
+                      }
+                      onClick={() =>
+                        onSdStatusChange(row.original, "sd_rejected")
+                      }
+                    >
+                      <IconX className="size-4" />
+                      <span className="sr-only">
+                        {t.recruitmentsList.sdStatusLabels.sd_rejected}
+                      </span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {t.recruitmentsList.sdStatusLabels.sd_rejected}
                   </TooltipContent>
                 </Tooltip>
               </>
@@ -269,6 +442,7 @@ export function createRecruitmentsColumns({
                   return (
                     <DropdownMenuItem
                       key={target}
+                      disabled={isFinalized}
                       onSelect={() => onStatusChange(row.original, target)}
                     >
                       <Icon className="size-4" />
@@ -276,14 +450,18 @@ export function createRecruitmentsColumns({
                     </DropdownMenuItem>
                   );
                 })}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  variant="destructive"
-                  onSelect={() => onDelete(row.original)}
-                >
-                  <IconTrash className="size-4" />
-                  {t.recruitmentsList.deleteSr}
-                </DropdownMenuItem>
+                {isAdmin && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={() => onDelete(row.original)}
+                    >
+                      <IconTrash className="size-4" />
+                      {t.recruitmentsList.deleteSr}
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
