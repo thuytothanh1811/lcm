@@ -127,10 +127,6 @@ export const vi = {
     updated: "Đã cập nhật người dùng",
     created: "Đã tạo người dùng",
     deleted: "Đã xóa người dùng",
-    passwordEmailSent: (email: string) =>
-      `Đã gửi email đặt mật khẩu tới ${email}`,
-    passwordEmailFailed:
-      "Đã tạo tài khoản nhưng không gửi được email đặt mật khẩu.",
     addButton: "Thêm người dùng",
     empty: "Chưa có người dùng nào.",
     deleteDialogTitle: "Xóa người dùng?",
@@ -149,8 +145,6 @@ export const vi = {
       createTitle: "Thêm người dùng",
       editDescription: "Cập nhật tên và vai trò của người dùng.",
       createDescription: "Tạo tài khoản đăng nhập mới cho hệ thống.",
-      createPasswordEmailNote:
-        "Hệ thống sẽ gửi email tới địa chỉ này để người dùng tự đặt mật khẩu. Bạn không cần nhập mật khẩu.",
       email: "Email",
       password: "Mật khẩu",
       newPasswordLabel: "Mật khẩu mới",

@@ -78,15 +78,15 @@ function generateStrongPassword(length = 14) {
 function buildUserFormSchema(t: Dictionary, isEdit: boolean) {
   return z.object({
     email: z.string(),
-    // Creating no longer asks for a password at all — the new account gets a
-    // random one server-side and its owner sets their own via the emailed
-    // link. Editing leaves the field blank to keep the current password, so
-    // an empty value is allowed; a non-empty value still must be strong.
+    // Editing leaves the password blank to keep the current one, so an
+    // empty value is allowed there; a non-empty value still must be strong.
     password: isEdit
       ? z.string().refine(v => v === "" || STRONG_PASSWORD_REGEX.test(v), {
           error: t.users.form.passwordRequirements,
         })
-      : z.string().optional(),
+      : z.string().regex(STRONG_PASSWORD_REGEX, {
+          error: t.users.form.passwordRequirements,
+        }),
     name: z.string().min(1, t.users.form.nameRequired),
     role: z.enum(["admin", "sd", "sh", "ad"]),
     managerSdUid: z.string().optional(),
@@ -169,7 +169,7 @@ export function UserFormDialog({
 
   const handleCopyPassword = async () => {
     try {
-      await navigator.clipboard.writeText(password ?? "");
+      await navigator.clipboard.writeText(password);
       toast.success(t.users.form.passwordCopied);
     } catch {
       toast.error(t.users.form.passwordCopyFailed);
@@ -233,65 +233,61 @@ export function UserFormDialog({
                 />
               </Field>
             )}
-            {!isEdit && (
-              <FieldDescription>
-                {t.users.form.createPasswordEmailNote}
-              </FieldDescription>
-            )}
-            {isEdit && (
-              <Field data-invalid={!!errors.password}>
-                <FieldLabel htmlFor="password">
-                  {t.users.form.newPasswordLabel}
-                </FieldLabel>
-                <InputGroup>
-                  <InputGroupInput
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    {...register("password")}
-                  />
-                  <InputGroupAddon align="inline-end">
-                    <InputGroupButton
-                      type="button"
-                      size="icon-xs"
-                      aria-label={
-                        showPassword
-                          ? t.users.form.hidePasswordSr
-                          : t.users.form.showPasswordSr
-                      }
-                      onClick={() => setShowPassword(show => !show)}
-                    >
-                      {showPassword ? <EyeOff /> : <Eye />}
-                    </InputGroupButton>
-                    <InputGroupButton
-                      type="button"
-                      size="icon-xs"
-                      aria-label={t.users.form.generatePasswordSr}
-                      onClick={handleGeneratePassword}
-                    >
-                      <RefreshCw />
-                    </InputGroupButton>
-                    <InputGroupButton
-                      type="button"
-                      size="icon-xs"
-                      aria-label={t.users.form.copyPasswordSr}
-                      disabled={!password}
-                      onClick={handleCopyPassword}
-                    >
-                      <Copy />
-                    </InputGroupButton>
-                  </InputGroupAddon>
-                </InputGroup>
+            <Field data-invalid={!!errors.password}>
+              <FieldLabel htmlFor="password">
+                {isEdit ? t.users.form.newPasswordLabel : t.users.form.password}
+              </FieldLabel>
+              <InputGroup>
+                <InputGroupInput
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required={!isEdit}
+                  {...register("password")}
+                />
+                <InputGroupAddon align="inline-end">
+                  <InputGroupButton
+                    type="button"
+                    size="icon-xs"
+                    aria-label={
+                      showPassword
+                        ? t.users.form.hidePasswordSr
+                        : t.users.form.showPasswordSr
+                    }
+                    onClick={() => setShowPassword(show => !show)}
+                  >
+                    {showPassword ? <EyeOff /> : <Eye />}
+                  </InputGroupButton>
+                  <InputGroupButton
+                    type="button"
+                    size="icon-xs"
+                    aria-label={t.users.form.generatePasswordSr}
+                    onClick={handleGeneratePassword}
+                  >
+                    <RefreshCw />
+                  </InputGroupButton>
+                  <InputGroupButton
+                    type="button"
+                    size="icon-xs"
+                    aria-label={t.users.form.copyPasswordSr}
+                    disabled={!password}
+                    onClick={handleCopyPassword}
+                  >
+                    <Copy />
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
+              {isEdit && (
                 <FieldDescription>
                   {t.users.form.newPasswordDescription}
                 </FieldDescription>
-                <FieldDescription>
-                  {t.users.form.passwordRequirements}
-                </FieldDescription>
-                <FieldError
-                  errors={errors.password ? [errors.password] : undefined}
-                />
-              </Field>
-            )}
+              )}
+              <FieldDescription>
+                {t.users.form.passwordRequirements}
+              </FieldDescription>
+              <FieldError
+                errors={errors.password ? [errors.password] : undefined}
+              />
+            </Field>
             <Field data-invalid={!!errors.name}>
               <FieldLabel htmlFor="name">{t.users.form.name}</FieldLabel>
               <Input id="name" {...register("name")} />

@@ -1,7 +1,5 @@
 "use server";
 
-import { randomInt } from "crypto";
-
 import { FieldValue } from "firebase-admin/firestore";
 
 import { adminAuth, adminDb } from "@/lib/firebase/admin";
@@ -13,32 +11,6 @@ import { ActionResult } from "@/lib/types";
 const COLLECTION = "users";
 const STRONG_PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
-
-// New accounts get a random password that is never shown to anyone — the
-// account owner sets their own via the reset link emailed to them right
-// after creation, so no admin ever handles someone else's password.
-function generateInitialPassword(length = 24) {
-  const lower = "abcdefghijklmnopqrstuvwxyz";
-  const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const digits = "0123456789";
-  const special = "!@#$%^&*-_+=?";
-  const all = lower + upper + digits + special;
-
-  const pick = (chars: string) => chars[randomInt(0, chars.length)] as string;
-
-  const chars = [
-    pick(lower),
-    pick(upper),
-    pick(digits),
-    pick(special),
-    ...Array.from({ length: length - 4 }, () => pick(all)),
-  ];
-  for (let i = chars.length - 1; i > 0; i--) {
-    const j = randomInt(0, i + 1);
-    [chars[i], chars[j]] = [chars[j], chars[i]];
-  }
-  return chars.join("");
-}
 
 export type TAppUser = {
   uid: string;
@@ -150,6 +122,7 @@ export async function listUsers(): Promise<ActionResult<TAppUser[]>> {
 
 export async function createUser(input: {
   email: string;
+  password: string;
   name: string;
   role: string;
   managerSdUid?: string;
@@ -163,11 +136,14 @@ export async function createUser(input: {
   if (!isRole(input.role)) {
     return { ok: false, error: dict.errors.users.invalidRole };
   }
+  if (!STRONG_PASSWORD_REGEX.test(input.password)) {
+    return { ok: false, error: dict.errors.users.passwordTooShort };
+  }
 
   try {
     const record = await adminAuth.createUser({
       email: input.email,
-      password: generateInitialPassword(),
+      password: input.password,
       displayName: input.name,
     });
 
