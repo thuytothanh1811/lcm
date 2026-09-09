@@ -72,7 +72,7 @@ const CHECKLIST_ROWS: {
   },
   {
     stt: 10,
-    label: "Mã QR khoản ngân hàng (hình chụp)",
+    label: "Mã QR tài khoản ngân hàng (hình chụp)",
     lpUm: true,
     mdrt: true,
     gad: true,
