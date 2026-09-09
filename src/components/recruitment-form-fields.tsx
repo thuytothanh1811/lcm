@@ -1326,6 +1326,113 @@ export function RecruitmentFormFields({
 
           <Controller
             control={control}
+            name="isRehire"
+            render={({ field }) => (
+              <Field>
+                <FieldLabel>
+                  {t.recruitmentForm.section2.rehireLabel}
+                </FieldLabel>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="flex gap-6"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="no" id="isRehire-no" />
+                    <FieldLabel htmlFor="isRehire-no" className="font-normal">
+                      {t.recruitmentForm.section2.no}
+                    </FieldLabel>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="yes" id="isRehire-yes" />
+                    <FieldLabel htmlFor="isRehire-yes" className="font-normal">
+                      {t.recruitmentForm.section2.yes}
+                    </FieldLabel>
+                  </div>
+                </RadioGroup>
+              </Field>
+            )}
+          />
+          {isRehire === "yes" && (
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Controller
+                control={control}
+                name="rehireFromDate"
+                render={({ field }) => (
+                  <DatePicker
+                    id="rehireFromDate"
+                    label={t.recruitmentForm.section2.rehireFromDateLabel}
+                    granularity="month"
+                    placeholder={
+                      t.recruitmentForm.section5.monthYearPlaceholder
+                    }
+                    className="!mx-0 !max-w-none"
+                    initialDate={parseMonthYear(field.value)}
+                    onChange={date => field.onChange(toMonthYear(date))}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="rehireToDate"
+                render={({ field }) => (
+                  <DatePicker
+                    id="rehireToDate"
+                    label={t.recruitmentForm.section2.rehireToDateLabel}
+                    granularity="month"
+                    placeholder={
+                      t.recruitmentForm.section5.monthYearPlaceholder
+                    }
+                    className="!mx-0 !max-w-none"
+                    initialDate={parseMonthYear(field.value)}
+                    onChange={date => field.onChange(toMonthYear(date))}
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name="rehireChannel"
+                render={({ field }) => (
+                  <Field>
+                    <FieldLabel>
+                      {t.recruitmentForm.section2.rehireChannelLabel}
+                    </FieldLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={
+                            t.recruitmentForm.section2.rehireChannelPlaceholder
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CHANNEL_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                )}
+              />
+              {rehireChannel === "other" && (
+                <Field>
+                  <FieldLabel htmlFor="rehireChannelOther">
+                    {t.recruitmentForm.section2.specifyOther}
+                  </FieldLabel>
+                  <Input
+                    id="rehireChannelOther"
+                    {...register("rehireChannelOther")}
+                  />
+                </Field>
+              )}
+            </div>
+          )}
+          <FieldSeparator />
+
+          <Controller
+            control={control}
             name="hasBasicAgentCertificate"
             render={({ field }) => (
               <Field>
@@ -1453,114 +1560,6 @@ export function RecruitmentFormFields({
                 />
               </Field>
             )}
-
-          <FieldSeparator />
-
-          <Controller
-            control={control}
-            name="isRehire"
-            render={({ field }) => (
-              <Field>
-                <FieldLabel>
-                  {t.recruitmentForm.section2.rehireLabel}
-                </FieldLabel>
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="no" id="isRehire-no" />
-                    <FieldLabel htmlFor="isRehire-no" className="font-normal">
-                      {t.recruitmentForm.section2.no}
-                    </FieldLabel>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="yes" id="isRehire-yes" />
-                    <FieldLabel htmlFor="isRehire-yes" className="font-normal">
-                      {t.recruitmentForm.section2.yes}
-                    </FieldLabel>
-                  </div>
-                </RadioGroup>
-              </Field>
-            )}
-          />
-          {isRehire === "yes" && (
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Controller
-                control={control}
-                name="rehireFromDate"
-                render={({ field }) => (
-                  <DatePicker
-                    id="rehireFromDate"
-                    label={t.recruitmentForm.section2.rehireFromDateLabel}
-                    granularity="month"
-                    placeholder={
-                      t.recruitmentForm.section5.monthYearPlaceholder
-                    }
-                    className="!mx-0 !max-w-none"
-                    initialDate={parseMonthYear(field.value)}
-                    onChange={date => field.onChange(toMonthYear(date))}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="rehireToDate"
-                render={({ field }) => (
-                  <DatePicker
-                    id="rehireToDate"
-                    label={t.recruitmentForm.section2.rehireToDateLabel}
-                    granularity="month"
-                    placeholder={
-                      t.recruitmentForm.section5.monthYearPlaceholder
-                    }
-                    className="!mx-0 !max-w-none"
-                    initialDate={parseMonthYear(field.value)}
-                    onChange={date => field.onChange(toMonthYear(date))}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="rehireChannel"
-                render={({ field }) => (
-                  <Field>
-                    <FieldLabel>
-                      {t.recruitmentForm.section2.rehireChannelLabel}
-                    </FieldLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue
-                          placeholder={
-                            t.recruitmentForm.section2.rehireChannelPlaceholder
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {CHANNEL_OPTIONS.map(opt => (
-                          <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                )}
-              />
-              {rehireChannel === "other" && (
-                <Field>
-                  <FieldLabel htmlFor="rehireChannelOther">
-                    {t.recruitmentForm.section2.specifyOther}
-                  </FieldLabel>
-                  <Input
-                    id="rehireChannelOther"
-                    {...register("rehireChannelOther")}
-                  />
-                </Field>
-              )}
-            </div>
-          )}
 
           <Controller
             control={control}
