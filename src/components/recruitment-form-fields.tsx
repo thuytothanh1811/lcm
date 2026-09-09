@@ -525,6 +525,7 @@ export function RecruitmentFormFields({
   const q3TargetAudience = watch("q3TargetAudience");
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
+  const hasInsuranceExperience = watch("hasInsuranceExperience");
   const secondManagerUid = watch("secondManagerUid");
 
   // Cascades top-down (SH -> SD): once an SH is picked, the SD list
@@ -1759,106 +1760,110 @@ export function RecruitmentFormFields({
             )}
           />
 
-          <FieldSeparator />
+          {hasInsuranceExperience === "yes" && (
+            <>
+              <FieldSeparator />
 
-          {workHistoryFields.map((field, index) => (
-            <div key={field.id} className="flex flex-col gap-4">
-              <p className="text-sm font-medium">
-                {t.recruitmentForm.section5.companyHeading(index + 1)}
-              </p>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Controller
-                  control={control}
-                  name={`workHistory.${index}.fromDate` as const}
-                  render={({ field }) => (
-                    <DatePicker
-                      id={`workHistory.${index}.fromDate`}
-                      label={t.recruitmentForm.section5.fromDate}
-                      granularity="month"
-                      placeholder={
-                        t.recruitmentForm.section5.monthYearPlaceholder
-                      }
-                      className="!mx-0 !max-w-none"
-                      initialDate={parseMonthYear(field.value)}
-                      onChange={date => field.onChange(toMonthYear(date))}
+              {workHistoryFields.map((field, index) => (
+                <div key={field.id} className="flex flex-col gap-4">
+                  <p className="text-sm font-medium">
+                    {t.recruitmentForm.section5.companyHeading(index + 1)}
+                  </p>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Controller
+                      control={control}
+                      name={`workHistory.${index}.fromDate` as const}
+                      render={({ field }) => (
+                        <DatePicker
+                          id={`workHistory.${index}.fromDate`}
+                          label={t.recruitmentForm.section5.fromDate}
+                          granularity="month"
+                          placeholder={
+                            t.recruitmentForm.section5.monthYearPlaceholder
+                          }
+                          className="!mx-0 !max-w-none"
+                          initialDate={parseMonthYear(field.value)}
+                          onChange={date => field.onChange(toMonthYear(date))}
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Controller
-                  control={control}
-                  name={`workHistory.${index}.toDate` as const}
-                  render={({ field }) => (
-                    <DatePicker
-                      id={`workHistory.${index}.toDate`}
-                      label={t.recruitmentForm.section5.toDate}
-                      granularity="month"
-                      placeholder={
-                        t.recruitmentForm.section5.monthYearPlaceholder
-                      }
-                      className="!mx-0 !max-w-none"
-                      initialDate={parseMonthYear(field.value)}
-                      onChange={date => field.onChange(toMonthYear(date))}
+                    <Controller
+                      control={control}
+                      name={`workHistory.${index}.toDate` as const}
+                      render={({ field }) => (
+                        <DatePicker
+                          id={`workHistory.${index}.toDate`}
+                          label={t.recruitmentForm.section5.toDate}
+                          granularity="month"
+                          placeholder={
+                            t.recruitmentForm.section5.monthYearPlaceholder
+                          }
+                          className="!mx-0 !max-w-none"
+                          initialDate={parseMonthYear(field.value)}
+                          onChange={date => field.onChange(toMonthYear(date))}
+                        />
+                      )}
                     />
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field>
+                      <FieldLabel htmlFor={`workHistory.${index}.title`}>
+                        {t.recruitmentForm.section5.jobTitle}
+                      </FieldLabel>
+                      <Input
+                        id={`workHistory.${index}.title`}
+                        {...register(`workHistory.${index}.title` as const)}
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel
+                        htmlFor={`workHistory.${index}.companyNameAddress`}
+                      >
+                        {t.recruitmentForm.section5.companyNameAddress}
+                      </FieldLabel>
+                      <Input
+                        id={`workHistory.${index}.companyNameAddress`}
+                        {...register(
+                          `workHistory.${index}.companyNameAddress` as const
+                        )}
+                      />
+                    </Field>
+                  </div>
+                  {workHistoryFields.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="text-destructive w-fit"
+                      onClick={() => removeWorkHistory(index)}
+                    >
+                      <IconX className="size-4" />
+                      {t.recruitmentForm.section5.removeCompany}
+                    </Button>
                   )}
-                />
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field>
-                  <FieldLabel htmlFor={`workHistory.${index}.title`}>
-                    {t.recruitmentForm.section5.jobTitle}
-                  </FieldLabel>
-                  <Input
-                    id={`workHistory.${index}.title`}
-                    {...register(`workHistory.${index}.title` as const)}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel
-                    htmlFor={`workHistory.${index}.companyNameAddress`}
-                  >
-                    {t.recruitmentForm.section5.companyNameAddress}
-                  </FieldLabel>
-                  <Input
-                    id={`workHistory.${index}.companyNameAddress`}
-                    {...register(
-                      `workHistory.${index}.companyNameAddress` as const
-                    )}
-                  />
-                </Field>
-              </div>
-              {workHistoryFields.length > 1 && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="text-destructive w-fit"
-                  onClick={() => removeWorkHistory(index)}
-                >
-                  <IconX className="size-4" />
-                  {t.recruitmentForm.section5.removeCompany}
-                </Button>
-              )}
-              {index < workHistoryFields.length - 1 && <FieldSeparator />}
-            </div>
-          ))}
+                  {index < workHistoryFields.length - 1 && <FieldSeparator />}
+                </div>
+              ))}
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="w-fit"
-            onClick={() =>
-              appendWorkHistory({
-                fromDate: "",
-                toDate: "",
-                title: "",
-                companyNameAddress: "",
-              })
-            }
-          >
-            <IconPlus className="size-4" />
-            {t.recruitmentForm.section5.addCompany}
-          </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-fit"
+                onClick={() =>
+                  appendWorkHistory({
+                    fromDate: "",
+                    toDate: "",
+                    title: "",
+                    companyNameAddress: "",
+                  })
+                }
+              >
+                <IconPlus className="size-4" />
+                {t.recruitmentForm.section5.addCompany}
+              </Button>
+            </>
+          )}
 
           <FieldSeparator />
           <FieldLegend className="mb-0">

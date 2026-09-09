@@ -23,8 +23,8 @@ export function buildRecruitmentSchema(
     email: z.email(t.emailInvalid),
     managerUid: z.string().optional(),
     managerName: z.string().optional(),
-    secondManagerUid: z.string().optional(),
-    secondManagerName: z.string().optional(),
+    secondManagerUid: z.string().min(1, t.secondManagerRequired),
+    secondManagerName: z.string().min(1, t.secondManagerRequired),
     sdManagerUid: z.string().min(1, t.sdManagerRequired),
     sdManagerName: z.string().min(1, t.sdManagerRequired),
 
