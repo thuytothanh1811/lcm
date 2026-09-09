@@ -638,28 +638,6 @@ export async function buildRecruitmentDocxBlob(
       children: b.checkRun(s11.dataConsent, !!data.commitmentDataConsent),
     })
   );
-  b.push(
-    b.bodyText("Xác nhận cam kết & đồng ý PDPD:", { bold: true, after: 40 })
-  );
-  b.push(
-    b.inlineChecks(
-      [s11.no, s11.yes],
-      labelsFor(
-        { no: s11.no, yes: s11.yes },
-        data.confirmationConsent ? [data.confirmationConsent] : []
-      )
-    )
-  );
-  b.push(b.bodyText("Hình thức xác nhận:", { bold: true, after: 40 }));
-  b.push(
-    b.inlineChecks(
-      [s11.handwritten],
-      labelsFor(
-        { handwritten: s11.handwritten },
-        data.confirmationMethod ? [data.confirmationMethod] : []
-      )
-    )
-  );
   b.push(b.field("Ngày ký", data.signDate));
   b.push(b.spacer(), b.spacer());
 

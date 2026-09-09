@@ -205,10 +205,6 @@ export function buildRecruitmentSchema(
     commitmentDataConsent: z.literal(true, {
       error: t.commitmentRequired,
     }),
-    confirmationConsent: z.enum(["no", "yes"]).optional(),
-    confirmationMethod: z.enum(["handwritten"], {
-      error: t.confirmationMethodRequired,
-    }),
     signDate: z.string().min(1, t.signDateRequired),
   });
 
@@ -218,14 +214,6 @@ export function buildRecruitmentSchema(
         code: "custom",
         path: ["agencyType"],
         message: t.agencyTypeRequired,
-      });
-    }
-
-    if (data.confirmationConsent !== "yes") {
-      ctx.addIssue({
-        code: "custom",
-        path: ["confirmationConsent"],
-        message: t.confirmationConsentRequired,
       });
     }
 
@@ -486,8 +474,6 @@ export function buildRecruitmentDraftSchema(
 
     commitmentVoluntary: z.boolean().optional(),
     commitmentDataConsent: z.boolean().optional(),
-    confirmationConsent: z.enum(["no", "yes"]).optional(),
-    confirmationMethod: z.enum(["handwritten"]).optional(),
     signDate: z.string().optional(),
   });
 }

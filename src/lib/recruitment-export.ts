@@ -384,15 +384,6 @@ export function buildAnswerBlocks(
           label: s11.dataConsent,
           getValue: s => yesNo(s11, s.commitmentDataConsent ? "yes" : "no"),
         },
-        {
-          label: s11.consentLabel,
-          getValue: s => yesNo(s11, s.confirmationConsent),
-        },
-        {
-          label: s11.methodLabel,
-          getValue: s =>
-            s.confirmationMethod === "handwritten" ? s11.handwritten : DASH,
-        },
         { label: s11.signDateLabel, getValue: s => s.signDate || DASH },
       ],
     },
