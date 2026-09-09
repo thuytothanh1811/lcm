@@ -7,18 +7,15 @@ import Image from "next/image";
 import {
   IconArrowLeft,
   IconClipboardList,
-  IconSearch,
   IconUserPlus,
 } from "@tabler/icons-react";
 
 import { RecruitmentDocumentChecklist } from "@/components/recruitment-document-checklist";
 import { RecruitmentForm } from "@/components/recruitment-form";
-import { RecruitmentSearch } from "@/components/recruitment-search";
 import { vi as dict } from "@/lib/i18n/dictionaries/vi";
-import type { RecruitmentValues } from "@/lib/validations/recruitment";
 import type { TManagerGroups } from "@/server/user-actions";
 
-type TMode = "landing" | "form" | "checklist" | "search";
+type TMode = "landing" | "form" | "checklist";
 
 export function RecruitmentEntryGate({
   managers,
@@ -26,10 +23,6 @@ export function RecruitmentEntryGate({
   managers: TManagerGroups;
 }) {
   const [mode, setMode] = useState<TMode>("landing");
-  const [resumeDraft, setResumeDraft] = useState<{
-    id: string;
-    values: Partial<RecruitmentValues>;
-  } | null>(null);
 
   return (
     <>
@@ -51,11 +44,9 @@ export function RecruitmentEntryGate({
               ? dict.pages.recruitmentPublic.title
               : mode === "checklist"
                 ? dict.pages.recruitmentPublic.documentChecklistButton
-                : mode === "search"
-                  ? dict.pages.recruitmentPublic.searchButton
-                  : dict.pages.recruitmentPublic.heading}
+                : dict.pages.recruitmentPublic.heading}
           </h1>
-          {mode !== "checklist" && mode !== "search" && (
+          {mode !== "checklist" && (
             <p className="mx-auto max-w-xl text-sm text-white/70">
               {dict.pages.recruitmentPublic.subtitle}
             </p>
@@ -67,21 +58,13 @@ export function RecruitmentEntryGate({
         <div className="flex flex-col gap-4">
           <button
             type="button"
-            onClick={() => {
-              setResumeDraft(null);
-              setMode("landing");
-            }}
+            onClick={() => setMode("landing")}
             className="flex w-fit items-center gap-1.5 text-sm text-white/70 hover:text-white"
           >
             <IconArrowLeft className="size-4" />
             {dict.pages.recruitmentPublic.backButton}
           </button>
-          <RecruitmentForm
-            key={resumeDraft?.id ?? "new"}
-            managers={managers}
-            initialValues={resumeDraft?.values}
-            submissionId={resumeDraft?.id}
-          />
+          <RecruitmentForm managers={managers} />
         </div>
       ) : mode === "checklist" ? (
         <div className="flex flex-col gap-4">
@@ -95,25 +78,8 @@ export function RecruitmentEntryGate({
           </button>
           <RecruitmentDocumentChecklist />
         </div>
-      ) : mode === "search" ? (
-        <div className="flex flex-col gap-4">
-          <button
-            type="button"
-            onClick={() => setMode("landing")}
-            className="flex w-fit items-center gap-1.5 text-sm text-white/70 hover:text-white"
-          >
-            <IconArrowLeft className="size-4" />
-            {dict.pages.recruitmentPublic.backButton}
-          </button>
-          <RecruitmentSearch
-            onResumeDraft={(id, values) => {
-              setResumeDraft({ id, values });
-              setMode("form");
-            }}
-          />
-        </div>
       ) : (
-        <div className="grid w-full gap-4 sm:grid-cols-3">
+        <div className="grid w-full gap-4 sm:grid-cols-2">
           <button
             type="button"
             onClick={() => setMode("checklist")}
@@ -126,25 +92,12 @@ export function RecruitmentEntryGate({
           </button>
           <button
             type="button"
-            onClick={() => {
-              setResumeDraft(null);
-              setMode("form");
-            }}
+            onClick={() => setMode("form")}
             className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
           >
             <IconUserPlus className="size-8" />
             <span className="text-lg font-semibold">
               {dict.pages.recruitmentPublic.newEntryButton}
-            </span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("search")}
-            className="border-white/30 bg-white/10 hover:bg-white/20 flex flex-col items-center gap-3 rounded-xl border py-10 text-white transition-colors"
-          >
-            <IconSearch className="size-8" />
-            <span className="text-lg font-semibold">
-              {dict.pages.recruitmentPublic.searchButton}
             </span>
           </button>
         </div>

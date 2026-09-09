@@ -33,19 +33,10 @@ function todayIso(): string {
   return `${year}-${month}-${day}`;
 }
 
-export function RecruitmentForm({
-  managers,
-  initialValues,
-  submissionId,
-}: {
-  managers: TManagerGroups;
-  initialValues?: Partial<RecruitmentValues>;
-  submissionId?: string;
-}) {
+export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isPreparingDocx, setIsPreparingDocx] = useState(false);
-  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
     []
@@ -57,8 +48,6 @@ export function RecruitmentForm({
     watch,
     setValue,
     getValues,
-    setError,
-    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<RecruitmentValues>({
     resolver: zodResolver(schema),
@@ -103,7 +92,6 @@ export function RecruitmentForm({
       attachments: [],
       commitmentVoluntary: undefined,
       commitmentDataConsent: undefined,
-      ...initialValues,
     },
   });
 
@@ -132,47 +120,12 @@ export function RecruitmentForm({
 
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
-    const result = await submitRecruitmentForm(
-      values,
-      "vi",
-      "new",
-      submissionId
-    );
+    const result = await submitRecruitmentForm(values, "vi", "new");
     if (!result.ok) {
       setFormError(result.error);
       return;
     }
     setSubmitted(true);
-  };
-
-  const handleSaveDraft = async () => {
-    setFormError(null);
-    const values = getValues();
-    if (!values.idNumber?.trim()) {
-      setError("idNumber", {
-        type: "manual",
-        message: t.recruitmentForm.validation.idNumberRequired,
-      });
-      return;
-    }
-    clearErrors("idNumber");
-
-    setIsSavingDraft(true);
-    try {
-      const result = await submitRecruitmentForm(
-        values,
-        "vi",
-        "draft",
-        submissionId
-      );
-      if (!result.ok) {
-        setFormError(result.error);
-        return;
-      }
-      toast.success(t.recruitmentForm.draftSaved);
-    } finally {
-      setIsSavingDraft(false);
-    }
   };
 
   if (submitted) {
@@ -206,17 +159,6 @@ export function RecruitmentForm({
       <FieldError>{formError}</FieldError>
 
       <div className="flex gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          className="flex-1"
-          disabled={isSavingDraft}
-          onClick={handleSaveDraft}
-        >
-          {isSavingDraft
-            ? t.recruitmentForm.saving
-            : t.pages.recruitmentPublic.saveButton}
-        </Button>
         <Button type="submit" disabled={isSubmitting} className="flex-1">
           {isSubmitting
             ? t.recruitmentForm.submitting
