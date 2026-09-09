@@ -623,6 +623,11 @@ export async function buildRecruitmentDocxBlob(
   }
 
   // ===== SECTION 3: CAM KẾT CỦA ỨNG VIÊN =====
+  // Pinned to its own page. Without the break it flows on from section 2,
+  // so how much the candidate typed above decides where it lands — and a
+  // long address or extra work-history rows can split the signature table
+  // across two pages.
+  b.pageBreak();
   b.push(b.sectionHeading("3. " + f.section11.title.toUpperCase()));
   b.push(
     new Paragraph({
