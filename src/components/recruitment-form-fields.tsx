@@ -2543,7 +2543,7 @@ export function RecruitmentFormFields({
       </SectionCard>
 
       <SectionCard number={5} title={t.recruitmentForm.section10.title}>
-        <p className="text-foreground text-sm font-medium">
+        <p className="text-foreground text-sm font-medium underline">
           {t.recruitmentForm.section10.templatesHeading}
         </p>
         <div className="border-input bg-muted/30 rounded-lg border px-3 py-2.5">
