@@ -198,6 +198,8 @@ export function RecruitmentForm({
         watch={watch}
         setValue={setValue}
         managers={managers}
+        onDownloadCt1={handleDownloadDocx}
+        isDownloadingCt1={isPreparingDocx}
         locale="vi"
       />
 
@@ -214,15 +216,6 @@ export function RecruitmentForm({
           {isSavingDraft
             ? t.recruitmentForm.saving
             : t.pages.recruitmentPublic.saveButton}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className="flex-1"
-          disabled={isPreparingDocx}
-          onClick={handleDownloadDocx}
-        >
-          {t.pages.recruitmentPublic.printButton}
         </Button>
         <Button type="submit" disabled={isSubmitting} className="flex-1">
           {isSubmitting

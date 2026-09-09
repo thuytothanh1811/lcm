@@ -255,6 +255,8 @@ export function RecruitmentFormFields({
   setValue,
   managers,
   onDownloadAttachment,
+  onDownloadCt1,
+  isDownloadingCt1,
   locale,
 }: {
   t: Dictionary;
@@ -265,6 +267,11 @@ export function RecruitmentFormFields({
   setValue: UseFormSetValue<RecruitmentValues>;
   managers: TManagerGroups;
   onDownloadAttachment?: (attachment: TAttachment) => void;
+  // CT01 is generated from what's typed into this form rather than served
+  // as a static template, so the public form passes its builder down and
+  // the admin's read-only detail view leaves it out.
+  onDownloadCt1?: () => void;
+  isDownloadingCt1?: boolean;
   locale?: Language;
 }) {
   const [uploading, setUploading] = useState(false);
@@ -2526,6 +2533,21 @@ export function RecruitmentFormFields({
                 {t.recruitmentForm.section10.candidateGroupLabel}
               </p>
               <ul className="grid min-w-0 gap-2">
+                {onDownloadCt1 && (
+                  <li className="min-w-0">
+                    <button
+                      type="button"
+                      disabled={isDownloadingCt1}
+                      onClick={onDownloadCt1}
+                      className="border-input bg-background hover:bg-muted/50 flex w-full min-w-0 items-center gap-2 rounded-md border px-3 py-2 text-start text-sm disabled:opacity-60"
+                    >
+                      <IconDownload className="text-muted-foreground size-4 shrink-0" />
+                      <span className="min-w-0 flex-1 truncate">
+                        {t.pages.recruitmentPublic.printButton}
+                      </span>
+                    </button>
+                  </li>
+                )}
                 {TEMPLATE_DOCUMENTS.filter(
                   doc => doc.group === "candidate"
                 ).map(doc => (
