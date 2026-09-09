@@ -40,6 +40,7 @@ const ADMIN_STATUS_VARIANTS: Record<
   new: "secondary",
   admin_agreed: "default",
   admin_rejected: "destructive",
+  admin_needs_documents: "outline",
 };
 
 const SH_STATUS_VARIANTS: Record<
@@ -69,6 +70,7 @@ export function createRecruitmentsColumns({
   onDownload,
   downloadingId,
   onAdminStatusChange,
+  onRequestAdminDocumentsNote,
   onShStatusChange,
   onRequestShDocumentsNote,
   onSdStatusChange,
@@ -84,6 +86,7 @@ export function createRecruitmentsColumns({
     submission: TRecruitmentSubmission,
     status: TAdminStatus
   ) => void;
+  onRequestAdminDocumentsNote: (submission: TRecruitmentSubmission) => void;
   onShStatusChange: (
     submission: TRecruitmentSubmission,
     status: TShStatus
@@ -191,6 +194,12 @@ export function createRecruitmentsColumns({
               );
             },
           },
+          {
+            accessorKey: "adminDocumentsNote",
+            header: t.recruitmentsList.columns.adminDocumentsNote,
+            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) =>
+              row.original.adminDocumentsNote ?? "—",
+          },
         ]
       : []),
     {
@@ -242,7 +251,9 @@ export function createRecruitmentsColumns({
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      disabled={isUpdatingStatus || isFinalized}
+                      disabled={
+                        isUpdatingStatus || adminStatus === "admin_agreed"
+                      }
                       onSelect={() =>
                         onAdminStatusChange(row.original, "admin_agreed")
                       }
@@ -252,9 +263,7 @@ export function createRecruitmentsColumns({
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        adminStatus === "admin_rejected"
+                        isUpdatingStatus || adminStatus === "admin_rejected"
                       }
                       onSelect={() =>
                         onAdminStatusChange(row.original, "admin_rejected")
@@ -262,6 +271,19 @@ export function createRecruitmentsColumns({
                     >
                       <IconX className="size-4" />
                       {t.recruitmentsList.adminStatusLabels.admin_rejected}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      disabled={
+                        isUpdatingStatus ||
+                        adminStatus === "admin_needs_documents"
+                      }
+                      onSelect={() => onRequestAdminDocumentsNote(row.original)}
+                    >
+                      <IconFileText className="size-4" />
+                      {
+                        t.recruitmentsList.adminStatusLabels
+                          .admin_needs_documents
+                      }
                     </DropdownMenuItem>
                   </>
                 )}
