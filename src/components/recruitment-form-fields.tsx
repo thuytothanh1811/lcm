@@ -535,30 +535,17 @@ export function RecruitmentFormFields({
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
   const CHECKLIST_KEYS = new Set(CHECKLIST_ROWS.map(r => r.key));
-  // Which checklist columns this candidate has to satisfy. LP/UM and GAD
-  // come from the position applied for; MDRT is not a position but a
-  // programme, so it is added whenever an MDRT programme is selected. A
-  // position with no column of its own (District Manager, Khác) falls back
-  // to showing every row rather than guessing.
-  const MDRT_PROGRAMS = [
-    "near_mdrt_700m",
-    "mdrt",
-    "mdrt_2_years",
-    "cot_mdrt_3_years",
-  ];
-  const wantsMdrt =
-    participatingProgram === "yes" &&
-    (programTypes ?? []).some(p => MDRT_PROGRAMS.includes(p));
+  // Which of the checklist rows this candidate has to hand in. LP/UM and
+  // GAD each need a subset, taken from their column. Joining any of the
+  // programmes (MDRT, Thu hút nhân tài, …) means the full set, and so does
+  // a position with no column of its own (District Manager, Khác) — better
+  // to ask for everything than to guess which rows to hide.
   const isLpUm =
     positionApplied === "agent" || positionApplied === "unit_manager";
   const isGad = positionApplied === "gad";
-  const showAllRows = !isLpUm && !isGad && !wantsMdrt;
+  const showAllRows = participatingProgram === "yes" || (!isLpUm && !isGad);
   const VISIBLE_CHECKLIST_ROWS = CHECKLIST_ROWS.filter(
-    row =>
-      showAllRows ||
-      (isLpUm && row.lpUm) ||
-      (isGad && row.gad) ||
-      (wantsMdrt && row.mdrt)
+    row => showAllRows || (isLpUm && row.lpUm) || (isGad && row.gad)
   );
   const untypedAttachments = attachments.filter(
     a => !a.documentType || !CHECKLIST_KEYS.has(a.documentType)
