@@ -138,7 +138,7 @@ export function buildRecruitmentSchema(
       .array(
         z.object({
           name: z.string().optional(),
-          birthYear: z.string().optional(),
+          idNumber: z.string().optional(),
           relationship: z.string().optional(),
           occupation: z.string().optional(),
         })
@@ -423,7 +423,7 @@ export function buildRecruitmentDraftSchema(
       .array(
         z.object({
           name: z.string().optional(),
-          birthYear: z.string().optional(),
+          idNumber: z.string().optional(),
           relationship: z.string().optional(),
           occupation: z.string().optional(),
         })

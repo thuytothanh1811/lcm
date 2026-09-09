@@ -1884,12 +1884,12 @@ export function RecruitmentFormFields({
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor={`familyMembers.${index}.birthYear`}>
-                    {t.recruitmentForm.section8.birthYear}
+                  <FieldLabel htmlFor={`familyMembers.${index}.idNumber`}>
+                    {t.recruitmentForm.section8.idNumber}
                   </FieldLabel>
                   <Input
-                    id={`familyMembers.${index}.birthYear`}
-                    {...register(`familyMembers.${index}.birthYear` as const)}
+                    id={`familyMembers.${index}.idNumber`}
+                    {...register(`familyMembers.${index}.idNumber` as const)}
                   />
                 </Field>
               </div>
@@ -1959,7 +1959,7 @@ export function RecruitmentFormFields({
               onClick={() =>
                 appendFamilyMember({
                   name: "",
-                  birthYear: "",
+                  idNumber: "",
                   relationship: "",
                   occupation: "",
                 })

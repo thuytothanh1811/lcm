@@ -90,7 +90,7 @@ export function RecruitmentForm({
       familyMembers: [
         {
           name: "",
-          birthYear: "",
+          idNumber: "",
           relationship: "",
           occupation: "",
         },

@@ -542,7 +542,7 @@ export const en: typeof vi = {
       title: "Next of kin *",
       memberHeading: (n: number) => `Family member ${n}`,
       name: "Full name",
-      birthYear: "Year of birth",
+      idNumber: "ID number",
       relationshipLabel: "Relationship",
       relationshipPlaceholder: "Select a relationship",
       occupation: "Occupation",

@@ -327,8 +327,8 @@ export function buildAnswerBlocks(
             getValue: s => s.familyMembers?.[index]?.name || DASH,
           },
           {
-            label: f.section8.birthYear,
-            getValue: s => s.familyMembers?.[index]?.birthYear || DASH,
+            label: f.section8.idNumber,
+            getValue: s => s.familyMembers?.[index]?.idNumber || DASH,
           },
           {
             label: f.section8.relationshipLabel,

@@ -541,7 +541,7 @@ export const vi = {
       title: "Quan hệ nhân thân *",
       memberHeading: (n: number) => `Thân nhân ${n}`,
       name: "Họ tên",
-      birthYear: "Năm sinh",
+      idNumber: "Số CCCD",
       relationshipLabel: "Quan hệ",
       relationshipPlaceholder: "Chọn quan hệ",
       occupation: "Nghề nghiệp",

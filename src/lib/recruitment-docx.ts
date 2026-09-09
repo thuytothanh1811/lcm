@@ -584,13 +584,13 @@ export async function buildRecruitmentDocxBlob(
     String(i + 1),
     m.name || "",
     labelFor(opt.relationship, m.relationship) || "",
-    m.birthYear || "",
+    m.idNumber || "",
     m.occupation || "",
   ]);
   b.push(
     b.dataTable(
       [700, 3000, 2160, 1500, 2000],
-      ["STT", s8.name, s8.relationshipLabel, s8.birthYear, s8.occupation],
+      ["STT", s8.name, s8.relationshipLabel, s8.idNumber, s8.occupation],
       familyRows
     )
   );
