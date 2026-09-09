@@ -119,7 +119,7 @@ export const en: typeof vi = {
       subtitle:
         "Please fill in the information below completely and accurately. Fields marked with * are required.",
       saveButton: "Save",
-      printButton: "Download CT1 document to sign",
+      printButton: "CT1 – Recruitment information form",
       newEntryButton: "Enter new candidate information",
       searchButton: "Search a record",
       documentChecklistButton: "Required document checklist",
