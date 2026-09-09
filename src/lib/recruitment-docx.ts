@@ -638,7 +638,7 @@ export async function buildRecruitmentDocxBlob(
       children: b.checkRun(s11.dataConsent, !!data.commitmentDataConsent),
     })
   );
-  b.push(b.field("Ngày ký", data.signDate));
+  b.push(b.field("Ngày ký", "…………………………………………………"));
   b.push(b.spacer(), b.spacer());
 
   const sigWidth = Math.round(PAGE_W / 2);
@@ -698,7 +698,7 @@ export async function buildRecruitmentDocxBlob(
         }),
         new TableRow({
           children: [
-            sigBodyCell(data.fullName, data.signDate),
+            sigBodyCell(data.fullName, undefined),
             sigBodyCell(undefined, undefined),
           ],
         }),
