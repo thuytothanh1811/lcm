@@ -380,10 +380,6 @@ export function buildAnswerBlocks(
           label: s11.voluntary,
           getValue: s => yesNo(s11, s.commitmentVoluntary ? "yes" : "no"),
         },
-        {
-          label: s11.dataConsent,
-          getValue: s => yesNo(s11, s.commitmentDataConsent ? "yes" : "no"),
-        },
         { label: s11.signDateLabel, getValue: s => s.signDate || DASH },
       ],
     },
