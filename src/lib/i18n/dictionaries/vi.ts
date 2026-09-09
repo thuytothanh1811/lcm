@@ -118,7 +118,7 @@ export const vi = {
       saveButton: "Lưu",
       printButton: "Tải chứng từ và ký",
       newEntryButton: "Nhập thông tin ứng viên mới",
-      searchButton: "Tìm kiếm",
+      searchButton: "Tìm kiếm hồ sơ",
       documentChecklistButton: "Danh mục hồ sơ cần nộp",
       backButton: "Quay lại",
     },
