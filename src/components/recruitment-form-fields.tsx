@@ -2410,7 +2410,78 @@ export function RecruitmentFormFields({
         </FieldGroup>
       </SectionCard>
 
-      <SectionCard number={4} title={t.recruitmentForm.section10.title}>
+      <SectionCard number={4} title={t.recruitmentForm.section11.title}>
+        <FieldGroup data-slot="checkbox-group">
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="commitmentVoluntary"
+              render={({ field }) => (
+                <Checkbox
+                  id="commitmentVoluntary"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="commitmentVoluntary" className="font-normal">
+              {t.recruitmentForm.section11.voluntary}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.commitmentVoluntary
+                ? [errors.commitmentVoluntary]
+                : undefined
+            }
+          />
+
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="commitmentDataConsent"
+              render={({ field }) => (
+                <Checkbox
+                  id="commitmentDataConsent"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="commitmentDataConsent" className="font-normal">
+              {t.recruitmentForm.section11.dataConsent}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.commitmentDataConsent
+                ? [errors.commitmentDataConsent]
+                : undefined
+            }
+          />
+
+          <Field data-invalid={!!errors.signDate}>
+            <Controller
+              control={control}
+              name="signDate"
+              render={({ field }) => (
+                <DatePicker
+                  id="signDate"
+                  label={t.recruitmentForm.section11.signDateLabel}
+                  className="!mx-0 !max-w-none"
+                  initialDate={parseIsoDate(field.value)}
+                  onChange={date => field.onChange(toIsoDate(date))}
+                />
+              )}
+            />
+            <FieldError
+              errors={errors.signDate ? [errors.signDate] : undefined}
+            />
+          </Field>
+        </FieldGroup>
+      </SectionCard>
+
+      <SectionCard number={5} title={t.recruitmentForm.section10.title}>
         <div className="border-input bg-muted/30 rounded-lg border p-4">
           <p className="text-muted-foreground text-sm">
             {t.recruitmentForm.section10.templatesIntro}
@@ -2538,77 +2609,6 @@ export function RecruitmentFormFields({
             </ul>
           )}
         </Field>
-      </SectionCard>
-
-      <SectionCard number={5} title={t.recruitmentForm.section11.title}>
-        <FieldGroup data-slot="checkbox-group">
-          <Field orientation="horizontal" className="items-start">
-            <Controller
-              control={control}
-              name="commitmentVoluntary"
-              render={({ field }) => (
-                <Checkbox
-                  id="commitmentVoluntary"
-                  checked={field.value ?? false}
-                  onCheckedChange={v => field.onChange(v === true)}
-                />
-              )}
-            />
-            <FieldLabel htmlFor="commitmentVoluntary" className="font-normal">
-              {t.recruitmentForm.section11.voluntary}
-            </FieldLabel>
-          </Field>
-          <FieldError
-            errors={
-              errors.commitmentVoluntary
-                ? [errors.commitmentVoluntary]
-                : undefined
-            }
-          />
-
-          <Field orientation="horizontal" className="items-start">
-            <Controller
-              control={control}
-              name="commitmentDataConsent"
-              render={({ field }) => (
-                <Checkbox
-                  id="commitmentDataConsent"
-                  checked={field.value ?? false}
-                  onCheckedChange={v => field.onChange(v === true)}
-                />
-              )}
-            />
-            <FieldLabel htmlFor="commitmentDataConsent" className="font-normal">
-              {t.recruitmentForm.section11.dataConsent}
-            </FieldLabel>
-          </Field>
-          <FieldError
-            errors={
-              errors.commitmentDataConsent
-                ? [errors.commitmentDataConsent]
-                : undefined
-            }
-          />
-
-          <Field data-invalid={!!errors.signDate}>
-            <Controller
-              control={control}
-              name="signDate"
-              render={({ field }) => (
-                <DatePicker
-                  id="signDate"
-                  label={t.recruitmentForm.section11.signDateLabel}
-                  className="!mx-0 !max-w-none"
-                  initialDate={parseIsoDate(field.value)}
-                  onChange={date => field.onChange(toIsoDate(date))}
-                />
-              )}
-            />
-            <FieldError
-              errors={errors.signDate ? [errors.signDate] : undefined}
-            />
-          </Field>
-        </FieldGroup>
       </SectionCard>
     </>
   );
