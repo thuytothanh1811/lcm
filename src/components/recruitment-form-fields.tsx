@@ -2523,6 +2523,9 @@ export function RecruitmentFormFields({
       </SectionCard>
 
       <SectionCard number={5} title={t.recruitmentForm.section10.title}>
+        <p className="text-foreground text-sm font-medium">
+          {t.recruitmentForm.section10.templatesHeading}
+        </p>
         <div className="border-input bg-muted/30 rounded-lg border p-4">
           <p className="text-muted-foreground text-sm">
             {t.recruitmentForm.section10.templatesIntro}

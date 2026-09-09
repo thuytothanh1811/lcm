@@ -571,6 +571,7 @@ export const en: typeof vi = {
     },
     section10: {
       title: "Attach application documents (handwritten, signed)",
+      templatesHeading: "Document templates",
       templatesIntro:
         "Download the templates below, print/fill and sign them, then photograph/scan and upload the signed copy in the upload area below.",
       candidateGroupLabel: "Candidate",
