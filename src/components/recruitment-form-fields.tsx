@@ -535,6 +535,31 @@ export function RecruitmentFormFields({
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
   const CHECKLIST_KEYS = new Set(CHECKLIST_ROWS.map(r => r.key));
+  // Which checklist columns this candidate has to satisfy. LP/UM and GAD
+  // come from the position applied for; MDRT is not a position but a
+  // programme, so it is added whenever an MDRT programme is selected. A
+  // position with no column of its own (District Manager, Khác) falls back
+  // to showing every row rather than guessing.
+  const MDRT_PROGRAMS = [
+    "near_mdrt_700m",
+    "mdrt",
+    "mdrt_2_years",
+    "cot_mdrt_3_years",
+  ];
+  const wantsMdrt =
+    participatingProgram === "yes" &&
+    (programTypes ?? []).some(p => MDRT_PROGRAMS.includes(p));
+  const isLpUm =
+    positionApplied === "agent" || positionApplied === "unit_manager";
+  const isGad = positionApplied === "gad";
+  const showAllRows = !isLpUm && !isGad && !wantsMdrt;
+  const VISIBLE_CHECKLIST_ROWS = CHECKLIST_ROWS.filter(
+    row =>
+      showAllRows ||
+      (isLpUm && row.lpUm) ||
+      (isGad && row.gad) ||
+      (wantsMdrt && row.mdrt)
+  );
   const untypedAttachments = attachments.filter(
     a => !a.documentType || !CHECKLIST_KEYS.has(a.documentType)
   );
@@ -2599,7 +2624,7 @@ export function RecruitmentFormFields({
               labelled with what it is. A reviewer can then see what is
               missing without opening anything. */}
           <ul className="flex flex-col gap-2">
-            {CHECKLIST_ROWS.map(row => {
+            {VISIBLE_CHECKLIST_ROWS.map((row, index) => {
               const rowFiles = attachments.filter(
                 a => a.documentType === row.key
               );
@@ -2615,7 +2640,7 @@ export function RecruitmentFormFields({
                       )}
                       <span className="min-w-0">
                         <span className="text-muted-foreground">
-                          {row.stt}.
+                          {index + 1}.
                         </span>{" "}
                         {row.label}
                       </span>
