@@ -294,6 +294,10 @@ export const en: typeof vi = {
     submitting: "Submitting...",
     submit: "Submit application",
     saving: "Saving...",
+    missingDocumentsTitle: (count: number) =>
+      `${count} documents are not attached yet`,
+    missingDocumentsHint:
+      'You can still submit. Press "Submit" again to continue, or upload the documents listed above first.',
     draftSaved: "Your information has been saved.",
     maxFilesError: (n: number) => `Maximum ${n} files.`,
     maxFileSizeError: "Each file must be 10MB or smaller.",

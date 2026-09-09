@@ -292,6 +292,10 @@ export const vi = {
     submitting: "Đang gửi...",
     submit: "Nộp phiếu thông tin",
     saving: "Đang lưu...",
+    missingDocumentsTitle: (count: number) =>
+      `Còn ${count} giấy tờ chưa đính kèm`,
+    missingDocumentsHint:
+      'Bạn vẫn nộp được phiếu. Bấm "Nộp phiếu thông tin" lần nữa để tiếp tục, hoặc tải các giấy tờ trên lên trước.',
     draftSaved: "Đã lưu phiếu thông tin.",
     maxFilesError: (n: number) => `Tối đa ${n} tệp.`,
     maxFileSizeError: "Mỗi tệp tối đa 10MB.",

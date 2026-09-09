@@ -116,6 +116,22 @@ export const CHECKLIST_ROWS: {
   },
 ];
 
+// Which of the rows a candidate has to hand in. LP/UM and GAD each need
+// the subset their column marks; joining any programme, or applying for a
+// position with no column of its own, means the full set.
+export function visibleChecklistRows(
+  positionApplied?: string | null,
+  participatingProgram?: string | null
+) {
+  const isLpUm =
+    positionApplied === "agent" || positionApplied === "unit_manager";
+  const isGad = positionApplied === "gad";
+  const showAll = participatingProgram === "yes" || (!isLpUm && !isGad);
+  return CHECKLIST_ROWS.filter(
+    row => showAll || (isLpUm && row.lpUm) || (isGad && row.gad)
+  );
+}
+
 function ChecklistCell({ applicable }: { applicable: boolean }) {
   return (
     <td className="border-border px-3 py-2 text-center align-middle">

@@ -51,7 +51,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CHECKLIST_ROWS } from "@/components/recruitment-document-checklist";
+import {
+  CHECKLIST_ROWS,
+  visibleChecklistRows,
+} from "@/components/recruitment-document-checklist";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { formatBytes } from "@/lib/utils";
 import {
@@ -535,17 +538,9 @@ export function RecruitmentFormFields({
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
   const CHECKLIST_KEYS = new Set(CHECKLIST_ROWS.map(r => r.key));
-  // Which of the checklist rows this candidate has to hand in. LP/UM and
-  // GAD each need a subset, taken from their column. Joining any of the
-  // programmes (MDRT, Thu hút nhân tài, …) means the full set, and so does
-  // a position with no column of its own (District Manager, Khác) — better
-  // to ask for everything than to guess which rows to hide.
-  const isLpUm =
-    positionApplied === "agent" || positionApplied === "unit_manager";
-  const isGad = positionApplied === "gad";
-  const showAllRows = participatingProgram === "yes" || (!isLpUm && !isGad);
-  const VISIBLE_CHECKLIST_ROWS = CHECKLIST_ROWS.filter(
-    row => showAllRows || (isLpUm && row.lpUm) || (isGad && row.gad)
+  const VISIBLE_CHECKLIST_ROWS = visibleChecklistRows(
+    positionApplied,
+    participatingProgram
   );
   const untypedAttachments = attachments.filter(
     a => !a.documentType || !CHECKLIST_KEYS.has(a.documentType)

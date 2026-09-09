@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { FieldError } from "@/components/ui/field";
+import { visibleChecklistRows } from "@/components/recruitment-document-checklist";
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { vi } from "@/lib/i18n/dictionaries/vi";
 import {
@@ -37,6 +38,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [isPreparingDocx, setIsPreparingDocx] = useState(false);
+  const [missingDocuments, setMissingDocuments] = useState<string[]>([]);
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
     []
@@ -120,6 +122,21 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
 
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
+
+    // Missing paperwork is worth flagging but not worth blocking on — some
+    // candidates legitimately send it later. So the first press lists what
+    // is missing and stops; pressing again goes through.
+    const attached = new Set(
+      (values.attachments ?? []).map(a => a.documentType)
+    );
+    const missing = visibleChecklistRows(
+      values.positionApplied,
+      values.participatingProgram
+    ).filter(row => !attached.has(row.key));
+    if (missing.length > 0 && missingDocuments.length === 0) {
+      setMissingDocuments(missing.map(row => row.label));
+      return;
+    }
     const result = await submitRecruitmentForm(values, "vi", "new");
     if (!result.ok) {
       setFormError(result.error);
@@ -155,6 +172,22 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
         isDownloadingCt1={isPreparingDocx}
         locale="vi"
       />
+
+      {missingDocuments.length > 0 && (
+        <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4">
+          <p className="text-sm font-medium">
+            {t.recruitmentForm.missingDocumentsTitle(missingDocuments.length)}
+          </p>
+          <ul className="mt-2 list-disc space-y-0.5 pl-5 text-sm">
+            {missingDocuments.map(label => (
+              <li key={label}>{label}</li>
+            ))}
+          </ul>
+          <p className="text-muted-foreground mt-3 text-sm">
+            {t.recruitmentForm.missingDocumentsHint}
+          </p>
+        </div>
+      )}
 
       <FieldError>{formError}</FieldError>
 
