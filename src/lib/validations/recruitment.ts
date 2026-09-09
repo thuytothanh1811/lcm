@@ -123,7 +123,7 @@ export function buildRecruitmentSchema(
           "other",
         ])
       )
-      .optional(),
+      .min(1, t.atLeastOneAnswerRequired),
     referralOther: z.string().optional(),
 
     hasPepRelationship: z.enum(["no", "yes"], {
@@ -251,6 +251,48 @@ export function buildRecruitmentSchema(
           code: "custom",
           path: ["q6Support"],
           message: t.atLeastOneAnswerRequired,
+        });
+      }
+    }
+
+    // Every "other" checkbox in the questionnaire reveals a text box; an
+    // "other" with nothing written in it tells the reviewer nothing.
+    const otherTexts: {
+      picked: boolean;
+      value: string | undefined;
+      path:
+        | "q2ViewOther"
+        | "q3TargetAudienceOther"
+        | "q6SupportOther"
+        | "referralOther";
+    }[] = [
+      {
+        picked: !!data.q2View?.includes("other"),
+        value: data.q2ViewOther,
+        path: "q2ViewOther",
+      },
+      {
+        picked: !!data.q3TargetAudience?.includes("other"),
+        value: data.q3TargetAudienceOther,
+        path: "q3TargetAudienceOther",
+      },
+      {
+        picked: !!data.q6Support?.includes("other"),
+        value: data.q6SupportOther,
+        path: "q6SupportOther",
+      },
+      {
+        picked: !!data.referralChannel?.includes("other"),
+        value: data.referralOther,
+        path: "referralOther",
+      },
+    ];
+    for (const { picked, value, path } of otherTexts) {
+      if (picked && !value?.trim()) {
+        ctx.addIssue({
+          code: "custom",
+          path: [path],
+          message: t.questionRequired,
         });
       }
     }

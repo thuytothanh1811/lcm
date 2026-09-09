@@ -2177,11 +2177,16 @@ export function RecruitmentFormFields({
                 )}
               />
               {(q2View ?? []).includes("other") && (
-                <Field>
+                <Field data-invalid={!!errors.q2ViewOther}>
                   <FieldLabel htmlFor="q2ViewOther">
                     {t.recruitmentForm.section9.specifyOther}
                   </FieldLabel>
                   <Input id="q2ViewOther" {...register("q2ViewOther")} />
+                  <FieldError
+                    errors={
+                      errors.q2ViewOther ? [errors.q2ViewOther] : undefined
+                    }
+                  />
                 </Field>
               )}
 
@@ -2234,13 +2239,20 @@ export function RecruitmentFormFields({
                 )}
               />
               {(q3TargetAudience ?? []).includes("other") && (
-                <Field>
+                <Field data-invalid={!!errors.q3TargetAudienceOther}>
                   <FieldLabel htmlFor="q3TargetAudienceOther">
                     {t.recruitmentForm.section9.specifyOther}
                   </FieldLabel>
                   <Input
                     id="q3TargetAudienceOther"
                     {...register("q3TargetAudienceOther")}
+                  />
+                  <FieldError
+                    errors={
+                      errors.q3TargetAudienceOther
+                        ? [errors.q3TargetAudienceOther]
+                        : undefined
+                    }
                   />
                 </Field>
               )}
@@ -2354,11 +2366,18 @@ export function RecruitmentFormFields({
                 )}
               />
               {(q6Support ?? []).includes("other") && (
-                <Field>
+                <Field data-invalid={!!errors.q6SupportOther}>
                   <FieldLabel htmlFor="q6SupportOther">
                     {t.recruitmentForm.section9.specifyOther}
                   </FieldLabel>
                   <Input id="q6SupportOther" {...register("q6SupportOther")} />
+                  <FieldError
+                    errors={
+                      errors.q6SupportOther
+                        ? [errors.q6SupportOther]
+                        : undefined
+                    }
+                  />
                 </Field>
               )}
             </>
@@ -2368,7 +2387,10 @@ export function RecruitmentFormFields({
             control={control}
             name="referralChannel"
             render={({ field }) => (
-              <Field data-slot="checkbox-group">
+              <Field
+                data-slot="checkbox-group"
+                data-invalid={!!errors.referralChannel}
+              >
                 <FieldLabel>{t.recruitmentForm.section9.q7Label}</FieldLabel>
                 {REFERRAL_OPTIONS.map(opt => (
                   <Field
@@ -2396,15 +2418,27 @@ export function RecruitmentFormFields({
                     </FieldLabel>
                   </Field>
                 ))}
+                <FieldError
+                  errors={
+                    errors.referralChannel
+                      ? [errors.referralChannel]
+                      : undefined
+                  }
+                />
               </Field>
             )}
           />
           {(watch("referralChannel") ?? []).includes("other") && (
-            <Field>
+            <Field data-invalid={!!errors.referralOther}>
               <FieldLabel htmlFor="referralOther">
                 {t.recruitmentForm.section2.specifyOther}
               </FieldLabel>
               <Input id="referralOther" {...register("referralOther")} />
+              <FieldError
+                errors={
+                  errors.referralOther ? [errors.referralOther] : undefined
+                }
+              />
             </Field>
           )}
         </FieldGroup>
