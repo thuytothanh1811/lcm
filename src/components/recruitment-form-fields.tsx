@@ -2595,6 +2595,10 @@ export function RecruitmentFormFields({
           </div>
         </div>
 
+        <p className="text-foreground text-sm font-medium">
+          {t.recruitmentForm.section10.checklistHeading}
+        </p>
+
         <Field>
           <label
             className={`flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed py-10 text-center ${

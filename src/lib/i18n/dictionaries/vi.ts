@@ -572,6 +572,7 @@ export const vi = {
     section10: {
       title: "Đính kèm hồ sơ đầu vào (bản viết tay, đã ký xác nhận)",
       templatesHeading: "Biểu mẫu chứng từ",
+      checklistHeading: "Danh mục hồ sơ cần nộp",
       templatesIntro:
         "Tải các mẫu phiếu bên dưới về, in/điền và ký tên, sau đó chụp/scan và tải bản đã ký lên ở mục upload phía dưới.",
       candidateGroupLabel: "Ứng viên",
