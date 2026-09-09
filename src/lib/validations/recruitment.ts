@@ -195,6 +195,7 @@ export function buildRecruitmentSchema(
           fileName: z.string(),
           size: z.number(),
           contentType: z.string(),
+          documentType: z.string().optional(),
         })
       )
       .max(15, t.attachmentsMax),
@@ -510,6 +511,7 @@ export function buildRecruitmentDraftSchema(
           fileName: z.string(),
           size: z.number(),
           contentType: z.string(),
+          documentType: z.string().optional(),
         })
       )
       .optional(),

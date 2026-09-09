@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 
 import {
   IconChevronRight,
+  IconCircleCheckFilled,
   IconCloudUpload,
   IconDownload,
   IconLoader2,
@@ -56,7 +57,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { DocumentChecklistTable } from "@/components/recruitment-document-checklist";
+import {
+  CHECKLIST_ROWS,
+  DocumentChecklistTable,
+} from "@/components/recruitment-document-checklist";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { formatBytes } from "@/lib/utils";
 import {
@@ -539,6 +543,10 @@ export function RecruitmentFormFields({
   const q3TargetAudience = watch("q3TargetAudience");
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
+  const CHECKLIST_KEYS = new Set(CHECKLIST_ROWS.map(r => r.key));
+  const untypedAttachments = attachments.filter(
+    a => !a.documentType || !CHECKLIST_KEYS.has(a.documentType)
+  );
   const hasInsuranceExperience = watch("hasInsuranceExperience");
   const secondManagerUid = watch("secondManagerUid");
 
@@ -569,7 +577,8 @@ export function RecruitmentFormFields({
   }, [channel, agencyType, positionApplied, setValue]);
 
   const handleFilesSelected = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
+    documentType?: string
   ) => {
     const files = Array.from(event.target.files ?? []);
     event.target.value = "";
@@ -591,6 +600,7 @@ export function RecruitmentFormFields({
       for (const file of files) {
         const formData = new FormData();
         formData.set("file", file);
+        if (documentType) formData.set("documentType", documentType);
         const result = await uploadRecruitmentAttachment(formData, locale);
         if (!result.ok) {
           setUploadError(result.error);
@@ -2533,25 +2543,25 @@ export function RecruitmentFormFields({
         <p className="text-foreground text-sm font-medium">
           {t.recruitmentForm.section10.templatesHeading}
         </p>
-        <div className="border-input bg-muted/30 rounded-lg border p-4">
-          <p className="text-muted-foreground text-sm">
+        <div className="border-input bg-muted/30 rounded-lg border p-3">
+          <p className="text-muted-foreground text-xs">
             {t.recruitmentForm.section10.templatesIntro}
           </p>
-          <div className="mt-3 grid min-w-0 gap-4 sm:grid-cols-2">
-            <div className="border-input min-w-0 sm:border-r sm:pr-4">
-              <p className="text-foreground mb-2 text-center text-sm font-medium">
+          <div className="mt-2 grid min-w-0 gap-3 sm:grid-cols-2">
+            <div className="border-input min-w-0 sm:border-r sm:pr-3">
+              <p className="text-muted-foreground mb-1.5 text-xs font-medium">
                 {t.recruitmentForm.section10.candidateGroupLabel}
               </p>
-              <ul className="grid min-w-0 gap-2">
+              <ul className="grid min-w-0 gap-1">
                 {onDownloadCt1 && (
                   <li className="min-w-0">
                     <button
                       type="button"
                       disabled={isDownloadingCt1}
                       onClick={onDownloadCt1}
-                      className="border-input bg-background hover:bg-muted/50 flex w-full min-w-0 items-center gap-2 rounded-md border px-3 py-2 text-start text-sm disabled:opacity-60"
+                      className="border-input bg-background hover:bg-muted/50 flex w-full min-w-0 items-center gap-1.5 rounded border px-2 py-1 text-start text-xs disabled:opacity-60"
                     >
-                      <IconDownload className="text-muted-foreground size-4 shrink-0" />
+                      <IconDownload className="text-muted-foreground size-3.5 shrink-0" />
                       <span className="min-w-0 flex-1 truncate">
                         {t.pages.recruitmentPublic.printButton}
                       </span>
@@ -2565,9 +2575,9 @@ export function RecruitmentFormFields({
                     <a
                       href={`/templates/${doc.file}`}
                       download
-                      className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-2 rounded-md border px-3 py-2 text-sm"
+                      className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-1.5 rounded border px-2 py-1 text-xs"
                     >
-                      <IconDownload className="text-muted-foreground size-4 shrink-0" />
+                      <IconDownload className="text-muted-foreground size-3.5 shrink-0" />
                       <span className="min-w-0 flex-1 truncate">
                         {doc.label}
                       </span>
@@ -2577,19 +2587,19 @@ export function RecruitmentFormFields({
               </ul>
             </div>
             <div className="min-w-0">
-              <p className="text-foreground mb-2 text-center text-sm font-medium">
+              <p className="text-muted-foreground mb-1.5 text-xs font-medium">
                 {t.recruitmentForm.section10.managerGroupLabel}
               </p>
-              <ul className="grid min-w-0 gap-2">
+              <ul className="grid min-w-0 gap-1">
                 {TEMPLATE_DOCUMENTS.filter(doc => doc.group === "manager").map(
                   doc => (
                     <li key={doc.file} className="min-w-0">
                       <a
                         href={`/templates/${doc.file}`}
                         download
-                        className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-2 rounded-md border px-3 py-2 text-sm"
+                        className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-1.5 rounded border px-2 py-1 text-xs"
                       >
-                        <IconDownload className="text-muted-foreground size-4 shrink-0" />
+                        <IconDownload className="text-muted-foreground size-3.5 shrink-0" />
                         <span className="min-w-0 flex-1 truncate">
                           {doc.label}
                         </span>
@@ -2616,76 +2626,163 @@ export function RecruitmentFormFields({
         </Collapsible>
 
         <Field>
-          <label
-            className={`flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed py-10 text-center ${
-              uploading || attachments.length >= MAX_FILES
-                ? "cursor-not-allowed opacity-50"
-                : "hover:bg-muted/50 cursor-pointer"
-            }`}
-          >
-            {uploading ? (
-              <IconLoader2 className="text-muted-foreground size-6 animate-spin" />
-            ) : (
-              <IconCloudUpload className="text-muted-foreground size-6" />
-            )}
-            <span className="text-sm font-medium">
-              {t.recruitmentForm.section10.dropzoneTitle}
-            </span>
-            <span className="text-muted-foreground text-xs">
-              {t.recruitmentForm.section10.dropzoneSubtitle}
-            </span>
-            <input
-              type="file"
-              multiple
-              accept={ACCEPTED_TYPES}
-              className="sr-only"
-              onChange={handleFilesSelected}
-              disabled={uploading || attachments.length >= MAX_FILES}
-            />
-          </label>
-          {uploadError && (
-            <p className="text-destructive text-sm">{uploadError}</p>
-          )}
-          {attachments.length > 0 && (
-            <ul className="mt-2 flex flex-col gap-2">
-              {attachments.map(a => (
-                <li
-                  key={a.storagePath}
-                  className="bg-muted flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm"
-                >
-                  <span className="truncate">
-                    {a.fileName}{" "}
-                    <span className="text-muted-foreground">
-                      ({formatBytes(a.size)})
+          {/* One upload control per checklist row, so a file arrives already
+              labelled with what it is. A reviewer can then see what is
+              missing without opening anything. */}
+          <ul className="flex flex-col gap-2">
+            {CHECKLIST_ROWS.map(row => {
+              const rowFiles = attachments.filter(
+                a => a.documentType === row.key
+              );
+              return (
+                <li key={row.key} className="rounded-md border px-3 py-2">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="flex min-w-0 items-start gap-1.5 text-sm">
+                      {rowFiles.length > 0 && (
+                        <IconCircleCheckFilled
+                          aria-hidden
+                          className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+                        />
+                      )}
+                      <span className="min-w-0">
+                        <span className="text-muted-foreground">
+                          {row.stt}.
+                        </span>{" "}
+                        {row.label}
+                      </span>
                     </span>
-                  </span>
-                  <span className="flex shrink-0 items-center gap-2">
-                    {onDownloadAttachment && (
+                    <label
+                      className={`flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium ${
+                        uploading || attachments.length >= MAX_FILES
+                          ? "cursor-not-allowed opacity-50"
+                          : "hover:bg-muted/50 cursor-pointer"
+                      }`}
+                    >
+                      <IconCloudUpload className="size-3.5" />
+                      {t.recruitmentForm.section10.uploadRowButton}
+                      <input
+                        type="file"
+                        multiple
+                        accept={ACCEPTED_TYPES}
+                        className="sr-only"
+                        onChange={e => handleFilesSelected(e, row.key)}
+                        disabled={uploading || attachments.length >= MAX_FILES}
+                      />
+                    </label>
+                  </div>
+                  {rowFiles.length === 0 ? (
+                    <p className="text-muted-foreground mt-1 text-xs">
+                      {t.recruitmentForm.section10.rowNotSubmitted}
+                    </p>
+                  ) : (
+                    <ul className="mt-2 flex flex-col gap-1">
+                      {rowFiles.map(a => (
+                        <li
+                          key={a.storagePath}
+                          className="bg-muted flex items-center justify-between gap-2 rounded px-2 py-1 text-xs"
+                        >
+                          <span className="truncate">
+                            {a.fileName}{" "}
+                            <span className="text-muted-foreground">
+                              ({formatBytes(a.size)})
+                            </span>
+                          </span>
+                          <span className="flex shrink-0 items-center gap-2">
+                            {onDownloadAttachment && (
+                              <button
+                                type="button"
+                                onClick={() => onDownloadAttachment(a)}
+                                className="text-muted-foreground hover:text-foreground"
+                              >
+                                <IconDownload className="size-3.5" />
+                                <span className="sr-only">
+                                  {t.recruitmentForm.section10.downloadSr}
+                                </span>
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => removeAttachment(a.storagePath)}
+                              className="text-muted-foreground hover:text-foreground"
+                            >
+                              <IconX className="size-3.5" />
+                              <span className="sr-only">
+                                {t.recruitmentForm.section10.removeSr}
+                              </span>
+                            </button>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Records created before per-row upload existed, plus anything
+              filed under a checklist row that has since been removed. */}
+          {untypedAttachments.length > 0 && (
+            <div className="mt-2 rounded-md border px-3 py-2">
+              <p className="text-sm">
+                {t.recruitmentForm.section10.otherDocuments}
+              </p>
+              <ul className="mt-2 flex flex-col gap-1">
+                {untypedAttachments.map(a => (
+                  <li
+                    key={a.storagePath}
+                    className="bg-muted flex items-center justify-between gap-2 rounded px-2 py-1 text-xs"
+                  >
+                    <span className="truncate">
+                      {a.fileName}{" "}
+                      <span className="text-muted-foreground">
+                        ({formatBytes(a.size)})
+                      </span>
+                    </span>
+                    <span className="flex shrink-0 items-center gap-2">
+                      {onDownloadAttachment && (
+                        <button
+                          type="button"
+                          onClick={() => onDownloadAttachment(a)}
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          <IconDownload className="size-3.5" />
+                          <span className="sr-only">
+                            {t.recruitmentForm.section10.downloadSr}
+                          </span>
+                        </button>
+                      )}
                       <button
                         type="button"
-                        onClick={() => onDownloadAttachment(a)}
+                        onClick={() => removeAttachment(a.storagePath)}
                         className="text-muted-foreground hover:text-foreground"
                       >
-                        <IconDownload className="size-4" />
+                        <IconX className="size-3.5" />
                         <span className="sr-only">
-                          {t.recruitmentForm.section10.downloadSr}
+                          {t.recruitmentForm.section10.removeSr}
                         </span>
                       </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => removeAttachment(a.storagePath)}
-                      className="text-muted-foreground hover:text-foreground"
-                    >
-                      <IconX className="size-4" />
-                      <span className="sr-only">
-                        {t.recruitmentForm.section10.removeSr}
-                      </span>
-                    </button>
-                  </span>
-                </li>
-              ))}
-            </ul>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <p className="text-muted-foreground mt-1 text-xs">
+            {t.recruitmentForm.section10.uploadHint(
+              attachments.length,
+              MAX_FILES
+            )}
+          </p>
+          {uploading && (
+            <p className="text-muted-foreground flex items-center gap-2 text-sm">
+              <IconLoader2 className="size-4 animate-spin" />
+              {t.recruitmentForm.section10.uploadingLabel}
+            </p>
+          )}
+          {uploadError && (
+            <p className="text-destructive text-sm">{uploadError}</p>
           )}
         </Field>
       </SectionCard>

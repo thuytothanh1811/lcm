@@ -266,10 +266,10 @@ export const en: typeof vi = {
     tabsLabel: "Record sections",
     tabInfo: "Record details",
     tabDocuments: "Supporting documents",
-    attachmentsHeading: (count: number) =>
-      `Documents submitted (${count})`,
+    attachmentsHeading: (count: number) => `Documents submitted (${count})`,
     attachmentsEmpty: "The candidate has not attached any documents yet.",
     attachmentDownload: "Download",
+    attachmentUnlabelled: "No document type",
     checklistHeading: "Required documents",
     checklistDescription:
       "Check what was submitted above against the column for the position applied for.",
@@ -579,6 +579,12 @@ export const en: typeof vi = {
       managerGroupLabel: "Direct manager/SD/SH",
       description: (max: number) =>
         `Attach related images or documents (ID card, diplomas, CV...). Maximum ${max} files, each file no more than 10MB. Supported: JPG images, PNG images, WEBP images, HEIC images, PDF documents, DOC documents, DOCX documents.`,
+      uploadRowButton: "Upload",
+      rowNotSubmitted: "Not submitted",
+      otherDocuments: "Other documents",
+      uploadingLabel: "Uploading...",
+      uploadHint: (used: number, max: number) =>
+        `${used} of ${max} files uploaded. Each file up to 10MB.`,
       dropzoneTitle: "Click to select a file",
       dropzoneSubtitle: "Images or documents (PDF, DOC, DOCX)",
       downloadSr: "Download",

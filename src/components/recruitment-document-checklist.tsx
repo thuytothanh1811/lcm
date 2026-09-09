@@ -1,6 +1,7 @@
 import { IconCheck } from "@tabler/icons-react";
 
-const CHECKLIST_ROWS: {
+export const CHECKLIST_ROWS: {
+  key: string;
   stt: number;
   label: string;
   lpUm: boolean;
@@ -8,6 +9,7 @@ const CHECKLIST_ROWS: {
   gad: boolean;
 }[] = [
   {
+    key: "ct01",
     stt: 1,
     label: "Phiếu thông tin tuyển dụng (CT-01)",
     lpUm: true,
@@ -15,6 +17,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "ct02",
     stt: 2,
     label: "Phiếu cam kết & đăng ký chữ ký mẫu (CT-02)",
     lpUm: true,
@@ -22,6 +25,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "ct03_04",
     stt: 3,
     label: "Phiếu đánh giá ứng viên / phê duyệt (CT-03, CT04)",
     lpUm: true,
@@ -29,6 +33,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "basic_cert",
     stt: 4,
     label: "Chứng chỉ đại lý cơ bản (Hình chụp)",
     lpUm: true,
@@ -36,6 +41,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "photo_4x6",
     stt: 5,
     label: "1 ảnh 4x6 chụp thẳng (không quá 6 tháng, nền xanh/trắng)",
     lpUm: true,
@@ -43,6 +49,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "cccd",
     stt: 6,
     label: "CCCD (Hình chụp 2 mặt, hình chụp quét mã QR trên CCCD)",
     lpUm: true,
@@ -50,6 +57,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "diploma",
     stt: 7,
     label: "Bằng cấp (Hình chụp)",
     lpUm: true,
@@ -57,6 +65,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "phone_proof",
     stt: 8,
     label: "Xác nhận số điện thoại chính chủ (hình chụp) (*)",
     lpUm: true,
@@ -64,6 +73,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "tax_proof",
     stt: 9,
     label: "Xác nhận Mã số thuế (hình chụp) (*)",
     lpUm: true,
@@ -71,6 +81,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "bank_qr",
     stt: 10,
     label: "Mã QR tài khoản ngân hàng (hình chụp)",
     lpUm: true,
@@ -78,6 +89,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "persistency",
     stt: 11,
     label:
       "Tỷ lệ duy trì hợp đồng trong vòng 06 tháng gần nhất ở công ty trước",
@@ -86,6 +98,7 @@ const CHECKLIST_ROWS: {
     gad: true,
   },
   {
+    key: "mdrt_cert",
     stt: 12,
     label: "Giấy chứng nhận MDRT của hiệp hội",
     lpUm: false,
@@ -93,6 +106,7 @@ const CHECKLIST_ROWS: {
     gad: false,
   },
   {
+    key: "achievements",
     stt: 13,
     label:
       "Hồ sơ thành tích (Chứng từ thu nhập/doanh số qua trang web/app portal của công ty)",

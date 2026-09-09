@@ -265,10 +265,10 @@ export const vi = {
     tabsLabel: "Phần hồ sơ",
     tabInfo: "Thông tin hồ sơ",
     tabDocuments: "Chi tiết chứng từ",
-    attachmentsHeading: (count: number) =>
-      `Giấy tờ ứng viên đã nộp (${count})`,
+    attachmentsHeading: (count: number) => `Giấy tờ ứng viên đã nộp (${count})`,
     attachmentsEmpty: "Ứng viên chưa đính kèm giấy tờ nào.",
     attachmentDownload: "Tải xuống",
+    attachmentUnlabelled: "Chưa gắn loại giấy tờ",
     checklistHeading: "Danh mục hồ sơ cần nộp",
     checklistDescription:
       "Đối chiếu giấy tờ đã nộp ở trên với cột tương ứng vị trí ứng tuyển.",
@@ -579,6 +579,12 @@ export const vi = {
       managerGroupLabel: "Quản lý trực tiếp/SD/SH",
       description: (max: number) =>
         `Đính kèm hình ảnh hoặc tài liệu liên quan (CCCD, bằng cấp, CV...). Tối đa ${max} file, mỗi file không quá 10MB. Hỗ trợ: Hình ảnh JPG, Hình ảnh PNG, Hình ảnh WEBP, Hình ảnh HEIC, Tài liệu PDF, Tài liệu DOC, Tài liệu DOCX.`,
+      uploadRowButton: "Tải lên",
+      rowNotSubmitted: "Chưa nộp",
+      otherDocuments: "Giấy tờ khác",
+      uploadingLabel: "Đang tải lên...",
+      uploadHint: (used: number, max: number) =>
+        `Đã nộp ${used}/${max} tệp. Mỗi tệp tối đa 10MB.`,
       dropzoneTitle: "Nhấp để chọn file",
       dropzoneSubtitle: "Hình ảnh hoặc tài liệu (PDF, DOC, DOCX)",
       downloadSr: "Tải xuống",

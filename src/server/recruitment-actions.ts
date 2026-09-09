@@ -143,6 +143,7 @@ export async function uploadRecruitmentAttachment(
     return { ok: false, error: dict.errors.recruitment.unsupportedFileType };
   }
 
+  const documentType = formData.get("documentType");
   const storagePath = `recruitment/${randomUUID()}-${file.name}`;
 
   try {
@@ -153,7 +154,15 @@ export async function uploadRecruitmentAttachment(
 
     return {
       ok: true,
-      data: { storagePath, fileName: file.name, size: file.size, contentType },
+      data: {
+        storagePath,
+        fileName: file.name,
+        size: file.size,
+        contentType,
+        ...(typeof documentType === "string" && documentType
+          ? { documentType }
+          : {}),
+      },
     };
   } catch {
     return { ok: false, error: dict.errors.recruitment.uploadFailed };

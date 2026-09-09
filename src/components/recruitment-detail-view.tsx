@@ -27,7 +27,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { DocumentChecklistTable } from "@/components/recruitment-document-checklist";
+import {
+  CHECKLIST_ROWS,
+  DocumentChecklistTable,
+} from "@/components/recruitment-document-checklist";
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { useDictionary } from "@/hooks/use-dictionary";
 import type { Role } from "@/lib/permissions";
@@ -198,7 +201,13 @@ export function RecruitmentDetailView({
                   key={a.storagePath}
                   className="flex items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm"
                 >
-                  <span className="min-w-0 break-all">{a.fileName}</span>
+                  <span className="min-w-0">
+                    <span className="break-all">{a.fileName}</span>
+                    <span className="text-muted-foreground block text-xs">
+                      {CHECKLIST_ROWS.find(r => r.key === a.documentType)
+                        ?.label ?? t.recruitmentDetailView.attachmentUnlabelled}
+                    </span>
+                  </span>
                   <Button
                     type="button"
                     variant="outline"
