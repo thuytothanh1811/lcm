@@ -262,6 +262,16 @@ export const vi = {
   },
   recruitmentDetailView: {
     saved: "Đã lưu thay đổi",
+    tabsLabel: "Phần hồ sơ",
+    tabInfo: "Thông tin hồ sơ",
+    tabDocuments: "Chi tiết chứng từ",
+    attachmentsHeading: (count: number) =>
+      `Giấy tờ ứng viên đã nộp (${count})`,
+    attachmentsEmpty: "Ứng viên chưa đính kèm giấy tờ nào.",
+    attachmentDownload: "Tải xuống",
+    checklistHeading: "Danh mục hồ sơ cần nộp",
+    checklistDescription:
+      "Đối chiếu giấy tờ đã nộp ở trên với cột tương ứng vị trí ứng tuyển.",
     deleted: "Đã xóa hồ sơ ứng viên",
     status: "Trạng thái",
     documentsNoteLabel: "Ghi chú bổ sung chứng từ *",

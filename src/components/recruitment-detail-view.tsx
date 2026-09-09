@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { DocumentChecklistTable } from "@/components/recruitment-document-checklist";
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { useDictionary } from "@/hooks/use-dictionary";
 import type { Role } from "@/lib/permissions";
@@ -66,6 +67,7 @@ export function RecruitmentDetailView({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [tab, setTab] = useState<"info" | "documents">("info");
   // Once admin has agreed, the decision is final — freeze editing.
   const isFinalized = submission.adminStatus === "admin_agreed";
 
@@ -141,73 +143,158 @@ export function RecruitmentDetailView({
     router.push("/recruitments");
   };
 
+  const attachments = submission.attachments ?? [];
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field>
-            <FieldLabel>{t.recruitmentDetailView.status}</FieldLabel>
-            <Select
-              value={status}
-              onValueChange={v =>
-                setStatus(v as TRecruitmentSubmission["status"])
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(t.recruitmentsList.statusLabels).map(
-                  ([value, label]) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  )
-                )}
-              </SelectContent>
-            </Select>
-          </Field>
-          <Field>
-            <FieldLabel>{t.recruitmentDetailView.submittedAt}</FieldLabel>
-            <p className="text-muted-foreground text-sm">
-              {formatDate(submission.submittedAt)}
+      <div
+        role="tablist"
+        aria-label={t.recruitmentDetailView.tabsLabel}
+        className="bg-muted flex w-fit gap-1 rounded-lg p-1"
+      >
+        {(
+          [
+            ["info", t.recruitmentDetailView.tabInfo],
+            ["documents", t.recruitmentDetailView.tabDocuments],
+          ] as const
+        ).map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            role="tab"
+            aria-selected={tab === value}
+            onClick={() => setTab(value)}
+            className={
+              tab === value
+                ? "bg-background text-foreground rounded-md px-4 py-1.5 text-sm font-medium shadow-sm"
+                : "text-muted-foreground hover:text-foreground rounded-md px-4 py-1.5 text-sm font-medium"
+            }
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {/* Both panels stay mounted: the form fields are registered with
+          react-hook-form, and unmounting them on a tab switch would drop
+          the reviewer's unsaved edits. */}
+      <div
+        className={
+          tab === "documents" ? "flex flex-col gap-6" : "hidden flex-col gap-6"
+        }
+      >
+        <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
+          <h2 className="text-base font-semibold">
+            {t.recruitmentDetailView.attachmentsHeading(attachments.length)}
+          </h2>
+          {attachments.length === 0 ? (
+            <p className="text-muted-foreground mt-3 text-sm">
+              {t.recruitmentDetailView.attachmentsEmpty}
             </p>
-          </Field>
-          {status === "needs_documents" && (
-            <Field
-              data-invalid={!!documentsNoteError}
-              className="sm:col-span-2"
-            >
-              <FieldLabel>
-                {t.recruitmentDetailView.documentsNoteLabel}
-              </FieldLabel>
-              <Textarea
-                value={needsDocumentsNote}
-                onChange={e => {
-                  setNeedsDocumentsNote(e.target.value);
-                  if (documentsNoteError) setDocumentsNoteError(null);
-                }}
-                placeholder={t.recruitmentDetailView.documentsNotePlaceholder}
-                rows={3}
-              />
-              {documentsNoteError && (
-                <FieldError>{documentsNoteError}</FieldError>
-              )}
-            </Field>
+          ) : (
+            <ul className="mt-4 flex flex-col gap-2">
+              {attachments.map(a => (
+                <li
+                  key={a.storagePath}
+                  className="flex items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm"
+                >
+                  <span className="min-w-0 break-all">{a.fileName}</span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDownload(a)}
+                  >
+                    {t.recruitmentDetailView.attachmentDownload}
+                  </Button>
+                </li>
+              ))}
+            </ul>
           )}
+        </div>
+
+        <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
+          <h2 className="text-base font-semibold">
+            {t.recruitmentDetailView.checklistHeading}
+          </h2>
+          <p className="text-muted-foreground mt-1 mb-4 text-sm">
+            {t.recruitmentDetailView.checklistDescription}
+          </p>
+          <DocumentChecklistTable />
         </div>
       </div>
 
-      <RecruitmentFormFields
-        t={t}
-        control={control}
-        register={register}
-        errors={errors}
-        watch={watch}
-        setValue={setValue}
-        managers={managers}
-        onDownloadAttachment={handleDownload}
-      />
+      <div
+        className={
+          tab === "info" ? "flex flex-col gap-6" : "hidden flex-col gap-6"
+        }
+      >
+        <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field>
+              <FieldLabel>{t.recruitmentDetailView.status}</FieldLabel>
+              <Select
+                value={status}
+                onValueChange={v =>
+                  setStatus(v as TRecruitmentSubmission["status"])
+                }
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(t.recruitmentsList.statusLabels).map(
+                    ([value, label]) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    )
+                  )}
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field>
+              <FieldLabel>{t.recruitmentDetailView.submittedAt}</FieldLabel>
+              <p className="text-muted-foreground text-sm">
+                {formatDate(submission.submittedAt)}
+              </p>
+            </Field>
+            {status === "needs_documents" && (
+              <Field
+                data-invalid={!!documentsNoteError}
+                className="sm:col-span-2"
+              >
+                <FieldLabel>
+                  {t.recruitmentDetailView.documentsNoteLabel}
+                </FieldLabel>
+                <Textarea
+                  value={needsDocumentsNote}
+                  onChange={e => {
+                    setNeedsDocumentsNote(e.target.value);
+                    if (documentsNoteError) setDocumentsNoteError(null);
+                  }}
+                  placeholder={t.recruitmentDetailView.documentsNotePlaceholder}
+                  rows={3}
+                />
+                {documentsNoteError && (
+                  <FieldError>{documentsNoteError}</FieldError>
+                )}
+              </Field>
+            )}
+          </div>
+        </div>
+
+        <RecruitmentFormFields
+          t={t}
+          control={control}
+          register={register}
+          errors={errors}
+          watch={watch}
+          setValue={setValue}
+          managers={managers}
+          onDownloadAttachment={handleDownload}
+        />
+      </div>
 
       <div className="flex items-center justify-between gap-2">
         {role === "admin" && (

@@ -119,6 +119,49 @@ function ChecklistCell({ applicable }: { applicable: boolean }) {
   );
 }
 
+// Shared with the reviewer's document tab, which needs the table on its own
+// without the public page's heading and footnotes.
+export function DocumentChecklistTable() {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[560px] border-collapse text-sm">
+        <thead>
+          <tr className="bg-muted">
+            <th className="border-border w-12 border px-3 py-2 text-center">
+              STT
+            </th>
+            <th className="border-border border px-3 py-2 text-left">
+              Hồ sơ / Tài liệu
+            </th>
+            <th className="border-border w-20 border px-3 py-2 text-center">
+              LP/UM
+            </th>
+            <th className="border-border w-20 border px-3 py-2 text-center">
+              MDRT
+            </th>
+            <th className="border-border w-20 border px-3 py-2 text-center">
+              GAD
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {CHECKLIST_ROWS.map(row => (
+            <tr key={row.stt} className="border-border border">
+              <td className="border-border border px-3 py-2 text-center">
+                {row.stt}
+              </td>
+              <td className="border-border border px-3 py-2">{row.label}</td>
+              <ChecklistCell applicable={row.lpUm} />
+              <ChecklistCell applicable={row.mdrt} />
+              <ChecklistCell applicable={row.gad} />
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export function RecruitmentDocumentChecklist() {
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
@@ -126,42 +169,7 @@ export function RecruitmentDocumentChecklist() {
         <h2 className="text-xl font-semibold">DANH MỤC HỒ SƠ</h2>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[560px] border-collapse text-sm">
-          <thead>
-            <tr className="bg-muted">
-              <th className="border-border w-12 border px-3 py-2 text-center">
-                STT
-              </th>
-              <th className="border-border border px-3 py-2 text-left">
-                Hồ sơ / Tài liệu
-              </th>
-              <th className="border-border w-20 border px-3 py-2 text-center">
-                LP/UM
-              </th>
-              <th className="border-border w-20 border px-3 py-2 text-center">
-                MDRT
-              </th>
-              <th className="border-border w-20 border px-3 py-2 text-center">
-                GAD
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {CHECKLIST_ROWS.map(row => (
-              <tr key={row.stt} className="border-border border">
-                <td className="border-border border px-3 py-2 text-center">
-                  {row.stt}
-                </td>
-                <td className="border-border border px-3 py-2">{row.label}</td>
-                <ChecklistCell applicable={row.lpUm} />
-                <ChecklistCell applicable={row.mdrt} />
-                <ChecklistCell applicable={row.gad} />
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DocumentChecklistTable />
 
       <div className="mt-6 space-y-1 text-sm">
         <p className="font-semibold">Lưu ý:</p>

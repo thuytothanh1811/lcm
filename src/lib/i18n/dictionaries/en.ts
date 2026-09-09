@@ -263,6 +263,16 @@ export const en: typeof vi = {
     },
   },
   recruitmentDetailView: {
+    tabsLabel: "Record sections",
+    tabInfo: "Record details",
+    tabDocuments: "Supporting documents",
+    attachmentsHeading: (count: number) =>
+      `Documents submitted (${count})`,
+    attachmentsEmpty: "The candidate has not attached any documents yet.",
+    attachmentDownload: "Download",
+    checklistHeading: "Required documents",
+    checklistDescription:
+      "Check what was submitted above against the column for the position applied for.",
     saved: "Changes saved",
     deleted: "Submission deleted",
     status: "Status",
