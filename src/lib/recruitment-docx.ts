@@ -631,6 +631,13 @@ export async function buildRecruitmentDocxBlob(
       children: b.checkRun(s11.voluntary, !!data.commitmentVoluntary),
     })
   );
+  b.push(
+    new Paragraph({
+      spacing: { after: 30, ...LINE_SPACING },
+      indent: { left: 260 },
+      children: b.checkRun(s11.dataConsent, !!data.commitmentDataConsent),
+    })
+  );
   b.push(b.field("Ngày ký", data.signDate));
   b.push(b.spacer(), b.spacer());
 

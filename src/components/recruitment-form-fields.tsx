@@ -2566,6 +2566,30 @@ export function RecruitmentFormFields({
             }
           />
 
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="commitmentDataConsent"
+              render={({ field }) => (
+                <Checkbox
+                  id="commitmentDataConsent"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="commitmentDataConsent" className="font-normal">
+              {t.recruitmentForm.section11.dataConsent}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.commitmentDataConsent
+                ? [errors.commitmentDataConsent]
+                : undefined
+            }
+          />
+
           <Field data-invalid={!!errors.signDate}>
             <Controller
               control={control}

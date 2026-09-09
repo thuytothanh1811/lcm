@@ -202,6 +202,9 @@ export function buildRecruitmentSchema(
     commitmentVoluntary: z.literal(true, {
       error: t.commitmentRequired,
     }),
+    commitmentDataConsent: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
     signDate: z.string().min(1, t.signDateRequired),
   });
 
@@ -470,6 +473,7 @@ export function buildRecruitmentDraftSchema(
       .optional(),
 
     commitmentVoluntary: z.boolean().optional(),
+    commitmentDataConsent: z.boolean().optional(),
     signDate: z.string().optional(),
   });
 }

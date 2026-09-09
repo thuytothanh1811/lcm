@@ -102,6 +102,7 @@ export function RecruitmentForm({
       q6Support: [],
       attachments: [],
       commitmentVoluntary: undefined,
+      commitmentDataConsent: undefined,
       ...initialValues,
     },
   });
