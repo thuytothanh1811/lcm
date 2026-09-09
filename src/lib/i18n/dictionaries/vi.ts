@@ -294,7 +294,7 @@ export const vi = {
     saving: "Đang lưu...",
     draftSaved: "Đã lưu phiếu thông tin.",
     maxFilesError: (n: number) => `Tối đa ${n} tệp.`,
-    maxFileSizeError: "Mỗi tệp tối đa 5MB.",
+    maxFileSizeError: "Mỗi tệp tối đa 10MB.",
     search: {
       idNumberLabel: "Số CCCD *",
       idNumberPlaceholder: "9 hoặc 12 số",
@@ -578,7 +578,7 @@ export const vi = {
       candidateGroupLabel: "Ứng viên",
       managerGroupLabel: "Quản lý trực tiếp/SD/SH",
       description: (max: number) =>
-        `Đính kèm hình ảnh hoặc tài liệu liên quan (CCCD, bằng cấp, CV...). Tối đa ${max} file, mỗi file không quá 5MB. Hỗ trợ: Hình ảnh JPG, Hình ảnh PNG, Hình ảnh WEBP, Hình ảnh HEIC, Tài liệu PDF, Tài liệu DOC, Tài liệu DOCX.`,
+        `Đính kèm hình ảnh hoặc tài liệu liên quan (CCCD, bằng cấp, CV...). Tối đa ${max} file, mỗi file không quá 10MB. Hỗ trợ: Hình ảnh JPG, Hình ảnh PNG, Hình ảnh WEBP, Hình ảnh HEIC, Tài liệu PDF, Tài liệu DOC, Tài liệu DOCX.`,
       dropzoneTitle: "Nhấp để chọn file",
       dropzoneSubtitle: "Hình ảnh hoặc tài liệu (PDF, DOC, DOCX)",
       downloadSr: "Tải xuống",
@@ -633,7 +633,7 @@ export const vi = {
         "Vui lòng xác nhận cam kết & đồng ý PDPD (chọn Có) để gửi hồ sơ",
       confirmationMethodRequired: "Vui lòng chọn hình thức xác nhận",
       signDateRequired: "Vui lòng nhập ngày ký đơn",
-      attachmentsMax: "Tối đa 5 tệp",
+      attachmentsMax: "Tối đa 15 tệp",
       commitmentRequired: "Vui lòng xác nhận cam kết này",
     },
   },
@@ -642,7 +642,7 @@ export const vi = {
     forbidden: "Bạn không có quyền thực hiện thao tác này.",
     recruitment: {
       noFileSelected: "Không có tệp nào được chọn.",
-      fileTooLarge: "Mỗi tệp tối đa 5MB.",
+      fileTooLarge: "Mỗi tệp tối đa 10MB.",
       unsupportedFileType: "Định dạng tệp không được hỗ trợ.",
       uploadFailed: "Không thể tải tệp lên.",
       invalidData: "Dữ liệu không hợp lệ.",

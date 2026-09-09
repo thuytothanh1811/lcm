@@ -197,7 +197,7 @@ export function buildRecruitmentSchema(
           contentType: z.string(),
         })
       )
-      .max(5, t.attachmentsMax),
+      .max(15, t.attachmentsMax),
 
     commitmentVoluntary: z.literal(true, {
       error: t.commitmentRequired,

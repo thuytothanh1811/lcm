@@ -296,7 +296,7 @@ export const en: typeof vi = {
     saving: "Saving...",
     draftSaved: "Your information has been saved.",
     maxFilesError: (n: number) => `Maximum ${n} files.`,
-    maxFileSizeError: "Each file must be 5MB or smaller.",
+    maxFileSizeError: "Each file must be 10MB or smaller.",
     search: {
       idNumberLabel: "ID number *",
       idNumberPlaceholder: "9 or 12 digits",
@@ -578,7 +578,7 @@ export const en: typeof vi = {
       candidateGroupLabel: "Candidate",
       managerGroupLabel: "Direct manager/SD/SH",
       description: (max: number) =>
-        `Attach related images or documents (ID card, diplomas, CV...). Maximum ${max} files, each file no more than 5MB. Supported: JPG images, PNG images, WEBP images, HEIC images, PDF documents, DOC documents, DOCX documents.`,
+        `Attach related images or documents (ID card, diplomas, CV...). Maximum ${max} files, each file no more than 10MB. Supported: JPG images, PNG images, WEBP images, HEIC images, PDF documents, DOC documents, DOCX documents.`,
       dropzoneTitle: "Click to select a file",
       dropzoneSubtitle: "Images or documents (PDF, DOC, DOCX)",
       downloadSr: "Download",
@@ -634,7 +634,7 @@ export const en: typeof vi = {
         "Please confirm the commitment & PDPD consent (choose Yes) to submit",
       confirmationMethodRequired: "Please select a confirmation method",
       signDateRequired: "Please enter the signature date",
-      attachmentsMax: "Maximum 5 files",
+      attachmentsMax: "Maximum 15 files",
       commitmentRequired: "Please confirm this commitment",
     },
   },
@@ -643,7 +643,7 @@ export const en: typeof vi = {
     forbidden: "You do not have permission to perform this action.",
     recruitment: {
       noFileSelected: "No file was selected.",
-      fileTooLarge: "Each file must be 5MB or smaller.",
+      fileTooLarge: "Each file must be 10MB or smaller.",
       unsupportedFileType: "This file type is not supported.",
       uploadFailed: "Unable to upload the file.",
       invalidData: "Invalid data.",

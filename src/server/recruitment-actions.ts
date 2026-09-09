@@ -108,7 +108,7 @@ async function requireRecruitmentAccess() {
   }
   return { ok: true as const, user, dict };
 }
-const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 const ALLOWED_CONTENT_TYPES = [
   "image/jpeg",
   "image/png",
