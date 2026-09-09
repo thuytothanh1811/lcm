@@ -733,36 +733,13 @@ export async function buildRecruitmentDocxBlob(
     })
   );
 
-  // The appendix is printed as a record of what the candidate answered,
-  // not as a paper questionnaire — so it carries the chosen answers only,
-  // rather than the whole option list with boxes still to tick.
-  function answerLine(text: string) {
-    return new Paragraph({
-      border: {
-        bottom: {
-          style: BorderStyle.SINGLE,
-          size: 4,
-          color: "000000",
-          space: 4,
-        },
-      },
-      spacing: { ...LINE_SPACING_SINGLE, after: 160 },
-      children: [new TextRun({ text })],
-    });
-  }
-
   function questionChecklist(
     label: string,
     options: string[],
-    selected: Set<string>,
-    other?: string | null
+    selected: Set<string>
   ) {
     b.push(b.bodyText(label, { bold: true, after: 40 }));
-    // Filtering the option list keeps the answers in the order they are
-    // presented on the form; the Set alone would not.
-    const answers = options.filter(o => selected.has(o));
-    if (other?.trim()) answers.push(other.trim());
-    b.push(answerLine(answers.join("; ")));
+    b.push(...b.stackedChecks(options, selected));
     b.push(b.spacer());
   }
 
@@ -798,14 +775,12 @@ export async function buildRecruitmentDocxBlob(
   questionChecklist(
     s9.q2Label,
     labelsOf(opt.q2),
-    labelsFor(opt.q2, data.q2View),
-    data.q2ViewOther
+    labelsFor(opt.q2, data.q2View)
   );
   questionChecklist(
     s9.q3Label,
     labelsOf(opt.q3),
-    labelsFor(opt.q3, data.q3TargetAudience),
-    data.q3TargetAudienceOther
+    labelsFor(opt.q3, data.q3TargetAudience)
   );
   questionFreeText(s9.q4Label, data.q4FirstTenPeople);
   questionChecklist(
@@ -816,14 +791,12 @@ export async function buildRecruitmentDocxBlob(
   questionChecklist(
     s9.q6Label,
     labelsOf(opt.q6),
-    labelsFor(opt.q6, data.q6Support),
-    data.q6SupportOther
+    labelsFor(opt.q6, data.q6Support)
   );
   questionChecklist(
     s9.q7Label,
     labelsOf(opt.referral),
-    labelsFor(opt.referral, data.referralChannel),
-    data.referralOther
+    labelsFor(opt.referral, data.referralChannel)
   );
 
   b.useNormalSpacing();
