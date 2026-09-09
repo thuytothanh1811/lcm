@@ -591,7 +591,7 @@ export const en: typeof vi = {
       consentLabel: "Confirm commitment & PDPD consent *",
       methodLabel: "Confirmation method *",
       handwritten: "Handwritten signature",
-      signDateLabel: "Signature date *",
+      signDateLabel: "Data entry date *",
       no: "No",
       yes: "Yes",
     },

@@ -591,7 +591,7 @@ export const vi = {
       consentLabel: "Xác nhận cam kết & đồng ý PDPD *",
       methodLabel: "Hình thức xác nhận *",
       handwritten: "Chữ ký tay",
-      signDateLabel: "Ngày ký đơn *",
+      signDateLabel: "Ngày nhập dữ liệu *",
       no: "Không",
       yes: "Có",
     },
