@@ -2534,73 +2534,60 @@ export function RecruitmentFormFields({
         <p className="text-foreground text-sm font-medium">
           {t.recruitmentForm.section10.templatesHeading}
         </p>
-        <div className="border-input bg-muted/30 rounded-lg border p-3">
+        <div className="border-input bg-muted/30 rounded-lg border px-3 py-2.5">
           <p className="text-muted-foreground text-xs">
             {t.recruitmentForm.section10.templatesIntro}
           </p>
-          <div className="mt-2 grid min-w-0 gap-3 sm:grid-cols-2">
-            <div className="border-input min-w-0 sm:border-r sm:pr-3">
-              <p className="text-muted-foreground mb-1.5 text-xs font-medium">
-                {t.recruitmentForm.section10.candidateGroupLabel}
-              </p>
-              <ul className="grid min-w-0 gap-1">
-                {onDownloadCt1 && (
-                  <li className="min-w-0">
-                    <button
-                      type="button"
-                      disabled={isDownloadingCt1}
-                      onClick={onDownloadCt1}
-                      className="border-input bg-background hover:bg-muted/50 flex w-full min-w-0 items-center gap-1.5 rounded border px-2 py-1 text-start text-xs disabled:opacity-60"
-                    >
-                      <IconDownload className="text-muted-foreground size-3.5 shrink-0" />
-                      <span className="min-w-0 flex-1 truncate">
-                        {t.pages.recruitmentPublic.printButton}
-                      </span>
-                    </button>
-                  </li>
-                )}
-                {TEMPLATE_DOCUMENTS.filter(
-                  doc => doc.group === "candidate"
-                ).map(doc => (
-                  <li key={doc.file} className="min-w-0">
-                    <a
-                      href={`/templates/${doc.file}`}
-                      download
-                      className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-1.5 rounded border px-2 py-1 text-xs"
-                    >
-                      <IconDownload className="text-muted-foreground size-3.5 shrink-0" />
-                      <span className="min-w-0 flex-1 truncate">
-                        {doc.label}
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+          {/* Chips carry only the form code — the full name is long, repeats
+              the checklist below, and is what the file itself is called. It
+              stays available on hover and to screen readers. */}
+          {(
+            [
+              [
+                t.recruitmentForm.section10.candidateGroupLabel,
+                "candidate",
+              ] as const,
+              [
+                t.recruitmentForm.section10.managerGroupLabel,
+                "manager",
+              ] as const,
+            ] as const
+          ).map(([groupLabel, group]) => (
+            <div
+              key={group}
+              className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5"
+            >
+              <span className="text-muted-foreground w-full text-xs font-medium sm:w-40 sm:shrink-0">
+                {groupLabel}
+              </span>
+              {group === "candidate" && onDownloadCt1 && (
+                <button
+                  type="button"
+                  disabled={isDownloadingCt1}
+                  onClick={onDownloadCt1}
+                  title={t.pages.recruitmentPublic.printButton}
+                  className="border-input bg-background hover:bg-muted/50 flex items-center gap-1 rounded border px-2 py-0.5 text-xs font-medium disabled:opacity-60"
+                >
+                  <IconDownload className="text-muted-foreground size-3.5" />
+                  CT01
+                </button>
+              )}
+              {TEMPLATE_DOCUMENTS.filter(doc => doc.group === group).map(
+                doc => (
+                  <a
+                    key={doc.file}
+                    href={`/templates/${doc.file}`}
+                    download
+                    title={doc.label}
+                    className="border-input bg-background hover:bg-muted/50 flex items-center gap-1 rounded border px-2 py-0.5 text-xs font-medium"
+                  >
+                    <IconDownload className="text-muted-foreground size-3.5" />
+                    {doc.label.split(" – ")[0]}
+                  </a>
+                )
+              )}
             </div>
-            <div className="min-w-0">
-              <p className="text-muted-foreground mb-1.5 text-xs font-medium">
-                {t.recruitmentForm.section10.managerGroupLabel}
-              </p>
-              <ul className="grid min-w-0 gap-1">
-                {TEMPLATE_DOCUMENTS.filter(doc => doc.group === "manager").map(
-                  doc => (
-                    <li key={doc.file} className="min-w-0">
-                      <a
-                        href={`/templates/${doc.file}`}
-                        download
-                        className="border-input bg-background hover:bg-muted/50 flex min-w-0 items-center gap-1.5 rounded border px-2 py-1 text-xs"
-                      >
-                        <IconDownload className="text-muted-foreground size-3.5 shrink-0" />
-                        <span className="min-w-0 flex-1 truncate">
-                          {doc.label}
-                        </span>
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          </div>
+          ))}
         </div>
 
         <p className="text-foreground text-sm font-medium underline">
