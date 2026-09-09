@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 import {
-  IconChevronRight,
   IconCircleCheckFilled,
   IconCloudUpload,
   IconDownload,
@@ -24,11 +23,6 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import {
   Combobox,
   ComboboxContent,
@@ -57,10 +51,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  CHECKLIST_ROWS,
-  DocumentChecklistTable,
-} from "@/components/recruitment-document-checklist";
+import { CHECKLIST_ROWS } from "@/components/recruitment-document-checklist";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { formatBytes } from "@/lib/utils";
 import {
@@ -2612,18 +2603,9 @@ export function RecruitmentFormFields({
           </div>
         </div>
 
-        {/* Collapsed by default: the checklist is 13 rows and would push the
-            upload area off the screen for the many candidates who already
-            know what to bring. */}
-        <Collapsible>
-          <CollapsibleTrigger className="group text-foreground flex w-full items-center gap-2 text-sm font-medium">
-            <IconChevronRight className="text-muted-foreground size-4 shrink-0 transition-transform group-data-[state=open]:rotate-90" />
-            {t.recruitmentForm.section10.checklistHeading}
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-3">
-            <DocumentChecklistTable />
-          </CollapsibleContent>
-        </Collapsible>
+        <p className="text-foreground text-sm font-medium underline">
+          {t.recruitmentForm.section10.checklistHeading}
+        </p>
 
         <Field>
           {/* One upload control per checklist row, so a file arrives already
