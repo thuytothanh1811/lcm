@@ -21,6 +21,9 @@ export const en: typeof vi = {
     settings: "Settings",
     documents: "Documents",
     soon: "Soon",
+    income: "Income",
+    incomeCalculator: "Income calculator",
+    incomePolicy: "Policy & bonus tables",
   },
   navUser: {
     appearance: "Appearance",
@@ -112,6 +115,14 @@ export const en: typeof vi = {
       heading: "Recruitment candidates",
     },
     recruitmentDetail: { title: "Candidate details" },
+    income: {
+      title: "Income calculator",
+      heading: "LP income calculator",
+    },
+    incomePolicy: {
+      title: "Income policy",
+      heading: "Income policy for Life Planners",
+    },
     recruitmentPublic: {
       title: "Recruitment information form",
       logoAlt: "Asahi Life",
@@ -689,6 +700,219 @@ export const en: typeof vi = {
       notFound: "Document not found.",
       deleteFailed: "Unable to delete the document.",
       downloadUrlFailed: "Unable to generate a download link.",
+    },
+  },
+  incomeCalculator: {
+    heading: "LP income calculator",
+    description:
+      "Estimate commissions, allowances and bonuses under the LP Income Policy (Ref: ALL/AD/2608 – 001, effective 01/10/2026).",
+    inputsCard: {
+      title: "Inputs",
+      workModel: "Work model",
+      fullTime: "Full-time",
+      partTime: "Part-time",
+      isFirstYear: "First-year LP (no K2 yet, or %1Up < 15%)",
+      hasK2Unknown: "No %K2 data yet (N/A)",
+      achievedMdrtLastYear: "Achieved MDRT in the previous year",
+    },
+    tabs: {
+      monthly: "Monthly",
+      quarterly: "Quarterly",
+      milestones: "Titles & benefits",
+    },
+    fields: {
+      fycMonth: "FYC generated this month (VND million)",
+      fycQuarter: "FYC generated this quarter (VND million)",
+      contractsMonth: "Contracts issued this month",
+      referredLp: "LPs referred this month",
+      k2Percent: "%K2 for the period",
+      oneUpPercent: "%1Up for the period",
+      daysWorked: "Actual days worked this month",
+      workingDaysInMonth: "Working days in the month",
+      joinedMidQuarter: "Joined mid-quarter",
+      monthsWorkedInQuarter: "Months worked in the quarter",
+      activeMonthsInQuarter: "Active months in the quarter (RYC)",
+      k2AverageQuarter: "Average %K2 for the quarter (RYC)",
+      consecutiveMdrt: "Consecutive MDRT achievements",
+      avgK2Year: "Average %K2 for the year (MDRT)",
+      activeMonths12: "Active months in the trailing 12 months (health)",
+    },
+    results: {
+      faTitle: "Monthly fixed allowance (FA)",
+      faFormula:
+        "FA = Allowance/workday × Workday coefficient × %K2 × %MDRT × %Contract",
+      fullTimeOnlyNotice: "FA only applies to full-time LPs.",
+      attendanceRate: "%Attendance",
+      workdayCoefficient: "Workday coefficient",
+      allowancePerWorkday: "Allowance/workday",
+      k2Coefficient: "%K2 coefficient",
+      mdrtCoefficient: "%MDRT coefficient",
+      contractCoefficient: "%Contract coefficient",
+      total: "Estimated total",
+      monthlyBonusTitle: "Monthly sales bonus",
+      quarterlyBonusTitle: "Quarterly sales bonus",
+      rycTitle: "Renewal commission (RYC) eligibility",
+      mdrtTitle: "MDRT title bonus",
+      healthTitle: "Health insurance package",
+      qualityColumn: "Quality tier reached",
+      qualityColumnLabels: {
+        rate80: "≥80% K2 or ≥25% 1Up",
+        rate70: "≥70% K2 or ≥15% 1Up",
+        rate60: "≥60% K2",
+        rate50: "≥50% K2",
+      },
+      qualifiedRate: "Bonus rate reached",
+      bonusAmount: "Estimated bonus amount",
+      convertedFyc: "Converted FYC (used to determine the bonus rate)",
+      eligible: "Eligible",
+      ineligible: "Not eligible",
+      reasons: {
+        minK2: "Below the minimum %K2 (≥ 50%)",
+        minAttendance: "Below the minimum attendance days",
+        belowMinFyc: "FYC below the minimum bonus threshold",
+        minAvgK2: "Below the minimum average yearly %K2 (≥ 70%)",
+        partTimeOrUmOnlyForOneTime:
+          "The 1-time MDRT bonus only applies to part-time LPs or UM+",
+        noTier: "Below the minimum consecutive MDRT achievements (1 time)",
+      },
+      healthEligible: "Eligible for the health insurance package",
+      healthIneligible: "Not eligible for the health insurance package",
+    },
+    disclaimer:
+      "Results are indicative only, based on Appendix 1 – LP Income Policy. Official figures follow the Company's payroll system.",
+  },
+  incomePolicy: {
+    heading: "Income policy for Life Planners",
+    description:
+      "Summary of Appendix 1 & 2 – Internal notice ALL/AD/2608 – 001, effective from 01/10/2026.",
+    effectiveNotice:
+      "Applies to all LPs and UM+ selling individually in the Agency channel.",
+    tabs: {
+      commission: "Commission",
+      fa: "Fixed allowance (FA)",
+      monthlyBonus: "Monthly bonus",
+      quarterlyBonus: "Quarterly bonus",
+      mdrtHealth: "MDRT & health",
+      promotionMaintenance: "Promotion & maintenance",
+    },
+    commission: {
+      fycTitle: "First year commission (FYC)",
+      fycDescription:
+        "No conditions required. Paid according to the commission rate of each product issued by the Company at any given time.",
+      rycTitle: "Renewal commission (RYC) — assessed quarterly",
+      colActiveMonths: "Active months in the quarter",
+      colK2: "%K2",
+      colRate: "Payout rate (%RYC)",
+      activeMonthNote:
+        "Active month: a calendar month in which the LP/UM+ has at least 01 net contract and 04 million VND of net FYC.",
+    },
+    fa: {
+      title: "Monthly fixed allowance (FA)",
+      subtitle:
+        "For full-time LPs only, who have completed mandatory training and reached ≥ 70% attendance (or ≥ 15 working days/month).",
+      formula:
+        "FA = Allowance/workday × Workday coefficient × %K2 coefficient × %MDRT coefficient × %Contract coefficient",
+      allowanceTitle: "A. Allowance/workday",
+      allowanceNote:
+        "The LP reaches a tier by meeting Option 1 or Option 2 (whichever gives the highest tier).",
+      colAllowance: "Allowance/workday",
+      colOption1: "Option 1 — FYC (VND million)",
+      colOption2Fyc: "Option 2 — FYC (VND million)",
+      colOption2Referred: "Option 2 — Referred LPs",
+      k2Title: "B. %K2 coefficient",
+      colK2: "%K2",
+      colCoefficient: "%K2 coefficient",
+      mdrtTitle: "C. %MDRT coefficient",
+      mdrtAchieved: "Achieved MDRT in the previous year",
+      mdrtNotAchieved: "Not achieved",
+      contractTitle: "D. %Contract coefficient",
+      colContracts: "Contracts in the month",
+      colContractCoefficient: "%Contract coefficient",
+      workdayTitle: "E. Workday coefficient",
+      workdayFormula: "Workday coefficient (*) = %attendance × 22",
+      attendanceFormula:
+        "%attendance = (actual days worked + 1) ÷ working days in the month, capped at 100%",
+      newLpGuaranteeTitle: "Guarantee for new LPs",
+      newLpGuarantee:
+        "During the first 2 working months from the appointment date, a new LP is guaranteed an Allowance/workday of 0.3 million VND times the workday coefficient, provided at least 01 contract is issued during these 2 months.",
+      quarterlyGuaranteeTitle: "Quarterly FA guarantee",
+      quarterlyGuarantee:
+        "The next quarter's FA is guaranteed at 0.15 million VND/workday times the workday coefficient if the current quarter reaches ≥ 06 contracts and ≥ 24 million VND of generated FYC.",
+      seNotice:
+        "An LP whose status is SE at month-end will not be paid FA for that month.",
+      exampleTitle: "Worked example",
+      exampleText:
+        "A month with 22 working days, where the LP worked 20 days (%attendance = 95.5%, workday coefficient = 21.0). FYC of 26 million, K2 not yet available (N/A), MDRT not achieved, 02 contracts issued → FA = 0.5 million × 21.0 × 100% × 100% × 100% = 10.5 million VND.",
+    },
+    salesBonus: {
+      monthlyTitle: "Monthly sales bonus",
+      monthlySubtitle: "For part-time LPs and UM+ selling individually.",
+      quarterlyTitle: "Quarterly sales bonus",
+      quarterlySubtitle:
+        "Applies to LP/UM+ selling individually, closed at the end of March, June, September and December.",
+      formula: "Bonus = FYC × Bonus rate",
+      establishedTitle: "LP/UM+ with an existing K2 track record or ≥ 15% 1Up",
+      firstYearTitle: "First-year LP/UM+ with 1Up < 15% or no K2 yet (N/A)",
+      colFycMonth: "FYC for the month (VND million)",
+      colFycQuarter: "FYC for the quarter (VND million)",
+      colRate: "Bonus rate (%FYC)",
+      eligibilityNote:
+        "Minimum conditions to receive the bonus: K2 ≥ 50% and attendance ≥ 04 working days.",
+      midQuarterNote:
+        "For an LP/UM+ joining mid-quarter: converted FYC = actual FYC ÷ (months worked in the quarter ÷ 3). The bonus rate is determined from the converted FYC, but the bonus amount is calculated on the actual FYC.",
+    },
+    mdrt: {
+      title: "MDRT title bonus",
+      subtitle: "Based on the number of consecutive MDRT achievements.",
+      colTimes: "Consecutive MDRT achievements",
+      colBonus: "Bonus amount (VND million)",
+      onceNote:
+        "(*) The bonus for a single MDRT achievement only applies to part-time LPs or UM+.",
+      minK2Note:
+        "Minimum condition to receive the bonus: average yearly %K2 ≥ 70%. This condition is waived if K2 is not yet available.",
+      consecutiveNote:
+        '"Consecutive": the Agent Agreement must remain continuously in force, without interruption, and the LP/UM+ must continuously hold a rank of LP or above. If the agreement is interrupted, the count of consecutive MDRT achievements restarts from zero.',
+    },
+    health: {
+      title: "Health insurance package",
+      condition:
+        "Reaching at least 10 active months (based on net revenue) within the trailing 12 months.",
+      review:
+        "Reviewed quarterly at the end of March, June, September and December. If the condition is not met, the benefit is suspended and restored the following quarter once the condition is met again.",
+      note: "Non-transferable and not convertible to cash; it ends when the Agent Agreement ends for any reason.",
+    },
+    promotion: {
+      title: "Promotion to Unit Manager (UM)",
+      subtitle:
+        "Reviewed quarterly, based on business results over the trailing 06 months (net revenue).",
+      colCriterion: "Criterion",
+      colRequirement: "Requirement",
+      tenure: "Tenure in the current position",
+      resultsWindow: "Business results review window",
+      personalFyc: "Personal FYC (VND million)",
+      referredLpFyc: "FYC of referred LPs (VND million)",
+      referredLpCount: "Number of referred LPs",
+      attendance: "Personal %attendance",
+      note: "Promotion is also subject to completing the Company's required training program and approval from the responsible Sales Management level.",
+    },
+    maintenance: {
+      title: "Contract maintenance conditions (LP position)",
+      subtitle:
+        "Reviewed quarterly (March, June, September, December), based on the trailing 03 months.",
+      tenure: "Minimum tenure in the position",
+      resultsWindow: "Business results review window",
+      personalFyc: "Personal net FYC (VND million)",
+      attendance: "Personal %attendance (applies to full-time LPs)",
+      seNote:
+        "An LP who fails the contract maintenance condition at a review is moved to SE status. Within 3 months of moving to SE, achieving 01 net contract and 4 million VND of net FYC in any month restores Active status the following month. If Active status is not restored within 3 months, the Company may terminate the Agent Agreement.",
+      maternityNote:
+        "An LP on maternity leave (registered at least 01 month in advance) is exempt from the contract maintenance review.",
+    },
+    units: {
+      million: "VND million",
+      percent: "%",
+      months: "months",
+      days: "days",
     },
   },
 };
