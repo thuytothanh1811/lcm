@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 
 import { IconLoader2 } from "@tabler/icons-react";
-import { Search, Settings, UserCheck, Users, Wallet } from "lucide-react";
+import { Search, Settings, UserCheck, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,6 @@ import {
 import { useDictionary } from "@/hooks/use-dictionary";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import {
-  canAccessIncome,
   canAccessSettings,
   canAccessUsers,
   type Role,
@@ -38,19 +37,6 @@ function getNavigationItems(t: Dictionary, role: Role) {
       url: "/recruitments",
     },
   ];
-
-  if (canAccessIncome(role)) {
-    items.push({
-      icon: Wallet,
-      label: t.nav.incomeCalculator,
-      url: "/income",
-    });
-    items.push({
-      icon: Wallet,
-      label: t.nav.incomePolicy,
-      url: "/income/policy",
-    });
-  }
 
   if (canAccessUsers(role)) {
     items.push({
