@@ -28,9 +28,8 @@ import type { Role } from "@/lib/permissions";
 import { formatDate } from "@/lib/utils";
 import type {
   TAdminStatus,
+  TRecruitmentStatus,
   TRecruitmentSubmission,
-  TSdStatus,
-  TShStatus,
 } from "@/server/recruitment-actions";
 
 const ADMIN_STATUS_VARIANTS: Record<
@@ -43,25 +42,38 @@ const ADMIN_STATUS_VARIANTS: Record<
   admin_needs_documents: "outline",
 };
 
-const SH_STATUS_VARIANTS: Record<
+const STATUS_VARIANTS: Record<
   string,
   "default" | "secondary" | "destructive" | "outline"
 > = {
+  draft: "secondary",
   new: "secondary",
-  sh_agreed: "default",
-  sh_rejected: "destructive",
-  sh_needs_documents: "outline",
+  agreed: "default",
+  rejected: "destructive",
+  needs_documents: "outline",
 };
 
-const SD_STATUS_VARIANTS: Record<
-  string,
-  "default" | "secondary" | "destructive" | "outline"
-> = {
-  new: "secondary",
-  sd_agreed: "default",
-  sd_rejected: "destructive",
-  sd_needs_documents: "outline",
-};
+// SH and SD share one status field: whichever of them last acted set it,
+// and statusUpdatedByRole says who — so the label can read "SH - Đồng Ý"
+// or "SD - Đồng Ý" from the same underlying value.
+function statusLabel(t: Dictionary, submission: TRecruitmentSubmission) {
+  const roleLabels =
+    submission.statusUpdatedByRole &&
+    submission.statusUpdatedByRole in t.recruitmentsList.roleStatusLabels
+      ? t.recruitmentsList.roleStatusLabels[
+          submission.statusUpdatedByRole as "ad" | "sh" | "sd"
+        ]
+      : undefined;
+  const status = submission.status;
+  return (
+    (roleLabels &&
+      (status === "agreed" ||
+        status === "rejected" ||
+        status === "needs_documents") &&
+      roleLabels[status]) ||
+    t.recruitmentsList.statusLabels[status]
+  );
+}
 
 export function createRecruitmentsColumns({
   t,
@@ -71,10 +83,8 @@ export function createRecruitmentsColumns({
   downloadingId,
   onAdminStatusChange,
   onRequestAdminDocumentsNote,
-  onShStatusChange,
-  onRequestShDocumentsNote,
-  onSdStatusChange,
-  onRequestSdDocumentsNote,
+  onStatusChange,
+  onRequestDocumentsNote,
   updatingStatusId,
 }: {
   t: Dictionary;
@@ -87,16 +97,11 @@ export function createRecruitmentsColumns({
     status: TAdminStatus
   ) => void;
   onRequestAdminDocumentsNote: (submission: TRecruitmentSubmission) => void;
-  onShStatusChange: (
+  onStatusChange: (
     submission: TRecruitmentSubmission,
-    status: TShStatus
+    status: TRecruitmentStatus
   ) => void;
-  onRequestShDocumentsNote: (submission: TRecruitmentSubmission) => void;
-  onSdStatusChange: (
-    submission: TRecruitmentSubmission,
-    status: TSdStatus
-  ) => void;
-  onRequestSdDocumentsNote: (submission: TRecruitmentSubmission) => void;
+  onRequestDocumentsNote: (submission: TRecruitmentSubmission) => void;
   updatingStatusId: string | null;
 }): ColumnDef<TRecruitmentSubmission & { id: string }>[] {
   const isAdmin = role === "admin";
@@ -136,72 +141,42 @@ export function createRecruitmentsColumns({
       accessorKey: "sdManagerName",
       header: t.recruitmentsList.columns.sdManager,
     },
-    ...(isAdmin || isSh
+    ...(isAdmin || isSh || isSd
       ? [
           {
-            accessorKey: "shStatus",
-            header: t.recruitmentsList.columns.shStatus,
-            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) => {
-              const shStatus = row.original.shStatus ?? "new";
-              return (
-                <Badge variant={SH_STATUS_VARIANTS[shStatus]}>
-                  {t.recruitmentsList.shStatusLabels[shStatus]}
-                </Badge>
-              );
-            },
+            accessorKey: "status",
+            header: t.recruitmentsList.columns.status,
+            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) => (
+              <Badge variant={STATUS_VARIANTS[row.original.status]}>
+                {statusLabel(t, row.original)}
+              </Badge>
+            ),
           },
           {
-            accessorKey: "shDocumentsNote",
-            header: t.recruitmentsList.columns.shDocumentsNote,
+            accessorKey: "needsDocumentsNote",
+            header: t.recruitmentsList.columns.documentsNote,
             cell: ({ row }: { row: { original: TRecruitmentSubmission } }) =>
-              row.original.shDocumentsNote ?? "—",
+              row.original.needsDocumentsNote ?? "—",
           },
         ]
       : []),
-    ...(isAdmin || isSd
-      ? [
-          {
-            accessorKey: "sdStatus",
-            header: t.recruitmentsList.columns.sdStatus,
-            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) => {
-              const sdStatus = row.original.sdStatus ?? "new";
-              return (
-                <Badge variant={SD_STATUS_VARIANTS[sdStatus]}>
-                  {t.recruitmentsList.sdStatusLabels[sdStatus]}
-                </Badge>
-              );
-            },
-          },
-          {
-            accessorKey: "sdDocumentsNote",
-            header: t.recruitmentsList.columns.sdDocumentsNote,
-            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) =>
-              row.original.sdDocumentsNote ?? "—",
-          },
-        ]
-      : []),
-    ...(isAdmin
-      ? [
-          {
-            accessorKey: "adminStatus",
-            header: t.recruitmentsList.columns.adminStatus,
-            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) => {
-              const adminStatus = row.original.adminStatus ?? "new";
-              return (
-                <Badge variant={ADMIN_STATUS_VARIANTS[adminStatus]}>
-                  {t.recruitmentsList.adminStatusLabels[adminStatus]}
-                </Badge>
-              );
-            },
-          },
-          {
-            accessorKey: "adminDocumentsNote",
-            header: t.recruitmentsList.columns.adminDocumentsNote,
-            cell: ({ row }: { row: { original: TRecruitmentSubmission } }) =>
-              row.original.adminDocumentsNote ?? "—",
-          },
-        ]
-      : []),
+    {
+      accessorKey: "adminStatus",
+      header: t.recruitmentsList.columns.adminStatus,
+      cell: ({ row }) => {
+        const adminStatus = row.original.adminStatus ?? "new";
+        return (
+          <Badge variant={ADMIN_STATUS_VARIANTS[adminStatus]}>
+            {t.recruitmentsList.adminStatusLabels[adminStatus]}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "adminDocumentsNote",
+      header: t.recruitmentsList.columns.adminDocumentsNote,
+      cell: ({ row }) => row.original.adminDocumentsNote ?? "—",
+    },
     {
       accessorKey: "submittedAt",
       header: t.recruitmentsList.columns.submittedAt,
@@ -214,8 +189,7 @@ export function createRecruitmentsColumns({
         const isUpdatingStatus = updatingStatusId === row.original.id;
         const isDownloading = downloadingId === row.original.id;
         const adminStatus = row.original.adminStatus ?? "new";
-        const shStatus = row.original.shStatus ?? "new";
-        const sdStatus = row.original.sdStatus ?? "new";
+        const status = row.original.status;
         // Once admin has agreed, the decision is final — freeze every
         // status control so nobody can change it out from under admin.
         const isFinalized = adminStatus === "admin_agreed";
@@ -287,90 +261,53 @@ export function createRecruitmentsColumns({
                     </DropdownMenuItem>
                   </>
                 )}
-                {isSh && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        shStatus === "sh_agreed"
-                      }
-                      onSelect={() =>
-                        onShStatusChange(row.original, "sh_agreed")
-                      }
-                    >
-                      <IconCheck className="size-4" />
-                      {t.recruitmentsList.shStatusLabels.sh_agreed}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        shStatus === "sh_rejected"
-                      }
-                      onSelect={() =>
-                        onShStatusChange(row.original, "sh_rejected")
-                      }
-                    >
-                      <IconX className="size-4" />
-                      {t.recruitmentsList.shStatusLabels.sh_rejected}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        shStatus === "sh_needs_documents"
-                      }
-                      onSelect={() => onRequestShDocumentsNote(row.original)}
-                    >
-                      <IconFileText className="size-4" />
-                      {t.recruitmentsList.shStatusLabels.sh_needs_documents}
-                    </DropdownMenuItem>
-                  </>
-                )}
-                {isSd && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        sdStatus === "sd_agreed"
-                      }
-                      onSelect={() =>
-                        onSdStatusChange(row.original, "sd_agreed")
-                      }
-                    >
-                      <IconCheck className="size-4" />
-                      {t.recruitmentsList.sdStatusLabels.sd_agreed}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        sdStatus === "sd_rejected"
-                      }
-                      onSelect={() =>
-                        onSdStatusChange(row.original, "sd_rejected")
-                      }
-                    >
-                      <IconX className="size-4" />
-                      {t.recruitmentsList.sdStatusLabels.sd_rejected}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      disabled={
-                        isUpdatingStatus ||
-                        isFinalized ||
-                        sdStatus === "sd_needs_documents"
-                      }
-                      onSelect={() => onRequestSdDocumentsNote(row.original)}
-                    >
-                      <IconFileText className="size-4" />
-                      {t.recruitmentsList.sdStatusLabels.sd_needs_documents}
-                    </DropdownMenuItem>
-                  </>
-                )}
+                {(isSh || isSd) &&
+                  (() => {
+                    const roleLabels =
+                      t.recruitmentsList.roleStatusLabels[isSh ? "sh" : "sd"];
+                    return (
+                      <>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          disabled={
+                            isUpdatingStatus ||
+                            isFinalized ||
+                            status === "agreed"
+                          }
+                          onSelect={() =>
+                            onStatusChange(row.original, "agreed")
+                          }
+                        >
+                          <IconCheck className="size-4" />
+                          {roleLabels.agreed}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          disabled={
+                            isUpdatingStatus ||
+                            isFinalized ||
+                            status === "rejected"
+                          }
+                          onSelect={() =>
+                            onStatusChange(row.original, "rejected")
+                          }
+                        >
+                          <IconX className="size-4" />
+                          {roleLabels.rejected}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          disabled={
+                            isUpdatingStatus ||
+                            isFinalized ||
+                            status === "needs_documents"
+                          }
+                          onSelect={() => onRequestDocumentsNote(row.original)}
+                        >
+                          <IconFileText className="size-4" />
+                          {roleLabels.needs_documents}
+                        </DropdownMenuItem>
+                      </>
+                    );
+                  })()}
                 {isAdmin && (
                   <>
                     <DropdownMenuSeparator />

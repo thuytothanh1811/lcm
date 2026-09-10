@@ -32,12 +32,10 @@ import type { Role } from "@/lib/permissions";
 import {
   deleteRecruitmentSubmission,
   updateRecruitmentAdminStatus,
-  updateRecruitmentSdStatus,
-  updateRecruitmentShStatus,
+  updateRecruitmentSubmissionStatus,
   type TAdminStatus,
+  type TRecruitmentStatus,
   type TRecruitmentSubmission,
-  type TSdStatus,
-  type TShStatus,
 } from "@/server/recruitment-actions";
 
 export function RecruitmentsView({
@@ -120,7 +118,7 @@ export function RecruitmentsView({
 
   const [documentsNoteTarget, setDocumentsNoteTarget] = useState<{
     submission: TRecruitmentSubmission;
-    kind: "admin" | "sh" | "sd";
+    kind: "admin" | "status";
   } | null>(null);
   const [documentsNoteValue, setDocumentsNoteValue] = useState("");
 
@@ -131,14 +129,9 @@ export function RecruitmentsView({
     setDocumentsNoteValue(submission.adminDocumentsNote ?? "");
   };
 
-  const handleRequestShDocumentsNote = (submission: TRecruitmentSubmission) => {
-    setDocumentsNoteTarget({ submission, kind: "sh" });
-    setDocumentsNoteValue(submission.shDocumentsNote ?? "");
-  };
-
-  const handleRequestSdDocumentsNote = (submission: TRecruitmentSubmission) => {
-    setDocumentsNoteTarget({ submission, kind: "sd" });
-    setDocumentsNoteValue(submission.sdDocumentsNote ?? "");
+  const handleRequestDocumentsNote = (submission: TRecruitmentSubmission) => {
+    setDocumentsNoteTarget({ submission, kind: "status" });
+    setDocumentsNoteValue(submission.needsDocumentsNote ?? "");
   };
 
   const handleConfirmDocumentsNote = async () => {
@@ -156,10 +149,8 @@ export function RecruitmentsView({
         "admin_needs_documents",
         trimmed
       );
-    } else if (kind === "sh") {
-      await handleShStatusChange(submission, "sh_needs_documents", trimmed);
     } else {
-      await handleSdStatusChange(submission, "sd_needs_documents", trimmed);
+      await handleStatusChange(submission, "needs_documents", trimmed);
     }
   };
 
@@ -219,32 +210,32 @@ export function RecruitmentsView({
     setUpdatingStatusId(null);
   };
 
-  const handleShStatusChange = async (
+  const handleStatusChange = async (
     submission: TRecruitmentSubmission,
-    shStatus: TShStatus,
+    status: TRecruitmentStatus,
     documentsNote?: string
   ) => {
-    const previousShStatus = submission.shStatus;
-    const previousNote = submission.shDocumentsNote;
+    const previousStatus = submission.status;
+    const previousNote = submission.needsDocumentsNote;
     setUpdatingStatusId(submission.id);
     setSubmissions(prev =>
       prev.map(s =>
         s.id === submission.id
           ? {
               ...s,
-              shStatus,
-              shDocumentsNote:
-                shStatus === "sh_needs_documents"
+              status,
+              needsDocumentsNote:
+                status === "needs_documents"
                   ? documentsNote
-                  : s.shDocumentsNote,
+                  : s.needsDocumentsNote,
             }
           : s
       )
     );
 
-    const result = await updateRecruitmentShStatus(
+    const result = await updateRecruitmentSubmissionStatus(
       submission.id,
-      shStatus,
+      status,
       documentsNote
     );
     if (!result.ok) {
@@ -253,55 +244,8 @@ export function RecruitmentsView({
           s.id === submission.id
             ? {
                 ...s,
-                shStatus: previousShStatus,
-                shDocumentsNote: previousNote,
-              }
-            : s
-        )
-      );
-      toast.error(result.error);
-    } else {
-      toast.success(t.recruitmentsList.statusUpdated);
-    }
-    setUpdatingStatusId(null);
-  };
-
-  const handleSdStatusChange = async (
-    submission: TRecruitmentSubmission,
-    sdStatus: TSdStatus,
-    documentsNote?: string
-  ) => {
-    const previousSdStatus = submission.sdStatus;
-    const previousNote = submission.sdDocumentsNote;
-    setUpdatingStatusId(submission.id);
-    setSubmissions(prev =>
-      prev.map(s =>
-        s.id === submission.id
-          ? {
-              ...s,
-              sdStatus,
-              sdDocumentsNote:
-                sdStatus === "sd_needs_documents"
-                  ? documentsNote
-                  : s.sdDocumentsNote,
-            }
-          : s
-      )
-    );
-
-    const result = await updateRecruitmentSdStatus(
-      submission.id,
-      sdStatus,
-      documentsNote
-    );
-    if (!result.ok) {
-      setSubmissions(prev =>
-        prev.map(s =>
-          s.id === submission.id
-            ? {
-                ...s,
-                sdStatus: previousSdStatus,
-                sdDocumentsNote: previousNote,
+                status: previousStatus,
+                needsDocumentsNote: previousNote,
               }
             : s
         )
@@ -321,10 +265,8 @@ export function RecruitmentsView({
     downloadingId,
     onAdminStatusChange: handleAdminStatusChange,
     onRequestAdminDocumentsNote: handleRequestAdminDocumentsNote,
-    onShStatusChange: handleShStatusChange,
-    onRequestShDocumentsNote: handleRequestShDocumentsNote,
-    onSdStatusChange: handleSdStatusChange,
-    onRequestSdDocumentsNote: handleRequestSdDocumentsNote,
+    onStatusChange: handleStatusChange,
+    onRequestDocumentsNote: handleRequestDocumentsNote,
     updatingStatusId,
   });
 
