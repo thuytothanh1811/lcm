@@ -524,6 +524,8 @@ export const vi = {
     },
     section8: {
       title: "Anh/Chị có người thân làm việc tại MVI không?",
+      no: "Không",
+      yes: "Có",
       memberHeading: (n: number) => `Thân nhân ${n}`,
       name: "Họ tên",
       idNumber: "Số CCCD",

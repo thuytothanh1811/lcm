@@ -545,6 +545,7 @@ export function RecruitmentFormFields({
     a => !a.documentType || !CHECKLIST_KEYS.has(a.documentType)
   );
   const hasInsuranceExperience = watch("hasInsuranceExperience");
+  const hasRelativeAtCompany = watch("hasRelativeAtCompany");
   const secondManagerUid = watch("secondManagerUid");
 
   // Cascades top-down (SH -> SD): once an SH is picked, the SD list
@@ -1880,92 +1881,126 @@ export function RecruitmentFormFields({
           )}
 
           <FieldSeparator />
-          <FieldLegend className="mb-0">
-            {t.recruitmentForm.section8.title}
-          </FieldLegend>
-          {familyMemberFields.map((field, index) => (
-            <div key={field.id} className="flex flex-col gap-4">
-              <p className="text-sm font-medium">
-                {t.recruitmentForm.section8.memberHeading(index + 1)}
-              </p>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field>
-                  <FieldLabel htmlFor={`familyMembers.${index}.name`}>
-                    {t.recruitmentForm.section8.name}
-                  </FieldLabel>
-                  <Input
-                    id={`familyMembers.${index}.name`}
-                    {...register(`familyMembers.${index}.name` as const)}
-                  />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor={`familyMembers.${index}.idNumber`}>
-                    {t.recruitmentForm.section8.idNumber}
-                  </FieldLabel>
-                  <Input
-                    id={`familyMembers.${index}.idNumber`}
-                    {...register(`familyMembers.${index}.idNumber` as const)}
-                  />
-                </Field>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Controller
-                  control={control}
-                  name={`familyMembers.${index}.relationship` as const}
-                  render={({ field: relField }) => (
-                    <Field>
-                      <FieldLabel>
-                        {t.recruitmentForm.section8.relationshipLabel}
-                      </FieldLabel>
-                      <Select
-                        value={relField.value}
-                        onValueChange={relField.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue
-                            placeholder={
-                              t.recruitmentForm.section8.relationshipPlaceholder
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {RELATIONSHIP_OPTIONS.map(opt => (
-                            <SelectItem key={opt.value} value={opt.value}>
-                              {opt.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </Field>
-                  )}
-                />
-                <Field>
-                  <FieldLabel htmlFor={`familyMembers.${index}.occupation`}>
-                    {t.recruitmentForm.section8.occupation}
-                  </FieldLabel>
-                  <Input
-                    id={`familyMembers.${index}.occupation`}
-                    {...register(`familyMembers.${index}.occupation` as const)}
-                  />
-                </Field>
-              </div>
-              {familyMemberFields.length > 1 && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="text-destructive w-fit"
-                  onClick={() => removeFamilyMember(index)}
+          <Controller
+            control={control}
+            name="hasRelativeAtCompany"
+            render={({ field }) => (
+              <Field>
+                <FieldLabel>{t.recruitmentForm.section8.title}</FieldLabel>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="flex gap-6"
                 >
-                  <IconX className="size-4" />
-                  {t.recruitmentForm.section8.removeMember}
-                </Button>
-              )}
-              {index < familyMemberFields.length - 1 && <FieldSeparator />}
-            </div>
-          ))}
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="no" id="hasRelativeAtCompany-no" />
+                    <FieldLabel
+                      htmlFor="hasRelativeAtCompany-no"
+                      className="font-normal"
+                    >
+                      {t.recruitmentForm.section8.no}
+                    </FieldLabel>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="yes" id="hasRelativeAtCompany-yes" />
+                    <FieldLabel
+                      htmlFor="hasRelativeAtCompany-yes"
+                      className="font-normal"
+                    >
+                      {t.recruitmentForm.section8.yes}
+                    </FieldLabel>
+                  </div>
+                </RadioGroup>
+              </Field>
+            )}
+          />
+          {hasRelativeAtCompany === "yes" &&
+            familyMemberFields.map((field, index) => (
+              <div key={field.id} className="flex flex-col gap-4">
+                <p className="text-sm font-medium">
+                  {t.recruitmentForm.section8.memberHeading(index + 1)}
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field>
+                    <FieldLabel htmlFor={`familyMembers.${index}.name`}>
+                      {t.recruitmentForm.section8.name}
+                    </FieldLabel>
+                    <Input
+                      id={`familyMembers.${index}.name`}
+                      {...register(`familyMembers.${index}.name` as const)}
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor={`familyMembers.${index}.idNumber`}>
+                      {t.recruitmentForm.section8.idNumber}
+                    </FieldLabel>
+                    <Input
+                      id={`familyMembers.${index}.idNumber`}
+                      {...register(`familyMembers.${index}.idNumber` as const)}
+                    />
+                  </Field>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Controller
+                    control={control}
+                    name={`familyMembers.${index}.relationship` as const}
+                    render={({ field: relField }) => (
+                      <Field>
+                        <FieldLabel>
+                          {t.recruitmentForm.section8.relationshipLabel}
+                        </FieldLabel>
+                        <Select
+                          value={relField.value}
+                          onValueChange={relField.onChange}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue
+                              placeholder={
+                                t.recruitmentForm.section8
+                                  .relationshipPlaceholder
+                              }
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {RELATIONSHIP_OPTIONS.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </Field>
+                    )}
+                  />
+                  <Field>
+                    <FieldLabel htmlFor={`familyMembers.${index}.occupation`}>
+                      {t.recruitmentForm.section8.occupation}
+                    </FieldLabel>
+                    <Input
+                      id={`familyMembers.${index}.occupation`}
+                      {...register(
+                        `familyMembers.${index}.occupation` as const
+                      )}
+                    />
+                  </Field>
+                </div>
+                {familyMemberFields.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive w-fit"
+                    onClick={() => removeFamilyMember(index)}
+                  >
+                    <IconX className="size-4" />
+                    {t.recruitmentForm.section8.removeMember}
+                  </Button>
+                )}
+                {index < familyMemberFields.length - 1 && <FieldSeparator />}
+              </div>
+            ))}
 
-          {familyMemberFields.length < 4 && (
+          {hasRelativeAtCompany === "yes" && familyMemberFields.length < 4 && (
             <Button
               type="button"
               variant="outline"

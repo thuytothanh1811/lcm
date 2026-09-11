@@ -125,6 +125,7 @@ export function buildRecruitmentSchema(
       .min(1, t.atLeastOneAnswerRequired),
     referralOther: z.string().optional(),
 
+    hasRelativeAtCompany: z.enum(["no", "yes"]).optional(),
     familyMembers: z
       .array(
         z.object({
@@ -421,6 +422,7 @@ export function buildRecruitmentDraftSchema(
       .optional(),
     referralOther: z.string().optional(),
 
+    hasRelativeAtCompany: z.enum(["no", "yes"]).optional(),
     familyMembers: z
       .array(
         z.object({

@@ -525,6 +525,8 @@ export const en: typeof vi = {
     },
     section8: {
       title: "Do you have any relatives working at MVI?",
+      no: "No",
+      yes: "Yes",
       memberHeading: (n: number) => `Family member ${n}`,
       name: "Full name",
       idNumber: "ID number",

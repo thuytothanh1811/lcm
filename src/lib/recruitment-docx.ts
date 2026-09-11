@@ -576,23 +576,34 @@ export async function buildRecruitmentDocxBlob(
     )
   );
 
-  b.push(b.subHeading(s8.title.replace(" *", "")));
-  const familyRows = (
-    data.familyMembers?.length ? data.familyMembers : [{}]
-  ).map((m, i) => [
-    String(i + 1),
-    m.name || "",
-    labelFor(opt.relationship, m.relationship) || "",
-    m.idNumber || "",
-    m.occupation || "",
-  ]);
+  b.push(b.bodyText(s8.title, { bold: true, after: 40 }));
   b.push(
-    b.dataTable(
-      [700, 3000, 2160, 1500, 2000],
-      ["STT", s8.name, s8.relationshipLabel, s8.idNumber, s8.occupation],
-      familyRows
+    b.inlineChecks(
+      [s8.no, s8.yes],
+      labelsFor(
+        { no: s8.no, yes: s8.yes },
+        data.hasRelativeAtCompany === "yes" ? ["yes"] : ["no"]
+      )
     )
   );
+  if (data.hasRelativeAtCompany === "yes") {
+    const familyRows = (
+      data.familyMembers?.length ? data.familyMembers : [{}]
+    ).map((m, i) => [
+      String(i + 1),
+      m.name || "",
+      labelFor(opt.relationship, m.relationship) || "",
+      m.idNumber || "",
+      m.occupation || "",
+    ]);
+    b.push(
+      b.dataTable(
+        [700, 3000, 2160, 1500, 2000],
+        ["STT", s8.name, s8.relationshipLabel, s8.idNumber, s8.occupation],
+        familyRows
+      )
+    );
+  }
 
   // ===== SECTION 3: CAM KẾT CỦA ỨNG VIÊN =====
   // Pinned to its own page. Without the break it flows on from section 2,

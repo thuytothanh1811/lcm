@@ -293,6 +293,15 @@ export function buildAnswerBlocks(
         },
       ],
     },
+    {
+      title: f.section8.title,
+      columns: [
+        {
+          label: f.section8.title,
+          getValue: s => yesNo(f.section8, s.hasRelativeAtCompany),
+        },
+      ],
+    },
     ...Array.from(
       { length: repeatCounts.familyMembers },
       (_, index): Block => ({
