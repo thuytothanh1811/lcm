@@ -2495,16 +2495,25 @@ export function RecruitmentFormFields({
           />
 
           <Field data-invalid={!!errors.signDate}>
+            <FieldLabel htmlFor="signDate">
+              {t.recruitmentForm.section11.signDateLabel}
+            </FieldLabel>
+            {/* Stamped by the system when the form is filled in — it records
+                when the data was entered, so it is shown but never edited. */}
             <Controller
               control={control}
               name="signDate"
               render={({ field }) => (
-                <DatePicker
+                <Input
                   id="signDate"
-                  label={t.recruitmentForm.section11.signDateLabel}
-                  className="!mx-0 !max-w-none"
-                  initialDate={parseIsoDate(field.value)}
-                  onChange={date => field.onChange(toIsoDate(date))}
+                  readOnly
+                  tabIndex={-1}
+                  className="bg-muted text-muted-foreground"
+                  value={
+                    field.value
+                      ? field.value.split("-").reverse().join("/")
+                      : ""
+                  }
                 />
               )}
             />
