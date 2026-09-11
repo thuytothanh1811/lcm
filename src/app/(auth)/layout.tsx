@@ -19,14 +19,6 @@ export default async function AuthLayout({
 
         <div className="relative flex h-full flex-col justify-between p-10 text-white">
           <div className="mr-auto flex items-center gap-2 self-start">
-            <Image
-              src="/brand/logo/ASAHI_SYMBOL.svg"
-              alt="MVI"
-              width={39}
-              height={33}
-              className="h-8 w-auto"
-              priority
-            />
             <span className="text-xl font-semibold">MVI</span>
           </div>
 
@@ -59,13 +51,6 @@ export default async function AuthLayout({
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat [background-image:url('/brand/images-webp/bg.webp')] lg:hidden" />
         <div className="absolute inset-0 bg-[oklch(0.283_0.121_260.9)]/55 lg:hidden" />
         <div className="absolute top-6 left-6 z-10 flex items-center gap-2 text-white lg:hidden">
-          <Image
-            src="/brand/logo/ASAHI_SYMBOL.svg"
-            alt="MVI"
-            width={39}
-            height={33}
-            className="h-7 w-auto"
-          />
           <span className="text-lg font-semibold">MVI</span>
         </div>
         <div className="bg-background/95 relative w-full max-w-sm rounded-xl p-6 shadow-lg backdrop-blur-sm">

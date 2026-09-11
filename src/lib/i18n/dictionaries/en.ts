@@ -486,7 +486,6 @@ export const en: typeof vi = {
       recruiterIdNumber: "Recruiter ID number (if no agent code)",
       referrerCode: "Referrer code (if any)",
       referrerName: "Referrer full name",
-      referrerIdNumber: "Referrer ID number (if no agent code)",
     },
     section3: {
       title: "Permanent address",
@@ -525,7 +524,7 @@ export const en: typeof vi = {
       title: "How the candidate learned about the recruitment program",
     },
     section8: {
-      title: "Next of kin *",
+      title: "Do you have any relatives working at MVI?",
       memberHeading: (n: number) => `Family member ${n}`,
       name: "Full name",
       idNumber: "ID number",
@@ -580,9 +579,39 @@ export const en: typeof vi = {
       title: "Candidate commitments",
       voluntary:
         "I confirm that exploring this career opportunity and applying to become an agent at MVI is entirely my own voluntary decision, not directed by any other individual or organization.",
-      dataConsent:
-        "I consent to the processing of my personal data (PDPD) so the system can collect, store, and process my application.",
-      consentLabel: "Confirm commitment & PDPD consent *",
+      pdpdHeading: "PERSONAL DATA PROCESSING NOTICE AND CONSENT",
+      pdpdIntro:
+        "(*) Under Article 9 of the Personal Data Protection Law and Article 8 of Decree 356/2025/ND-CP, you must be informed of the following before giving consent:",
+      pdpdInfo: [
+        {
+          label: "Personal data controller:",
+          text: "MVI Life Insurance Company Limited.",
+        },
+        {
+          label: "Collection source:",
+          text: "directly from you through this form and the related forms in the recruitment file set (CT01, CT02, CT03, CT04, CT05).",
+        },
+        {
+          label: "Retention period:",
+          text: "throughout your time as an agent of the Company and thereafter for the periods required by the laws on accounting, taxation and the resolution of related disputes.",
+        },
+        {
+          label: "Your rights and obligations:",
+          text: "to be informed, to consent or withhold consent, to access, to request correction or deletion of data, to withdraw consent, to complain, and other rights under the Personal Data Protection Law.",
+        },
+        {
+          label: "How to withdraw consent:",
+          text: "send a written notice or email to the Company's recruitment HR department. Withdrawal does not affect the lawfulness of processing carried out beforehand.",
+        },
+      ],
+      consentInstruction:
+        "Please tick your consent separately for each processing purpose below (leaving a box unticked counts as withholding consent):",
+      consentBasicData:
+        "(1) I consent to the Company collecting, storing and processing my basic personal data (full name, date of birth, gender, ID number, address, phone number, email, education, work history) for the purpose of assessing and processing my agent application.",
+      consentSensitiveData:
+        "(2) I consent to the Company collecting and processing my sensitive personal data (where applicable: criminal record status, bank account details) for the purpose of screening agent eligibility as required by law and paying agent income.",
+      consentThirdParty:
+        "(3) I consent to the Company sharing my personal data with the Insurance Association of Vietnam, the agent training/examination body (MOF) and other relevant third parties for the purpose of screening, training and issuing the agent practising certificate.",
       methodLabel: "Confirmation method *",
       handwritten: "Handwritten signature",
       signDateLabel: "Data entry date *",

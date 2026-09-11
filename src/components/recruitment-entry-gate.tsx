@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import Image from "next/image";
-
 import {
   IconArrowLeft,
   IconClipboardList,
@@ -28,14 +26,6 @@ export function RecruitmentEntryGate({
     <>
       <div className="flex flex-col items-center gap-6 py-16 text-center text-white">
         <div className="flex w-full items-center gap-2">
-          <Image
-            src="/brand/logo/ASAHI_SYMBOL.svg"
-            alt={dict.pages.recruitmentPublic.logoAlt}
-            width={39}
-            height={33}
-            className="size-6"
-            priority
-          />
           <span className="text-lg font-semibold">MVI</span>
         </div>
         <div className="flex flex-col gap-2">

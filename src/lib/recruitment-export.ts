@@ -205,10 +205,6 @@ export function buildAnswerBlocks(
         },
         { label: s2.referrerCode, getValue: s => s.referrerCode || DASH },
         { label: s2.referrerName, getValue: s => s.referrerName || DASH },
-        {
-          label: s2.referrerIdNumber,
-          getValue: s => s.referrerIdNumber || DASH,
-        },
       ],
     },
     {
@@ -361,8 +357,16 @@ export function buildAnswerBlocks(
           getValue: s => yesNo(s11, s.commitmentVoluntary ? "yes" : "no"),
         },
         {
-          label: s11.dataConsent,
-          getValue: s => yesNo(s11, s.commitmentDataConsent ? "yes" : "no"),
+          label: s11.consentBasicData,
+          getValue: s => yesNo(s11, s.consentBasicData ? "yes" : "no"),
+        },
+        {
+          label: s11.consentSensitiveData,
+          getValue: s => yesNo(s11, s.consentSensitiveData ? "yes" : "no"),
+        },
+        {
+          label: s11.consentThirdParty,
+          getValue: s => yesNo(s11, s.consentThirdParty ? "yes" : "no"),
         },
         { label: s11.signDateLabel, getValue: s => s.signDate || DASH },
       ],

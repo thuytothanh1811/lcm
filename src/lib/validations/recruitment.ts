@@ -90,7 +90,6 @@ export function buildRecruitmentSchema(
     recruiterIdNumber: z.string().optional(),
     referrerCode: z.string().optional(),
     referrerName: z.string().optional(),
-    referrerIdNumber: z.string().optional(),
 
     permanentProvince: z.string().min(1, t.permanentProvinceRequired),
     permanentWard: z.string().min(1, t.permanentWardRequired),
@@ -195,7 +194,13 @@ export function buildRecruitmentSchema(
     commitmentVoluntary: z.literal(true, {
       error: t.commitmentRequired,
     }),
-    commitmentDataConsent: z.literal(true, {
+    consentBasicData: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
+    consentSensitiveData: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
+    consentThirdParty: z.literal(true, {
       error: t.commitmentRequired,
     }),
     signDate: z.string().min(1, t.signDateRequired),
@@ -381,7 +386,6 @@ export function buildRecruitmentDraftSchema(
     recruiterIdNumber: z.string().optional(),
     referrerCode: z.string().optional(),
     referrerName: z.string().optional(),
-    referrerIdNumber: z.string().optional(),
 
     permanentProvince: z.string().optional(),
     permanentWard: z.string().optional(),
@@ -484,7 +488,9 @@ export function buildRecruitmentDraftSchema(
       .optional(),
 
     commitmentVoluntary: z.boolean().optional(),
-    commitmentDataConsent: z.boolean().optional(),
+    consentBasicData: z.boolean().optional(),
+    consentSensitiveData: z.boolean().optional(),
+    consentThirdParty: z.boolean().optional(),
     signDate: z.string().optional(),
   });
 }

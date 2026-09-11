@@ -1709,12 +1709,6 @@ export function RecruitmentFormFields({
               </FieldLabel>
               <Input id="referrerName" {...register("referrerName")} />
             </Field>
-            <Field>
-              <FieldLabel htmlFor="referrerIdNumber">
-                {t.recruitmentForm.section2.referrerIdNumber}
-              </FieldLabel>
-              <Input id="referrerIdNumber" {...register("referrerIdNumber")} />
-            </Field>
           </div>
 
           <Field data-invalid={!!errors.potentialCustomers}>
@@ -2378,27 +2372,90 @@ export function RecruitmentFormFields({
             }
           />
 
+          <FieldSeparator />
+          <FieldLegend className="mb-0">
+            {t.recruitmentForm.section11.pdpdHeading}
+          </FieldLegend>
+          <div className="bg-muted text-muted-foreground flex flex-col gap-2 rounded-lg p-4 text-sm">
+            <p className="italic">{t.recruitmentForm.section11.pdpdIntro}</p>
+            {t.recruitmentForm.section11.pdpdInfo.map(item => (
+              <p key={item.label}>
+                <span className="text-foreground font-semibold">
+                  - {item.label}
+                </span>{" "}
+                {item.text}
+              </p>
+            ))}
+          </div>
+          <p className="text-sm font-semibold">
+            {t.recruitmentForm.section11.consentInstruction}
+          </p>
+
           <Field orientation="horizontal" className="items-start">
             <Controller
               control={control}
-              name="commitmentDataConsent"
+              name="consentBasicData"
               render={({ field }) => (
                 <Checkbox
-                  id="commitmentDataConsent"
+                  id="consentBasicData"
                   checked={field.value ?? false}
                   onCheckedChange={v => field.onChange(v === true)}
                 />
               )}
             />
-            <FieldLabel htmlFor="commitmentDataConsent" className="font-normal">
-              {t.recruitmentForm.section11.dataConsent}
+            <FieldLabel htmlFor="consentBasicData" className="font-normal">
+              {t.recruitmentForm.section11.consentBasicData}
             </FieldLabel>
           </Field>
           <FieldError
             errors={
-              errors.commitmentDataConsent
-                ? [errors.commitmentDataConsent]
+              errors.consentBasicData ? [errors.consentBasicData] : undefined
+            }
+          />
+
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="consentSensitiveData"
+              render={({ field }) => (
+                <Checkbox
+                  id="consentSensitiveData"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="consentSensitiveData" className="font-normal">
+              {t.recruitmentForm.section11.consentSensitiveData}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.consentSensitiveData
+                ? [errors.consentSensitiveData]
                 : undefined
+            }
+          />
+
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="consentThirdParty"
+              render={({ field }) => (
+                <Checkbox
+                  id="consentThirdParty"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="consentThirdParty" className="font-normal">
+              {t.recruitmentForm.section11.consentThirdParty}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.consentThirdParty ? [errors.consentThirdParty] : undefined
             }
           />
 

@@ -485,7 +485,6 @@ export const vi = {
       recruiterIdNumber: "CCCD Người Tuyển Dụng (nếu chưa có MSĐL)",
       referrerCode: "Mã số người giới thiệu (nếu có)",
       referrerName: "Họ tên người giới thiệu",
-      referrerIdNumber: "CCCD Người Giới Thiệu (nếu chưa có MSĐL)",
     },
     section3: {
       title: "Địa chỉ thường trú",
@@ -524,7 +523,7 @@ export const vi = {
       title: "Ứng viên biết đến chương trình tuyển dụng qua",
     },
     section8: {
-      title: "Quan hệ nhân thân *",
+      title: "Anh/Chị có người thân làm việc tại MVI không?",
       memberHeading: (n: number) => `Thân nhân ${n}`,
       name: "Họ tên",
       idNumber: "Số CCCD",
@@ -580,9 +579,39 @@ export const vi = {
       title: "Cam kết của ứng viên",
       voluntary:
         "Tôi xác nhận việc tìm hiểu cơ hội nghề nghiệp này và ứng tuyển làm đại lý tại MVI hoàn toàn là quyết định tự nguyện của cá nhân tôi, không do bất kỳ cá nhân hay tổ chức nào chi phối.",
-      dataConsent:
-        "Tôi đồng ý cho phép xử lý dữ liệu cá nhân (PDPD) để hệ thống thu thập, lưu trữ và xử lý hồ sơ của tôi.",
-      consentLabel: "Xác nhận cam kết & đồng ý PDPD *",
+      pdpdHeading: "THÔNG TIN VÀ SỰ ĐỒNG Ý XỬ LÝ DỮ LIỆU CÁ NHÂN",
+      pdpdIntro:
+        "(*) Theo Điều 9 Luật Bảo vệ dữ liệu cá nhân và Điều 8 Nghị định 356/2025/NĐ-CP, trước khi đồng ý, Anh/Chị cần được biết rõ các thông tin sau:",
+      pdpdInfo: [
+        {
+          label: "Bên kiểm soát dữ liệu cá nhân:",
+          text: "Công ty TNHH Bảo hiểm Nhân thọ MVI.",
+        },
+        {
+          label: "Nguồn thu thập:",
+          text: "trực tiếp từ Anh/Chị qua Phiếu này và các phiếu liên quan trong bộ hồ sơ tuyển dụng (CT01, CT02, CT03, CT04, CT05).",
+        },
+        {
+          label: "Thời gian lưu trữ:",
+          text: "trong suốt thời gian Anh/Chị là đại lý của Công ty và tiếp tục lưu trữ sau khi chấm dứt hợp đồng theo thời hạn quy định của pháp luật về kế toán, thuế và giải quyết tranh chấp có liên quan.",
+        },
+        {
+          label: "Quyền, nghĩa vụ của Anh/Chị:",
+          text: "được biết, đồng ý/không đồng ý, truy cập, yêu cầu chỉnh sửa hoặc xóa dữ liệu, rút lại sự đồng ý, khiếu nại và các quyền khác theo Luật Bảo vệ dữ liệu cá nhân.",
+        },
+        {
+          label: "Cách thức rút lại sự đồng ý:",
+          text: "gửi văn bản hoặc email đến bộ phận Nhân sự phụ trách tuyển dụng của Công ty. Việc rút lại không ảnh hưởng đến tính hợp pháp của việc xử lý dữ liệu đã thực hiện trước đó.",
+        },
+      ],
+      consentInstruction:
+        "Vui lòng đánh dấu đồng ý riêng cho từng mục đích xử lý dưới đây (không đánh dấu được xem là không đồng ý):",
+      consentBasicData:
+        "(1) Tôi đồng ý để Công ty thu thập, lưu trữ, xử lý dữ liệu cá nhân cơ bản của tôi (họ tên, ngày sinh, giới tính, số CCCD, địa chỉ, số điện thoại, email, trình độ học vấn, quá trình công tác) nhằm mục đích thẩm định và xử lý hồ sơ tuyển dụng đại lý.",
+      consentSensitiveData:
+        "(2) Tôi đồng ý để Công ty thu thập, xử lý dữ liệu cá nhân nhạy cảm của tôi (nếu có: tình trạng án tích/hình sự, thông tin tài khoản ngân hàng) nhằm mục đích sàng lọc điều kiện hành nghề đại lý theo quy định pháp luật và phục vụ chi trả thu nhập đại lý.",
+      consentThirdParty:
+        "(3) Tôi đồng ý để Công ty chia sẻ dữ liệu cá nhân của tôi với Hiệp hội Bảo hiểm Việt Nam, đơn vị tổ chức đào tạo/thi chứng chỉ đại lý (MOF) và các bên thứ ba có liên quan nhằm mục đích sàng lọc, đào tạo và cấp chứng chỉ hành nghề đại lý.",
       methodLabel: "Hình thức xác nhận *",
       handwritten: "Chữ ký tay",
       signDateLabel: "Ngày nhập dữ liệu *",

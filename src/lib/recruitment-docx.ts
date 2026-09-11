@@ -608,13 +608,28 @@ export async function buildRecruitmentDocxBlob(
       children: b.checkRun(s11.voluntary, !!data.commitmentVoluntary),
     })
   );
-  b.push(
-    new Paragraph({
-      spacing: { after: 30, ...LINE_SPACING },
-      indent: { left: 260 },
-      children: b.checkRun(s11.dataConsent, !!data.commitmentDataConsent),
-    })
-  );
+  b.push(b.subHeading(s11.pdpdHeading));
+  b.push(b.bodyText(s11.pdpdIntro, { italics: true, size: 18, after: 40 }));
+  for (const item of s11.pdpdInfo) {
+    b.push(
+      b.bodyText("- " + item.label + " " + item.text, { size: 18, after: 40 })
+    );
+  }
+  b.push(b.bodyText(s11.consentInstruction, { bold: true, after: 60 }));
+  const consents: [string, boolean][] = [
+    [s11.consentBasicData, !!data.consentBasicData],
+    [s11.consentSensitiveData, !!data.consentSensitiveData],
+    [s11.consentThirdParty, !!data.consentThirdParty],
+  ];
+  for (const [label, checked] of consents) {
+    b.push(
+      new Paragraph({
+        spacing: { after: 30, ...LINE_SPACING },
+        indent: { left: 260 },
+        children: b.checkRun(label, checked),
+      })
+    );
+  }
   b.push(b.field("Ngày ký", "…………………………………………………"));
   b.push(b.spacer(), b.spacer());
 

@@ -93,7 +93,9 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
       q6Support: [],
       attachments: [],
       commitmentVoluntary: undefined,
-      commitmentDataConsent: undefined,
+      consentBasicData: undefined,
+      consentSensitiveData: undefined,
+      consentThirdParty: undefined,
     },
   });
 
