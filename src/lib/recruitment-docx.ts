@@ -156,10 +156,10 @@ class DocxBuilder {
     });
   }
 
-  checkRun(label: string, checked: boolean) {
+  checkRun(label: string, checked: boolean, size?: number) {
     return [
-      new TextRun({ text: checked ? "☑ " : "☐ ", font: CHECK_FONT }),
-      new TextRun({ text: label }),
+      new TextRun({ text: checked ? "☑ " : "☐ ", font: CHECK_FONT, size }),
+      new TextRun({ text: label, size }),
     ];
   }
 
@@ -172,13 +172,17 @@ class DocxBuilder {
     return new Paragraph({ spacing: this.sp({ after: 50 }), children: runs });
   }
 
-  stackedChecks(labels: string[], selected: Set<string>) {
+  stackedChecks(
+    labels: string[],
+    selected: Set<string>,
+    opts: { size?: number; after?: number } = {}
+  ) {
     return labels.map(
       l =>
         new Paragraph({
-          spacing: this.sp({ after: 30 }),
+          spacing: this.sp({ after: opts.after ?? 30 }),
           indent: { left: 260 },
-          children: this.checkRun(l, selected.has(l)),
+          children: this.checkRun(l, selected.has(l), opts.size),
         })
     );
   }
@@ -256,21 +260,6 @@ class DocxBuilder {
 
   spacer() {
     return new Paragraph({ spacing: this.sp({ after: 40 }), children: [] });
-  }
-
-  blankLine() {
-    return new Paragraph({
-      border: {
-        bottom: {
-          style: BorderStyle.SINGLE,
-          size: 4,
-          color: "000000",
-          space: 4,
-        },
-      },
-      spacing: this.sp({ after: 160 }),
-      children: [],
-    });
   }
 
   footer() {
@@ -736,38 +725,44 @@ export async function buildRecruitmentDocxBlob(
     })
   );
 
+  // The appendix has to land on a single page, so it runs a step smaller than
+  // the body and leans on paragraph spacing instead of blank spacer lines.
+  const APPENDIX_SIZE = 18; // 9pt
+
+  function questionLabel(label: string) {
+    return new Paragraph({
+      spacing: { ...LINE_SPACING_SINGLE, before: 80, after: 30 },
+      children: [new TextRun({ text: label, bold: true, size: APPENDIX_SIZE })],
+    });
+  }
+
   function questionChecklist(
     label: string,
     options: string[],
     selected: Set<string>
   ) {
-    b.push(b.bodyText(label, { bold: true, after: 40 }));
-    b.push(...b.stackedChecks(options, selected));
-    b.push(b.spacer());
+    b.push(questionLabel(label));
+    b.push(
+      ...b.stackedChecks(options, selected, { size: APPENDIX_SIZE, after: 20 })
+    );
   }
 
   function questionFreeText(label: string, value?: string | null) {
-    b.push(b.bodyText(label, { bold: true, after: 40 }));
-    if (value) {
-      b.push(
-        new Paragraph({
-          border: {
-            bottom: {
-              style: BorderStyle.SINGLE,
-              size: 4,
-              color: "000000",
-              space: 4,
-            },
+    b.push(questionLabel(label));
+    b.push(
+      new Paragraph({
+        border: {
+          bottom: {
+            style: BorderStyle.SINGLE,
+            size: 4,
+            color: "000000",
+            space: 4,
           },
-          spacing: { ...LINE_SPACING_SINGLE, after: 160 },
-          children: [new TextRun({ text: value })],
-        })
-      );
-    } else {
-      b.push(b.blankLine());
-      b.push(b.blankLine());
-    }
-    b.push(b.spacer());
+        },
+        spacing: { ...LINE_SPACING_SINGLE, after: 60 },
+        children: [new TextRun({ text: value || "", size: APPENDIX_SIZE })],
+      })
+    );
   }
 
   questionChecklist(
