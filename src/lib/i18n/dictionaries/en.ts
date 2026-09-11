@@ -529,7 +529,7 @@ export const en: typeof vi = {
       yes: "Yes",
       memberHeading: (n: number) => `Family member ${n}`,
       name: "Full name",
-      idNumber: "ID number",
+      idNumber: "ID number (CCCD/CMND)",
       relationshipLabel: "Relationship",
       relationshipPlaceholder: "Select a relationship",
       occupation: "Occupation",

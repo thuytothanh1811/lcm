@@ -528,7 +528,7 @@ export const vi = {
       yes: "Có",
       memberHeading: (n: number) => `Thân nhân ${n}`,
       name: "Họ tên",
-      idNumber: "Số CCCD",
+      idNumber: "CCCD/CMND",
       relationshipLabel: "Quan hệ",
       relationshipPlaceholder: "Chọn quan hệ",
       occupation: "Nghề nghiệp",
