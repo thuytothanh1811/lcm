@@ -60,6 +60,14 @@ function labelFor(map: Record<string, string>, value?: string | null) {
   return map[value] ?? value;
 }
 
+/**
+ * The trailing "*" marks a required field on the web form. On paper it reads
+ * as part of the label, so drop it wherever a form label is printed.
+ */
+function printableLabel(label: string) {
+  return label.replace(/\s*\*\s*$/, "");
+}
+
 class DocxBuilder {
   private lineSpacing = LINE_SPACING;
   readonly children: (Paragraph | Table)[] = [];
@@ -135,7 +143,7 @@ class DocxBuilder {
     return new Paragraph({
       spacing: this.sp({ after: 50 }),
       children: [
-        new TextRun({ text: label + ": " }),
+        new TextRun({ text: printableLabel(label) + ": " }),
         new TextRun({ text: value || "" }),
       ],
     });
@@ -152,10 +160,10 @@ class DocxBuilder {
       tabStops: [{ type: TabStopType.LEFT, position: half + 120 }],
       spacing: this.sp({ after: 50 }),
       children: [
-        new TextRun({ text: label1 + ": " }),
+        new TextRun({ text: printableLabel(label1) + ": " }),
         new TextRun({ text: value1 || "" }),
         new TextRun({ text: "\t" }),
-        new TextRun({ text: label2 + ": " }),
+        new TextRun({ text: printableLabel(label2) + ": " }),
         new TextRun({ text: value2 || "" }),
       ],
     });
@@ -429,11 +437,13 @@ export async function buildRecruitmentDocxBlob(
     b.push(b.field("Phường/Xã", data.temporaryWard));
     b.push(b.field("Số nhà, tên đường", data.temporaryStreetAddress));
   }
-  if (data.sdManagerName) {
-    b.push(b.field(s1.sdManagerLabel, data.sdManagerName));
-  }
+  // SH manages the region the SD sits in, so the printed form lists them in
+  // that order — same as the web form and the paper CT-01.
   if (data.secondManagerName) {
     b.push(b.field(s1.secondManagerLabel, data.secondManagerName));
+  }
+  if (data.sdManagerName) {
+    b.push(b.field(s1.sdManagerLabel, data.sdManagerName));
   }
   if (data.managerName) {
     b.push(b.field(s1.managerLabel, data.managerName));
