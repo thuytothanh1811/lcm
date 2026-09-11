@@ -457,6 +457,8 @@ export const vi = {
       emailPlaceholder: "ban@email.com",
       sdManagerLabel: "Họ và tên SD – Giám Đốc Kinh Doanh *",
       sdManagerPlaceholder: "Chọn tên SD",
+      sdManagerEmpty:
+        "SH này chưa có SD nào. Vui lòng liên hệ bộ phận Nhân sự để được hỗ trợ.",
       secondManagerLabel: "Họ và tên SH – Trưởng Vùng Kinh Doanh *",
       secondManagerPlaceholder: "Chọn tên SH",
       managerLabel: "Họ và tên Quản lý trực tiếp",

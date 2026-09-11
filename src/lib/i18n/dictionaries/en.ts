@@ -458,6 +458,8 @@ export const en: typeof vi = {
       emailPlaceholder: "you@email.com",
       sdManagerLabel: "SD full name – Sales Director *",
       sdManagerPlaceholder: "Select an SD",
+      sdManagerEmpty:
+        "This SH has no SD assigned yet. Please contact HR for assistance.",
       secondManagerLabel: "SH full name – Regional Sales Head *",
       secondManagerPlaceholder: "Select an SH",
       managerLabel: "Direct manager full name",

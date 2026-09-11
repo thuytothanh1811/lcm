@@ -549,13 +549,13 @@ export function RecruitmentFormFields({
   const secondManagerUid = watch("secondManagerUid");
 
   // Cascades top-down (SH -> SD): picking an SH narrows the SD list to the
-  // SDs sitting under that SH. Until an SH has any SD assigned to it the
-  // narrowing would leave a required field with nothing to pick, so fall
-  // back to the full roster rather than dead-ending the candidate.
-  const sdsUnderSh = secondManagerUid
+  // SDs sitting under that SH, and to nothing at all when that SH has none
+  // assigned yet. Showing the other SHs' SDs instead would only invite a
+  // wrong answer — an SH with no SD is a gap in the user records to close
+  // there, not something to paper over here.
+  const VISIBLE_SD_MANAGERS = secondManagerUid
     ? managers.sd.filter(sd => sd.managerShUid === secondManagerUid)
-    : [];
-  const VISIBLE_SD_MANAGERS = sdsUnderSh.length > 0 ? sdsUnderSh : managers.sd;
+    : managers.sd;
 
   const permanentWards =
     provinces.find(p => p.name === permanentProvince)?.wards ?? [];
@@ -1660,6 +1660,11 @@ export function RecruitmentFormFields({
                     ))}
                   </SelectContent>
                 </Select>
+                {secondManagerUid && VISIBLE_SD_MANAGERS.length === 0 && (
+                  <p className="text-destructive text-sm">
+                    {t.recruitmentForm.section1.sdManagerEmpty}
+                  </p>
+                )}
                 <FieldError
                   errors={
                     errors.sdManagerUid ? [errors.sdManagerUid] : undefined
