@@ -126,9 +126,9 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
 
-    // Missing paperwork is worth flagging but not worth blocking on — some
-    // candidates legitimately send it later. So the first press lists what
-    // is missing and stops; pressing again goes through.
+    // Every document on the checklist is required, and which ones apply
+    // depends on the position and programme chosen above — so a submission
+    // is only accepted once all of them are attached.
     const attached = new Set(
       (values.attachments ?? []).map(a => a.documentType)
     );
@@ -136,10 +136,11 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
       values.positionApplied,
       values.participatingProgram
     ).filter(row => !attached.has(row.key));
-    if (missing.length > 0 && missingDocuments.length === 0) {
+    if (missing.length > 0) {
       setMissingDocuments(missing.map(row => row.label));
       return;
     }
+    setMissingDocuments([]);
     const result = await submitRecruitmentForm(values, "vi", "new");
     if (!result.ok) {
       setFormError(result.error);

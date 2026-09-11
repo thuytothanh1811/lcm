@@ -83,7 +83,7 @@ export const CHECKLIST_ROWS: {
   {
     key: "bank_qr",
     stt: 10,
-    label: "Mã QR tài khoản ngân hàng (hình chụp)",
+    label: "Tải mã QR tài khoản ngân hàng (hình chụp)",
     lpUm: true,
     mdrt: true,
     gad: true,
