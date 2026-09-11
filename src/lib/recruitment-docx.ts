@@ -5,7 +5,6 @@ import {
   Footer,
   LineRuleType,
   Packer,
-  PageBreak,
   PageNumber,
   Paragraph,
   ShadingType,
@@ -22,9 +21,9 @@ import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { RecruitmentValues } from "@/lib/validations/recruitment";
 
 // Mirrors the layout/styling of the CT1 "Phiếu thông tin tuyển dụng" reference
-// template (CT1_Phieu_thong_tin_tuyen_dung_v2.docx): Calibri 10pt body, 14pt
-// title, 1.15 line spacing (1.0 in the survey appendix), "Trang N | Total"
-// footer, and the same section ordering as the printed form.
+// template (CT1_Phieu_thong_tin_tuyen_dung_v2.docx): Noto Sans 11pt body, 14pt
+// title, single line spacing, "Trang N | Total" footer, and the same section
+// ordering as the printed form.
 const NAVY = "1F3864";
 const BLUE = "004A7D";
 const RED = "C0392B";
@@ -32,9 +31,12 @@ const GRAY = "595959";
 const FOOTER_GRAY = "808080";
 const WHITE = "FFFFFF";
 const PAGE_W = 9360; // usable width (12240 - 1440*2)
-const BODY_FONT = "Calibri";
-const BODY_SIZE = 20; // 10pt
-const LINE_SPACING = { line: 276, lineRule: LineRuleType.AUTO }; // 1.15
+const BODY_FONT = "Noto Sans";
+const BODY_SIZE = 22; // 11pt
+// Noto Sans draws a 300tw line where Calibri drew 253, so the 1.15 spacing
+// this used to carry overflowed every page once the body moved to Noto Sans
+// 11pt. The reference CT-01 sets 240 on nearly every paragraph — match it.
+const LINE_SPACING = { line: 240, lineRule: LineRuleType.AUTO }; // 1.0
 const LINE_SPACING_SINGLE = { line: 240, lineRule: LineRuleType.AUTO }; // 1.0
 
 const CHECK_FONT = {
@@ -78,10 +80,6 @@ class DocxBuilder {
     this.children.push(...nodes);
   }
 
-  pageBreak() {
-    this.children.push(new Paragraph({ children: [new PageBreak()] }));
-  }
-
   bannerLine(
     text: string,
     opts: { bold?: boolean; color?: string; after?: number }
@@ -101,12 +99,19 @@ class DocxBuilder {
     });
   }
 
-  sectionHeading(text: string) {
+  /**
+   * `startsPage` breaks to a new page on the heading itself. A standalone
+   * page-break paragraph would leave its own empty line sitting above the
+   * heading, and if the previous page were full that stray line could spill
+   * into a page of its own.
+   */
+  sectionHeading(text: string, startsPage = false) {
     return new Paragraph({
+      pageBreakBefore: startsPage,
       border: {
         bottom: { style: BorderStyle.SINGLE, size: 6, color: BLUE, space: 2 },
       },
-      spacing: this.sp({ before: 200, after: 60 }),
+      spacing: this.sp({ before: startsPage ? 0 : 200, after: 60 }),
       children: [new TextRun({ text, bold: true, color: BLUE })],
     });
   }
@@ -435,8 +440,7 @@ export async function buildRecruitmentDocxBlob(
   }
 
   // ===== SECTION 2: THÔNG TIN TUYỂN DỤNG =====
-  b.pageBreak();
-  b.push(b.sectionHeading("2. " + s2.title.toUpperCase()));
+  b.push(b.sectionHeading("2. " + s2.title.toUpperCase(), true));
   b.push(b.bodyText("Kênh:", { bold: true, after: 40 }));
   b.push(
     b.inlineChecks(
@@ -454,20 +458,20 @@ export async function buildRecruitmentDocxBlob(
     );
   }
   b.push(b.bodyText("Vị trí ứng tuyển:", { bold: true, after: 40 }));
-  const positionPrintLabels = [
-    opt.position.agent,
-    opt.position.unit_manager,
-    opt.position.gad,
-    opt.position.other,
-  ];
+  // All four on one line measures 10895tw against a 9360tw text width, so they
+  // go two per line the way the printed CT-01 lays them out.
+  const positionSelected = labelsFor(
+    opt.position,
+    data.positionApplied ? [data.positionApplied] : []
+  );
   b.push(
     b.inlineChecks(
-      positionPrintLabels,
-      labelsFor(
-        opt.position,
-        data.positionApplied ? [data.positionApplied] : []
-      )
+      [opt.position.agent, opt.position.unit_manager],
+      positionSelected
     )
+  );
+  b.push(
+    b.inlineChecks([opt.position.gad, opt.position.other], positionSelected)
   );
   b.push(b.bodyText(s2.basicAgentCertificateLabel, { bold: true, after: 40 }));
   b.push(
@@ -599,8 +603,7 @@ export async function buildRecruitmentDocxBlob(
   // so how much the candidate typed above decides where it lands — and a
   // long address or extra work-history rows can split the signature table
   // across two pages.
-  b.pageBreak();
-  b.push(b.sectionHeading("3. " + f.section11.title.toUpperCase()));
+  b.push(b.sectionHeading("3. " + f.section11.title.toUpperCase(), true));
   b.push(
     new Paragraph({
       spacing: { after: 30, ...LINE_SPACING },
@@ -700,9 +703,9 @@ export async function buildRecruitmentDocxBlob(
 
   // ===== PHỤ LỤC 1: BỘ CÂU HỎI KHẢO SÁT =====
   b.useSingleSpacing();
-  b.pageBreak();
   b.push(
     new Paragraph({
+      pageBreakBefore: true,
       alignment: AlignmentType.CENTER,
       spacing: { ...LINE_SPACING_SINGLE, after: 0 },
       children: [
