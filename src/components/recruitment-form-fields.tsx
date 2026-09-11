@@ -548,16 +548,14 @@ export function RecruitmentFormFields({
   const hasRelativeAtCompany = watch("hasRelativeAtCompany");
   const secondManagerUid = watch("secondManagerUid");
 
-  // Cascades top-down (SH -> SD): once an SH is picked, the SD list
-  // narrows to that SH's own linked SD, but falls back to the full roster
-  // when nothing's picked yet so the required SD field never dead-ends.
-  const VISIBLE_SD_MANAGERS = secondManagerUid
-    ? managers.sd.filter(
-        m =>
-          managers.sh.find(sh => sh.uid === secondManagerUid)?.managerSdUid ===
-          m.uid
-      )
-    : managers.sd;
+  // Cascades top-down (SH -> SD): picking an SH narrows the SD list to the
+  // SDs sitting under that SH. Until an SH has any SD assigned to it the
+  // narrowing would leave a required field with nothing to pick, so fall
+  // back to the full roster rather than dead-ending the candidate.
+  const sdsUnderSh = secondManagerUid
+    ? managers.sd.filter(sd => sd.managerShUid === secondManagerUid)
+    : [];
+  const VISIBLE_SD_MANAGERS = sdsUnderSh.length > 0 ? sdsUnderSh : managers.sd;
 
   const permanentWards =
     provinces.find(p => p.name === permanentProvince)?.wards ?? [];

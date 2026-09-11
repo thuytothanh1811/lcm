@@ -101,12 +101,17 @@ export type UserEditValues = UserFormValues;
 // Org hierarchy: SH sits above SD, which is the terminal/leaf role. Admin
 // sits outside the hierarchy for system permissions, but still carries
 // SD/SH tags (for org-chart/reporting purposes only).
+/**
+ * One SH covers many SDs, so the link lives on the SD — each SD names the SH
+ * it sits under. Putting it the other way round (an SH naming its one SD)
+ * cannot express the real structure.
+ */
 function getVisibleManagerFields(role: UserFormValues["role"]) {
   switch (role) {
     case "admin":
       return { sd: true, sh: true, direct: false };
-    case "sh":
-      return { sd: true, sh: false, direct: false };
+    case "sd":
+      return { sd: false, sh: true, direct: false };
     default:
       return { sd: false, sh: false, direct: false };
   }
