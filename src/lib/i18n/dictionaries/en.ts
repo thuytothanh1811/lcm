@@ -2,9 +2,9 @@ import type { vi } from "./vi";
 
 export const en: typeof vi = {
   metadata: {
-    titleDefault: "Asahi Life",
-    titleTemplate: "Asahi Life - %s",
-    description: "Compensation Asahi Life",
+    titleDefault: "MVI",
+    titleTemplate: "MVI - %s",
+    description: "Compensation MVI",
   },
   common: {
     cancel: "Cancel",
@@ -96,7 +96,7 @@ export const en: typeof vi = {
       hero: {
         heading: "RECRUITMENT INFORMATION MANAGEMENT",
         subtitle:
-          "Sign in to manage compensation and benefits for the Asahi Life team.",
+          "Sign in to manage compensation and benefits for the MVI team.",
         quote:
           '"A journey of a thousand miles begins with a single step." — Lao Tzu',
       },
@@ -114,8 +114,8 @@ export const en: typeof vi = {
     recruitmentDetail: { title: "Candidate details" },
     recruitmentPublic: {
       title: "Recruitment information form",
-      logoAlt: "Asahi Life",
-      heading: "Welcome to Asahi Life",
+      logoAlt: "MVI",
+      heading: "Welcome to MVI",
       subtitle:
         "Please fill in the information below completely and accurately. Fields marked with * are required.",
       saveButton: "Save",
@@ -221,10 +221,10 @@ export const en: typeof vi = {
       confirm: "Confirm",
     },
     positionLabels: {
-      agent: "Life Planner (Agent)",
+      agent: "Financial Consultant (LP)",
       unit_manager: "Unit Manager (UM)",
       district_manager: "District Manager (DM)",
-      gad: "GAD",
+      gad: "General Agency Office (GAD)",
       other: "Other",
     },
     statusLabels: {
@@ -286,7 +286,7 @@ export const en: typeof vi = {
   recruitmentForm: {
     thankYouTitle: "Thank you!",
     thankYouBody:
-      "Your application has been submitted successfully. The Asahi Life recruitment team will contact you as soon as possible.",
+      "Your application has been submitted successfully. The MVI recruitment team will contact you as soon as possible.",
     submitting: "Submitting...",
     submit: "Submit application",
     saving: "Saving...",
@@ -317,10 +317,10 @@ export const en: typeof vi = {
         part_time: "Part-time model",
       },
       position: {
-        agent: "Life Planner (Agent)",
+        agent: "Financial Consultant (LP)",
         unit_manager: "Unit Manager (UM)",
         district_manager: "District Manager (DM)",
-        gad: "GAD",
+        gad: "General Agency Office (GAD)",
         other: "Other",
       },
       program: {
@@ -360,7 +360,7 @@ export const en: typeof vi = {
         other: "Other",
       },
       civilServantType: {
-        teacher: "Teacher",
+        teacher: "Teacher (public school)",
         police: "Police",
         doctor: "Doctor",
         other: "Other",
@@ -434,7 +434,8 @@ export const en: typeof vi = {
       maritalStatusLabel: "Marital status *",
       maritalStatusPlaceholder: "Select marital status",
       taxCode: "Tax code",
-      averageMonthlyIncomeLabel: "Average monthly income (last 6 months) *",
+      averageMonthlyIncomeLabel:
+        "Average monthly income, last 6 months (VND million) *",
       averageMonthlyIncomePlaceholder: "Select income level",
       potentialCustomers: "Number of potential customers *",
       educationLevelLabel: "Education level *",
@@ -455,9 +456,9 @@ export const en: typeof vi = {
       mobile2: "Mobile 2",
       email: "Email *",
       emailPlaceholder: "you@email.com",
-      sdManagerLabel: "SD full name *",
+      sdManagerLabel: "SD full name – Sales Director *",
       sdManagerPlaceholder: "Select an SD",
-      secondManagerLabel: "SH full name *",
+      secondManagerLabel: "SH full name – Regional Sales Head *",
       secondManagerPlaceholder: "Select an SH",
       managerLabel: "Direct manager full name",
     },
@@ -523,21 +524,6 @@ export const en: typeof vi = {
     section6: {
       title: "How the candidate learned about the recruitment program",
     },
-    section7: {
-      title: "PEP relationship information",
-      definitionLabel: "PEP definition:",
-      definitionText:
-        "a politically exposed person, someone holding a senior position in a State agency in any country (e.g. head of state, minister, deputy minister, National Assembly delegate, ambassador, senior manager of a State agency/enterprise...), or a relative/individual closely related to a PEP (spouse, child, partner, parent, parent-in-law, full or half sibling). If you cannot determine this yourself, please contact the HR department for guidance.",
-      questionLabel:
-        "Are you a PEP or do you have a relationship with a PEP as defined above? *",
-      no: "No",
-      yes: "Yes",
-      relationship: "Relationship with the PEP *",
-      relationshipPlaceholder: "e.g. parent, spouse, I am the PEP myself...",
-      fullName: "Full name (of the PEP) *",
-      position: "Position *",
-      organization: "Organization *",
-    },
     section8: {
       title: "Next of kin *",
       memberHeading: (n: number) => `Family member ${n}`,
@@ -561,7 +547,7 @@ export const en: typeof vi = {
       q5Label:
         "5) Are you willing to take part in the following training courses to develop yourself? *",
       q6Label:
-        "6) What support do you hope Asahi Life provides so you can succeed, increase your income, have opportunities for advancement, and improve your skills and knowledge? (multiple answers allowed)",
+        "6) What support do you hope MVI provides so you can succeed, increase your income, have opportunities for advancement, and improve your skills and knowledge? (multiple answers allowed)",
       q7Label:
         "7) How the candidate learned about the recruitment program (multiple answers allowed)",
       selectPlaceholder: "Select an answer",
@@ -593,7 +579,7 @@ export const en: typeof vi = {
     section11: {
       title: "Candidate commitments",
       voluntary:
-        "I confirm that exploring this career opportunity and applying to become an agent at Asahi Life is entirely my own voluntary decision, not directed by any other individual or organization.",
+        "I confirm that exploring this career opportunity and applying to become an agent at MVI is entirely my own voluntary decision, not directed by any other individual or organization.",
       dataConsent:
         "I consent to the processing of my personal data (PDPD) so the system can collect, store, and process my application.",
       consentLabel: "Confirm commitment & PDPD consent *",
@@ -627,11 +613,6 @@ export const en: typeof vi = {
       branchRequired: "Please enter the branch",
       potentialCustomersRequired:
         "Please enter the number of potential customers",
-      pepStatusRequired: "Please select an option",
-      pepRelationshipRequired: "Please enter your relationship with the PEP",
-      pepFullNameRequired: "Please enter the full name",
-      pepPositionRequired: "Please enter the position",
-      pepOrganizationRequired: "Please enter the organization",
       answerRequired: "Please select an answer",
       atLeastOneAnswerRequired: "Please select at least one answer",
       questionRequired: "Please answer this question",

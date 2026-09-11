@@ -1,8 +1,8 @@
 export const vi = {
   metadata: {
-    titleDefault: "Asahi Life",
-    titleTemplate: "Asahi Life - %s",
-    description: "Compensation Asahi Life",
+    titleDefault: "MVI",
+    titleTemplate: "MVI - %s",
+    description: "Compensation MVI",
   },
   common: {
     cancel: "Hủy",
@@ -94,7 +94,7 @@ export const vi = {
       hero: {
         heading: "TRANG QUẢN LÝ THÔNG TIN\nTUYỂN DỤNG",
         subtitle:
-          "Đăng nhập để quản lý lương thưởng và phúc lợi cho đội ngũ Asahi Life.",
+          "Đăng nhập để quản lý lương thưởng và phúc lợi cho đội ngũ MVI.",
         quote: '"Hành trình vạn dặm bắt đầu từ một bước chân." — Lão Tử',
       },
     },
@@ -111,8 +111,8 @@ export const vi = {
     recruitmentDetail: { title: "Chi tiết ứng viên" },
     recruitmentPublic: {
       title: "Phiếu thông tin tuyển dụng",
-      logoAlt: "Asahi Life",
-      heading: "Chào mừng Anh/ Chị đến với Asahi Life",
+      logoAlt: "MVI",
+      heading: "Chào mừng Anh/ Chị đến với MVI",
       subtitle:
         "Vui lòng điền đầy đủ và chính xác thông tin bên dưới. Các trường có dấu * là bắt buộc.",
       saveButton: "Lưu",
@@ -219,10 +219,10 @@ export const vi = {
       confirm: "Xác nhận",
     },
     positionLabels: {
-      agent: "Life Planner (Agent)",
-      unit_manager: "Unit Manager (UM)",
+      agent: "Tư Vấn Tài Chính (LP)",
+      unit_manager: "Trưởng Phòng Kinh Doanh (UM)",
       district_manager: "District Manager (DM)",
-      gad: "GAD",
+      gad: "Văn phòng tổng đại lý (GAD)",
       other: "Khác",
     },
     statusLabels: {
@@ -284,7 +284,7 @@ export const vi = {
   recruitmentForm: {
     thankYouTitle: "Cảm ơn bạn!",
     thankYouBody:
-      "Thông tin ứng tuyển của bạn đã được gửi thành công. Đội ngũ tuyển dụng Asahi Life sẽ liên hệ với bạn trong thời gian sớm nhất.",
+      "Thông tin ứng tuyển của bạn đã được gửi thành công. Đội ngũ tuyển dụng MVI sẽ liên hệ với bạn trong thời gian sớm nhất.",
     submitting: "Đang gửi...",
     submit: "Nộp phiếu thông tin",
     saving: "Đang lưu...",
@@ -322,10 +322,10 @@ export const vi = {
         part_time: "Mô hình bán thời gian",
       },
       position: {
-        agent: "Life Planner (Agent)",
-        unit_manager: "Unit Manager (UM)",
+        agent: "Tư Vấn Tài Chính (LP)",
+        unit_manager: "Trưởng Phòng Kinh Doanh (UM)",
         district_manager: "District Manager (DM)",
-        gad: "GAD",
+        gad: "Văn phòng tổng đại lý (GAD)",
         other: "Khác",
       },
       program: {
@@ -358,7 +358,7 @@ export const vi = {
         other: "Khác",
       },
       civilServantType: {
-        teacher: "Giáo viên",
+        teacher: "Giáo viên (Trường công lập)",
         police: "Công an",
         doctor: "Bác sĩ",
         other: "Khác",
@@ -433,7 +433,8 @@ export const vi = {
       maritalStatusLabel: "Tình trạng hôn nhân *",
       maritalStatusPlaceholder: "Chọn tình trạng hôn nhân",
       taxCode: "Mã số thuế",
-      averageMonthlyIncomeLabel: "Thu nhập bình quân 6 tháng gần nhất *",
+      averageMonthlyIncomeLabel:
+        "Thu nhập bình quân 6 tháng gần nhất (triệu đồng) *",
       averageMonthlyIncomePlaceholder: "Chọn mức thu nhập",
       potentialCustomers: "Số lượng khách hàng tiềm năng *",
       educationLevelLabel: "Trình độ học vấn *",
@@ -454,9 +455,9 @@ export const vi = {
       mobile2: "Di động 2",
       email: "Email *",
       emailPlaceholder: "ban@email.com",
-      sdManagerLabel: "Họ và tên SD *",
+      sdManagerLabel: "Họ và tên SD – Giám Đốc Kinh Doanh *",
       sdManagerPlaceholder: "Chọn tên SD",
-      secondManagerLabel: "Họ và tên SH *",
+      secondManagerLabel: "Họ và tên SH – Trưởng Vùng Kinh Doanh *",
       secondManagerPlaceholder: "Chọn tên SH",
       managerLabel: "Họ và tên Quản lý trực tiếp",
     },
@@ -522,21 +523,6 @@ export const vi = {
     section6: {
       title: "Ứng viên biết đến chương trình tuyển dụng qua",
     },
-    section7: {
-      title: "Thông tin mối quan hệ với PEP",
-      definitionLabel: "Định nghĩa PEP:",
-      definitionText:
-        "là cá nhân có ảnh hưởng chính trị, người nắm giữ chức vụ cấp cao trong cơ quan Nhà nước ở tất cả các quốc gia (VD: Nguyên thủ quốc gia, bộ trưởng, thứ trưởng, Đại biểu quốc hội, Đại sứ, Quản lý cấp cao của cơ quan/doanh nghiệp Nhà nước...), hoặc người thân/cá nhân có quan hệ mật thiết với PEP (vợ/chồng, con, bạn đời, cha/mẹ, cha mẹ của bạn đời, anh/chị/em ruột hoặc cùng cha khác mẹ hoặc cùng mẹ khác cha). Nếu không tự xác định được, vui lòng liên hệ bộ phận Nhân sự để được tham vấn.",
-      questionLabel:
-        "Anh/chị có phải PEP hoặc có mối quan hệ với PEP như định nghĩa trên không? *",
-      no: "Không",
-      yes: "Có",
-      relationship: "Mối quan hệ với PEP *",
-      relationshipPlaceholder: "VD: Cha/mẹ, vợ/chồng, bản thân là PEP...",
-      fullName: "Họ và tên (của PEP) *",
-      position: "Chức vụ *",
-      organization: "Đơn vị công tác *",
-    },
     section8: {
       title: "Quan hệ nhân thân *",
       memberHeading: (n: number) => `Thân nhân ${n}`,
@@ -561,7 +547,7 @@ export const vi = {
       q5Label:
         "5) Anh chị Cam Kết tham gia các khóa học-Đào tạo nào dưới đây? *",
       q6Label:
-        "6) Anh/chị mong Asahi Life hỗ trợ gì để thành công? (có thể chọn nhiều đáp án)",
+        "6) Anh/chị mong MVI hỗ trợ gì để thành công? (có thể chọn nhiều đáp án)",
       q7Label:
         "7) Ứng viên biết đến chương trình tuyển dụng qua (có thể chọn nhiều đáp án)",
       selectPlaceholder: "Chọn một đáp án",
@@ -593,7 +579,7 @@ export const vi = {
     section11: {
       title: "Cam kết của ứng viên",
       voluntary:
-        "Tôi xác nhận việc tìm hiểu cơ hội nghề nghiệp này và ứng tuyển làm đại lý tại Asahi Life hoàn toàn là quyết định tự nguyện của cá nhân tôi, không do bất kỳ cá nhân hay tổ chức nào chi phối.",
+        "Tôi xác nhận việc tìm hiểu cơ hội nghề nghiệp này và ứng tuyển làm đại lý tại MVI hoàn toàn là quyết định tự nguyện của cá nhân tôi, không do bất kỳ cá nhân hay tổ chức nào chi phối.",
       dataConsent:
         "Tôi đồng ý cho phép xử lý dữ liệu cá nhân (PDPD) để hệ thống thu thập, lưu trữ và xử lý hồ sơ của tôi.",
       consentLabel: "Xác nhận cam kết & đồng ý PDPD *",
@@ -626,11 +612,6 @@ export const vi = {
       bankNameRequired: "Vui lòng chọn ngân hàng",
       branchRequired: "Vui lòng nhập chi nhánh",
       potentialCustomersRequired: "Vui lòng nhập số khách hàng tiềm năng",
-      pepStatusRequired: "Vui lòng chọn một lựa chọn",
-      pepRelationshipRequired: "Vui lòng nhập mối quan hệ với PEP",
-      pepFullNameRequired: "Vui lòng nhập họ và tên",
-      pepPositionRequired: "Vui lòng nhập chức vụ",
-      pepOrganizationRequired: "Vui lòng nhập đơn vị công tác",
       answerRequired: "Vui lòng chọn một đáp án",
       atLeastOneAnswerRequired: "Vui lòng chọn ít nhất một đáp án",
       questionRequired: "Vui lòng trả lời câu hỏi này",

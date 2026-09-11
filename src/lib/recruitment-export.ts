@@ -58,7 +58,6 @@ export function buildAnswerBlocks(
   const genderLabels = { male: s1.genderMale, female: s1.genderFemale };
   const civilServant = { yes: s1.civilServantYes, no: s1.civilServantNo };
   const s5 = f.section5;
-  const s7 = f.section7;
   const s9 = f.section9;
   const s11 = f.section11;
 
@@ -295,25 +294,6 @@ export function buildAnswerBlocks(
         {
           label: opt.referral.other,
           getValue: s => s.referralOther || DASH,
-        },
-      ],
-    },
-    {
-      title: s7.title,
-      columns: [
-        {
-          label: s7.questionLabel,
-          getValue: s => yesNo(s7, s.hasPepRelationship),
-        },
-        {
-          label: s7.relationship,
-          getValue: s => s.pepRelationship || DASH,
-        },
-        { label: s7.fullName, getValue: s => s.pepFullName || DASH },
-        { label: s7.position, getValue: s => s.pepPosition || DASH },
-        {
-          label: s7.organization,
-          getValue: s => s.pepOrganization || DASH,
         },
       ],
     },

@@ -36,7 +36,7 @@ export function RecruitmentEntryGate({
             className="size-6"
             priority
           />
-          <span className="text-lg font-semibold">Asahi Life</span>
+          <span className="text-lg font-semibold">MVI</span>
         </div>
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold text-balance sm:text-3xl">

@@ -314,7 +314,6 @@ export async function buildRecruitmentDocxBlob(
   const s1 = f.section1;
   const s2 = f.section2;
   const s5 = f.section5;
-  const s7 = f.section7;
   const s8 = f.section8;
   const s9 = f.section9;
   const s11 = f.section11;
@@ -323,7 +322,7 @@ export async function buildRecruitmentDocxBlob(
 
   // ===== Banner =====
   b.push(
-    b.bannerLine("ASAHI LIFE – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
+    b.bannerLine("MVI – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
     b.bannerLine("CT-01", { color: GRAY, after: 120 }),
     b.title("PHIẾU THÔNG TIN TUYỂN DỤNG")
   );
@@ -594,33 +593,6 @@ export async function buildRecruitmentDocxBlob(
       familyRows
     )
   );
-
-  b.push(b.subHeading(s7.title));
-  b.push(
-    b.bodyText(s7.definitionLabel + " " + s7.definitionText, {
-      italics: true,
-      size: 18,
-      after: 80,
-    })
-  );
-  b.push(
-    b.bodyText(s7.questionLabel.replace(" *", ""), { bold: true, after: 40 })
-  );
-  b.push(
-    b.inlineChecks(
-      [s7.no, s7.yes + " (khai báo bên dưới)"],
-      labelsFor(
-        { no: s7.no, yes: s7.yes + " (khai báo bên dưới)" },
-        data.hasPepRelationship === "yes" ? ["yes"] : ["no"]
-      )
-    )
-  );
-  if (data.hasPepRelationship === "yes") {
-    b.push(b.field(s7.relationship.replace(" *", ""), data.pepRelationship));
-    b.push(b.field(s7.fullName.replace(" *", ""), data.pepFullName));
-    b.push(b.field(s7.position.replace(" *", ""), data.pepPosition));
-    b.push(b.field(s7.organization.replace(" *", ""), data.pepOrganization));
-  }
 
   // ===== SECTION 3: CAM KẾT CỦA ỨNG VIÊN =====
   // Pinned to its own page. Without the break it flows on from section 2,

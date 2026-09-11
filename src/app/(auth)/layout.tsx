@@ -21,13 +21,13 @@ export default async function AuthLayout({
           <div className="mr-auto flex items-center gap-2 self-start">
             <Image
               src="/brand/logo/ASAHI_SYMBOL.svg"
-              alt="Asahi Life"
+              alt="MVI"
               width={39}
               height={33}
               className="h-8 w-auto"
               priority
             />
-            <span className="text-xl font-semibold">Asahi Life</span>
+            <span className="text-xl font-semibold">MVI</span>
           </div>
 
           <div className="max-w-md -translate-y-10 space-y-3">
@@ -61,12 +61,12 @@ export default async function AuthLayout({
         <div className="absolute top-6 left-6 z-10 flex items-center gap-2 text-white lg:hidden">
           <Image
             src="/brand/logo/ASAHI_SYMBOL.svg"
-            alt="Asahi Life"
+            alt="MVI"
             width={39}
             height={33}
             className="h-7 w-auto"
           />
-          <span className="text-lg font-semibold">Asahi Life</span>
+          <span className="text-lg font-semibold">MVI</span>
         </div>
         <div className="bg-background/95 relative w-full max-w-sm rounded-xl p-6 shadow-lg backdrop-blur-sm">
           {children}

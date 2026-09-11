@@ -531,7 +531,6 @@ export function RecruitmentFormFields({
   const sameAsPermanentAddress = watch("sameAsPermanentAddress");
   const permanentProvince = watch("permanentProvince");
   const temporaryProvince = watch("temporaryProvince");
-  const hasPepRelationship = watch("hasPepRelationship");
   const q1Experience = watch("q1Experience");
   const q2View = watch("q2View");
   const q3TargetAudience = watch("q3TargetAudience");
@@ -1990,119 +1989,6 @@ export function RecruitmentFormFields({
               <IconPlus className="size-4" />
               {t.recruitmentForm.section8.addMember}
             </Button>
-          )}
-
-          <FieldSeparator />
-          <FieldLegend className="mb-0">
-            {t.recruitmentForm.section7.title}
-          </FieldLegend>
-          <div className="bg-muted text-muted-foreground rounded-lg p-4 text-sm">
-            <span className="text-foreground font-semibold">
-              {t.recruitmentForm.section7.definitionLabel}
-            </span>{" "}
-            {t.recruitmentForm.section7.definitionText}
-          </div>
-          <Controller
-            control={control}
-            name="hasPepRelationship"
-            render={({ field }) => (
-              <Field data-invalid={!!errors.hasPepRelationship}>
-                <FieldLabel>
-                  {t.recruitmentForm.section7.questionLabel}
-                </FieldLabel>
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="flex gap-6"
-                >
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="no" id="hasPepRelationship-no" />
-                    <FieldLabel
-                      htmlFor="hasPepRelationship-no"
-                      className="font-normal"
-                    >
-                      {t.recruitmentForm.section7.no}
-                    </FieldLabel>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <RadioGroupItem value="yes" id="hasPepRelationship-yes" />
-                    <FieldLabel
-                      htmlFor="hasPepRelationship-yes"
-                      className="font-normal"
-                    >
-                      {t.recruitmentForm.section7.yes}
-                    </FieldLabel>
-                  </div>
-                </RadioGroup>
-                <FieldError
-                  errors={
-                    errors.hasPepRelationship
-                      ? [errors.hasPepRelationship]
-                      : undefined
-                  }
-                />
-              </Field>
-            )}
-          />
-          {hasPepRelationship === "yes" && (
-            <FieldGroup>
-              <Field data-invalid={!!errors.pepRelationship}>
-                <FieldLabel htmlFor="pepRelationship">
-                  {t.recruitmentForm.section7.relationship}
-                </FieldLabel>
-                <Input
-                  id="pepRelationship"
-                  placeholder={
-                    t.recruitmentForm.section7.relationshipPlaceholder
-                  }
-                  {...register("pepRelationship")}
-                />
-                <FieldError
-                  errors={
-                    errors.pepRelationship
-                      ? [errors.pepRelationship]
-                      : undefined
-                  }
-                />
-              </Field>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field data-invalid={!!errors.pepFullName}>
-                  <FieldLabel htmlFor="pepFullName">
-                    {t.recruitmentForm.section7.fullName}
-                  </FieldLabel>
-                  <Input id="pepFullName" {...register("pepFullName")} />
-                  <FieldError
-                    errors={
-                      errors.pepFullName ? [errors.pepFullName] : undefined
-                    }
-                  />
-                </Field>
-                <Field data-invalid={!!errors.pepPosition}>
-                  <FieldLabel htmlFor="pepPosition">
-                    {t.recruitmentForm.section7.position}
-                  </FieldLabel>
-                  <Input id="pepPosition" {...register("pepPosition")} />
-                  <FieldError
-                    errors={
-                      errors.pepPosition ? [errors.pepPosition] : undefined
-                    }
-                  />
-                </Field>
-              </div>
-              <Field data-invalid={!!errors.pepOrganization}>
-                <FieldLabel htmlFor="pepOrganization">
-                  {t.recruitmentForm.section7.organization}
-                </FieldLabel>
-                <Input id="pepOrganization" {...register("pepOrganization")} />
-                <FieldError
-                  errors={
-                    errors.pepOrganization
-                      ? [errors.pepOrganization]
-                      : undefined
-                  }
-                />
-              </Field>
-            </FieldGroup>
           )}
         </FieldGroup>
       </SectionCard>

@@ -126,14 +126,6 @@ export function buildRecruitmentSchema(
       .min(1, t.atLeastOneAnswerRequired),
     referralOther: z.string().optional(),
 
-    hasPepRelationship: z.enum(["no", "yes"], {
-      error: t.pepStatusRequired,
-    }),
-    pepRelationship: z.string().optional(),
-    pepFullName: z.string().optional(),
-    pepPosition: z.string().optional(),
-    pepOrganization: z.string().optional(),
-
     familyMembers: z
       .array(
         z.object({
@@ -297,25 +289,6 @@ export function buildRecruitmentSchema(
         });
       }
     }
-
-    if (data.hasPepRelationship !== "yes") return;
-
-    const requiredWhenPep: {
-      field:
-        "pepRelationship" | "pepFullName" | "pepPosition" | "pepOrganization";
-      message: string;
-    }[] = [
-      { field: "pepRelationship", message: t.pepRelationshipRequired },
-      { field: "pepFullName", message: t.pepFullNameRequired },
-      { field: "pepPosition", message: t.pepPositionRequired },
-      { field: "pepOrganization", message: t.pepOrganizationRequired },
-    ];
-
-    for (const { field, message } of requiredWhenPep) {
-      if (!data[field]) {
-        ctx.addIssue({ code: "custom", path: [field], message });
-      }
-    }
   });
 }
 
@@ -443,12 +416,6 @@ export function buildRecruitmentDraftSchema(
       )
       .optional(),
     referralOther: z.string().optional(),
-
-    hasPepRelationship: z.enum(["no", "yes"]).optional(),
-    pepRelationship: z.string().optional(),
-    pepFullName: z.string().optional(),
-    pepPosition: z.string().optional(),
-    pepOrganization: z.string().optional(),
 
     familyMembers: z
       .array(
