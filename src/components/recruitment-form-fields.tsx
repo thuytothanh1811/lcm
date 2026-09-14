@@ -225,11 +225,6 @@ const TEMPLATE_DOCUMENTS = [
     group: "manager",
   },
   {
-    file: "CT05_Phieu_danh_gia_tai_ky.docx",
-    label: "CT05 – Phiếu đánh giá tái ký",
-    group: "manager",
-  },
-  {
     file: "F-07_Danh_muc_ho_so_VN.docx",
     label: "F-07 – Danh mục hồ sơ",
     group: null,
