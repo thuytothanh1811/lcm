@@ -537,7 +537,8 @@ export function sanitizeFilename(name: string): string {
   const cleaned = name
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
-    .replace(/đ/gi, "d")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
     .replace(/[^a-zA-Z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
   return cleaned || "recruitment";
@@ -595,13 +596,17 @@ function submittedStamp(submittedAt?: string | null): string | null {
  * "Nguyen-Van-A_079192004567_14-09-2026_15h31". The same candidate can be
  * submitted more than once, so the stamp keeps two of their folders apart.
  */
-export function candidateSlug(submission: {
-  fullName?: string | null;
-  idNumber?: string | null;
-  submittedAt?: string | null;
-}): string {
+export function candidateSlug(
+  submission: {
+    fullName?: string | null;
+    idNumber?: string | null;
+    submittedAt?: string | null;
+  },
+  { withStamp = true }: { withStamp?: boolean } = {}
+): string {
   const parts = [sanitizeFilename(submission.fullName || "ung-vien")];
   if (submission.idNumber) parts.push(sanitizeFilename(submission.idNumber));
+  if (!withStamp) return parts.join("_");
   const stamp = submittedStamp(submission.submittedAt);
   if (stamp) parts.push(stamp);
   return parts.join("_");

@@ -45,7 +45,8 @@ export async function GET(
   }
 
   const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
-  const filename = `Ho-so_${candidate}.zip`;
+  // The zip is filed by who it is about; the stamp lives on the files inside.
+  const filename = `${candidateSlug(submission, { withStamp: false })}.zip`;
 
   return new Response(new Uint8Array(zipBuffer), {
     headers: {

@@ -311,7 +311,8 @@ export function sanitizeFilename(name: string): string {
   const cleaned = name
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
-    .replace(/đ/gi, "d")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
     .replace(/[^a-zA-Z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
   return cleaned || "phieu-thong-tin-tuyen-dung";
