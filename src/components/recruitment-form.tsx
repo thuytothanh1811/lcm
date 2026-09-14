@@ -13,6 +13,7 @@ import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { vi } from "@/lib/i18n/dictionaries/vi";
 import {
   buildCt02DocxBlob,
+  buildCt03DocxBlob,
   buildRecruitmentDocxBlob,
   sanitizeFilename,
 } from "@/lib/recruitment-docx";
@@ -40,6 +41,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [formError, setFormError] = useState<string | null>(null);
   const [isPreparingDocx, setIsPreparingDocx] = useState(false);
   const [isPreparingCt02, setIsPreparingCt02] = useState(false);
+  const [isPreparingCt03, setIsPreparingCt03] = useState(false);
   const [missingDocuments, setMissingDocuments] = useState<string[]>([]);
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
@@ -148,6 +150,29 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     }
   };
 
+  const handleDownloadCt03 = async () => {
+    setIsPreparingCt03(true);
+    try {
+      const values = getValues();
+      const blob = await buildCt03DocxBlob(values, t);
+      const filename = `Phieu-danh-gia-ung-vien-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    } catch {
+      toast.error(t.errors.recruitment.exportFailed);
+    } finally {
+      setIsPreparingCt03(false);
+    }
+  };
+
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
 
@@ -201,6 +226,8 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
         isDownloadingCt1={isPreparingDocx}
         onDownloadCt2={handleDownloadCt02}
         isDownloadingCt2={isPreparingCt02}
+        onDownloadCt3={handleDownloadCt03}
+        isDownloadingCt3={isPreparingCt03}
         locale="vi"
       />
 

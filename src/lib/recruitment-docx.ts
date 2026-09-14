@@ -61,6 +61,16 @@ function labelFor(map: Record<string, string>, value?: string | null) {
 }
 
 /**
+ * The form stores dates as ISO (yyyy-mm-dd); a printed Vietnamese form wants
+ * dd/mm/yyyy. Anything that is not an ISO date is passed through untouched.
+ */
+function vnDate(value?: string | null): string {
+  if (!value) return "";
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : value;
+}
+
+/**
  * The trailing "*" marks a required field on the web form. On paper it reads
  * as part of the label, so drop it wherever a form label is printed.
  */
@@ -335,7 +345,7 @@ export async function buildRecruitmentDocxBlob(
   b.push(
     b.twoField(
       "Ngày sinh",
-      data.dateOfBirth,
+      vnDate(data.dateOfBirth),
       "Mã số thuế (nếu có)",
       data.taxCode
     )
@@ -977,6 +987,173 @@ export async function buildCt02DocxBlob(
               "XÁC NHẬN CỦA SD/SH",
               "Tôi xác nhận đã kiểm tra CCCD của ứng viên và ứng viên đã ký trực tiếp vào phiếu này."
             ),
+          ],
+        }),
+      ],
+    })
+  );
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            size: { width: 12240, height: 15840 },
+            margin: { top: 1300, bottom: 1300, left: 1440, right: 1440 },
+          },
+        },
+        footers: { default: b.footer() },
+        children: b.children,
+      },
+    ],
+    styles: {
+      default: {
+        document: {
+          run: { font: BODY_FONT, size: BODY_SIZE },
+          paragraph: { spacing: LINE_SPACING },
+        },
+      },
+    },
+  });
+
+  return Packer.toBlob(doc);
+}
+
+const CT03_CRITERIA = [
+  "1. Giới thiệu bản thân & kinh nghiệm (giao tiếp, kinh nghiệm bán hàng; ngoại hình, tác phong)",
+  "2. Lý do quan tâm công ty & vị trí ứng tuyển; sự phù hợp văn hóa; mục tiêu nghề nghiệp rõ ràng",
+  "3. Mức độ tham gia cộng đồng; khả năng mở rộng quan hệ; thị trường khách hàng tiềm năng",
+  "4. Tình huống thuyết phục thành công; kỹ năng thuyết phục & xử lý từ chối",
+  "5. Tình huống vượt qua khởi đầu khó khăn để cải thiện quan hệ; xử lý tình huống & sự kiên trì",
+];
+
+/**
+ * Total years covered by the declared work history, rounded to one decimal.
+ * Dates are the "MM/YYYY" the form asks for; anything else is skipped rather
+ * than guessed at, and an empty history prints nothing at all.
+ */
+function totalExperienceYears(history?: RecruitmentValues["workHistory"]) {
+  const monthsOf = (value?: string | null) => {
+    const m = /^(\d{1,2})\/(\d{4})$/.exec((value ?? "").trim());
+    return m ? Number(m[2]) * 12 + Number(m[1]) : null;
+  };
+  let months = 0;
+  for (const row of history ?? []) {
+    const from = monthsOf(row?.fromDate);
+    const to = monthsOf(row?.toDate);
+    if (from === null || to === null || to < from) continue;
+    months += to - from;
+  }
+  if (months === 0) return "";
+  // Vietnamese decimal separator, since this is printed, not parsed.
+  return String(Math.round((months / 12) * 10) / 10).replace(".", ",");
+}
+
+export async function buildCt03DocxBlob(
+  data: RecruitmentValues,
+  dict: Dictionary
+): Promise<Blob> {
+  const opt = dict.recruitmentForm.options;
+  const s1 = dict.recruitmentForm.section1;
+  const b = new DocxBuilder();
+
+  b.push(
+    b.bannerLine("MVI – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
+    b.bannerLine("CT-03", { color: GRAY }),
+    b.title("PHIẾU ĐÁNH GIÁ ỨNG VIÊN")
+  );
+
+  b.push(b.sectionHeading("THÔNG TIN ỨNG VIÊN", false, 120));
+  b.push(b.twoField("Họ và tên", data.fullName, "Số CCCD", data.idNumber));
+  b.push(
+    b.twoField(
+      "Ngày sinh",
+      vnDate(data.dateOfBirth),
+      "Giới tính",
+      data.gender === "male"
+        ? s1.genderMale
+        : data.gender === "female"
+          ? s1.genderFemale
+          : ""
+    )
+  );
+  b.push(
+    b.twoField(
+      "Tình trạng hôn nhân",
+      labelFor(opt.maritalStatus, data.maritalStatus),
+      "Học vấn",
+      labelFor(opt.education, data.educationLevel)
+    )
+  );
+  b.push(
+    b.twoField(
+      "Kinh nghiệm làm việc (số năm)",
+      totalExperienceYears(data.workHistory),
+      "Thu nhập",
+      labelFor(opt.income, data.averageMonthlyIncome)
+    )
+  );
+
+  b.push(
+    b.bodyText(
+      "Thang điểm: 1 – Rất kém; 2 – Trung bình; 3 – Khá; 4 – Tốt; 5 – Rất tốt",
+      { italics: true, after: 120 }
+    )
+  );
+
+  const scoreW = 1600;
+  const criteriaW = PAGE_W - scoreW;
+  b.push(
+    b.dataTable(
+      [criteriaW, scoreW],
+      ["CÂU HỎI / TIÊU CHÍ", "ĐIỂM (1–5)"],
+      [...CT03_CRITERIA.map(c => [c, ""]), ["TỔNG ĐIỂM", ""]]
+    )
+  );
+
+  b.push(
+    new Paragraph({
+      spacing: { ...LINE_SPACING, before: 160, after: 40 },
+      children: [
+        new TextRun({ text: "KẾT QUẢ: ", bold: true }),
+        ...b.checkRun("Đậu", false),
+        new TextRun({ text: "      " }),
+        ...b.checkRun("Rớt", false),
+        new TextRun({
+          text: "   (Đậu: Tổng điểm ≥15đ và không có tiêu chí nào có điểm =1)",
+          italics: true,
+          size: 18,
+        }),
+      ],
+    })
+  );
+
+  b.push(b.bodyText("Nhận xét:", { bold: true, after: 40 }));
+  for (let i = 0; i < 3; i += 1) {
+    b.push(b.bodyText(DOTS.repeat(5), { after: 40 }));
+  }
+
+  b.push(
+    new Table({
+      width: { size: PAGE_W, type: WidthType.DXA },
+      columnWidths: [PAGE_W],
+      rows: [
+        new TableRow({
+          children: [b.headerCell("QUẢN LÝ TRỰC TIẾP", PAGE_W)],
+        }),
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: PAGE_W, type: WidthType.DXA },
+              margins: { top: 55, bottom: 55, left: 105, right: 105 },
+              children: [
+                b.bodyText("Chữ ký:", { after: 40 }),
+                b.spacer(),
+                b.spacer(),
+                b.bodyText("Tên: " + DOTS.repeat(2), { after: 40 }),
+                b.bodyText("Thời gian: " + DOTS.repeat(2), { after: 0 }),
+              ],
+            }),
           ],
         }),
       ],
