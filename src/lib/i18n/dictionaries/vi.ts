@@ -119,6 +119,7 @@ export const vi = {
       printButton: "CT01 – Phiếu thông tin tuyển dụng",
       printButtonCt02: "CT02 – Phiếu cam kết & đăng ký chữ ký mẫu",
       printButtonCt03: "CT03 – Phiếu đánh giá ứng viên",
+      printButtonCt04: "CT04 – Phiếu đánh giá & phê duyệt tuyển dụng",
       newEntryButton: "Nhập thông tin ứng viên mới",
       searchButton: "Tìm kiếm hồ sơ",
       documentChecklistButton: "Danh mục hồ sơ cần nộp",

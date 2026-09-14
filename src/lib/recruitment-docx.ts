@@ -1064,7 +1064,14 @@ export async function buildCt03DocxBlob(
   );
 
   b.push(b.sectionHeading("THÔNG TIN ỨNG VIÊN", false, 120));
-  b.push(b.twoField("Họ và tên", data.fullName, "Số CCCD", data.idNumber));
+  b.push(
+    b.twoField(
+      "Họ và tên",
+      data.fullName,
+      "Số CCCD/CMND",
+      data.idNumber || data.oldIdNumber
+    )
+  );
   b.push(
     b.twoField(
       "Ngày sinh",
@@ -1140,6 +1147,229 @@ export async function buildCt03DocxBlob(
       rows: [
         new TableRow({
           children: [b.headerCell("QUẢN LÝ TRỰC TIẾP", PAGE_W)],
+        }),
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: PAGE_W, type: WidthType.DXA },
+              margins: { top: 55, bottom: 55, left: 105, right: 105 },
+              children: [
+                b.bodyText("Chữ ký:", { after: 40 }),
+                b.spacer(),
+                b.spacer(),
+                b.bodyText("Tên: " + DOTS.repeat(2), { after: 40 }),
+                b.bodyText("Thời gian: " + DOTS.repeat(2), { after: 0 }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    })
+  );
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            size: { width: 12240, height: 15840 },
+            margin: { top: 1300, bottom: 1300, left: 1440, right: 1440 },
+          },
+        },
+        footers: { default: b.footer() },
+        children: b.children,
+      },
+    ],
+    styles: {
+      default: {
+        document: {
+          run: { font: BODY_FONT, size: BODY_SIZE },
+          paragraph: { spacing: LINE_SPACING },
+        },
+      },
+    },
+  });
+
+  return Packer.toBlob(doc);
+}
+
+const CT04_SECTIONS = [
+  {
+    title: "1. Giới thiệu bản thân (2 phút)",
+    startsPage: false,
+    criteria: [
+      "1.1 Khả năng trình bày",
+      "1.2 Cấu trúc & sự rõ ràng",
+      "1.3 Ngoại hình",
+      "1.4 Tác phong (giao tiếp mắt, giọng nói, cử chỉ)",
+    ],
+  },
+  {
+    title: "2. Hỏi đáp (5 phút)",
+    startsPage: false,
+    criteria: [
+      "2.1 Thái độ (xử lý từ chối)",
+      "2.2 Quan hệ xã hội (theo danh sách P50/P100)",
+      "2.3 Quyết tâm và cam kết",
+      "2.4 Thời gian sinh sống tại địa phương",
+      "2.5 Kiến thức/kinh nghiệm bảo hiểm",
+      "2.6 Hoàn cảnh gia đình & sự ủng hộ",
+    ],
+  },
+  {
+    title: "3. Năng lực — chọn 1 chủ đề trình bày (2 phút)",
+    startsPage: true,
+    criteria: [
+      "3.1 Quản lý thời gian",
+      "3.2 Cấu trúc & sự rõ ràng",
+      "3.3 Hiệu quả",
+      "3.4 Tính sáng tạo",
+    ],
+  },
+];
+
+const SCORE_W = 1600;
+
+export async function buildCt04DocxBlob(
+  data: RecruitmentValues,
+  dict: Dictionary
+): Promise<Blob> {
+  const opt = dict.recruitmentForm.options;
+  const s1 = dict.recruitmentForm.section1;
+  const b = new DocxBuilder();
+  const criteriaW = PAGE_W - SCORE_W;
+
+  b.push(
+    b.bannerLine("MVI – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
+    b.bannerLine("CT-04", { color: GRAY }),
+    b.title("PHIẾU ĐÁNH GIÁ & PHÊ DUYỆT TUYỂN DỤNG")
+  );
+
+  b.push(b.sectionHeading("THÔNG TIN ỨNG VIÊN", false, 120));
+  b.push(
+    b.twoField(
+      "Họ và tên",
+      data.fullName,
+      "Số CCCD",
+      data.idNumber || data.oldIdNumber
+    )
+  );
+  b.push(
+    b.twoField(
+      "Ngày sinh",
+      vnDate(data.dateOfBirth),
+      "Giới tính",
+      data.gender === "male"
+        ? s1.genderMale
+        : data.gender === "female"
+          ? s1.genderFemale
+          : ""
+    )
+  );
+  b.push(
+    b.twoField(
+      "Tình trạng hôn nhân",
+      labelFor(opt.maritalStatus, data.maritalStatus),
+      "Học vấn",
+      labelFor(opt.education, data.educationLevel)
+    )
+  );
+  b.push(
+    b.twoField(
+      "Kinh nghiệm làm việc",
+      totalExperienceYears(data.workHistory),
+      "Thu nhập",
+      labelFor(opt.income, data.averageMonthlyIncome)
+    )
+  );
+  b.push(b.field("Người giới thiệu (nếu có)", data.referrerName));
+  b.push(
+    b.twoField(
+      "Người tuyển dụng (nếu có)",
+      data.recruiterName,
+      "Loại hình tuyển dụng",
+      labelFor(opt.agencyType, data.agencyType) ??
+        labelFor(opt.channel, data.channel)
+    )
+  );
+
+  b.push(
+    b.bodyText(
+      "Thang điểm: 1 – Chưa đạt; 2 – Trung bình; 3 – Tốt; 4 – Rất tốt; 5 – Xuất sắc",
+      { italics: true, after: 120 }
+    )
+  );
+
+  for (const section of CT04_SECTIONS) {
+    b.push(
+      new Paragraph({
+        pageBreakBefore: section.startsPage,
+        spacing: { ...LINE_SPACING, after: 60 },
+        children: [new TextRun({ text: section.title, bold: true })],
+      })
+    );
+    b.push(
+      b.dataTable(
+        [criteriaW, SCORE_W],
+        ["CÂU HỎI / TIÊU CHÍ", "ĐIỂM (1–5)"],
+        [...section.criteria.map(c => [c, ""]), ["TỔNG ĐIỂM", ""]]
+      )
+    );
+    b.push(b.spacer());
+  }
+
+  b.push(
+    new Table({
+      width: { size: PAGE_W, type: WidthType.DXA },
+      columnWidths: [criteriaW, SCORE_W],
+      rows: [
+        new TableRow({
+          children: [
+            b.headerCell("TỔNG ĐIỂM (1) + (2) + (3)", criteriaW),
+            b.headerCell("", SCORE_W),
+          ],
+        }),
+      ],
+    })
+  );
+
+  b.push(b.sectionHeading("4. ĐÁNH GIÁ TỔNG THỂ & QUYẾT ĐỊNH", false, 200));
+  b.push(
+    new Paragraph({
+      spacing: { ...LINE_SPACING, after: 40 },
+      children: [
+        new TextRun({ text: "Kết quả: ", bold: true }),
+        ...b.checkRun("Chấp thuận tuyển dụng", false),
+        new TextRun({ text: "      " }),
+        ...b.checkRun("Từ chối", false),
+      ],
+    })
+  );
+  b.push(
+    b.bodyText(
+      "(chấp nhận tuyển dụng: Tổng điểm ≥42đ và không có tiêu chí nào có điểm =1)",
+      { italics: true, size: 18, after: 80 }
+    )
+  );
+  b.push(b.bodyText("Chức danh: " + DOTS.repeat(3), { after: 80 }));
+
+  b.push(
+    b.bodyText("Ghi chú (bắt buộc nếu từ chối ứng viên):", {
+      bold: true,
+      after: 40,
+    })
+  );
+  for (let i = 0; i < 3; i += 1) {
+    b.push(b.bodyText(DOTS.repeat(5), { after: 40 }));
+  }
+
+  b.push(
+    new Table({
+      width: { size: PAGE_W, type: WidthType.DXA },
+      columnWidths: [PAGE_W],
+      rows: [
+        new TableRow({
+          children: [b.headerCell("NGƯỜI PHÊ DUYỆT (SD/SH)", PAGE_W)],
         }),
         new TableRow({
           children: [

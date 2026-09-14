@@ -122,6 +122,7 @@ export const en: typeof vi = {
       printButton: "CT01 – Recruitment information form",
       printButtonCt02: "CT02 – Commitment & signature registration form",
       printButtonCt03: "CT03 – Candidate evaluation form",
+      printButtonCt04: "CT04 – Recruitment evaluation & approval form",
       newEntryButton: "Enter new candidate information",
       searchButton: "Search a record",
       documentChecklistButton: "Required document checklist",

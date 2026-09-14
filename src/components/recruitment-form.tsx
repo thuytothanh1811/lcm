@@ -14,6 +14,7 @@ import { vi } from "@/lib/i18n/dictionaries/vi";
 import {
   buildCt02DocxBlob,
   buildCt03DocxBlob,
+  buildCt04DocxBlob,
   buildRecruitmentDocxBlob,
   sanitizeFilename,
 } from "@/lib/recruitment-docx";
@@ -42,6 +43,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [isPreparingDocx, setIsPreparingDocx] = useState(false);
   const [isPreparingCt02, setIsPreparingCt02] = useState(false);
   const [isPreparingCt03, setIsPreparingCt03] = useState(false);
+  const [isPreparingCt04, setIsPreparingCt04] = useState(false);
   const [missingDocuments, setMissingDocuments] = useState<string[]>([]);
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
@@ -173,6 +175,29 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     }
   };
 
+  const handleDownloadCt04 = async () => {
+    setIsPreparingCt04(true);
+    try {
+      const values = getValues();
+      const blob = await buildCt04DocxBlob(values, t);
+      const filename = `Phieu-danh-gia-phe-duyet-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    } catch {
+      toast.error(t.errors.recruitment.exportFailed);
+    } finally {
+      setIsPreparingCt04(false);
+    }
+  };
+
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
 
@@ -228,6 +253,8 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
         isDownloadingCt2={isPreparingCt02}
         onDownloadCt3={handleDownloadCt03}
         isDownloadingCt3={isPreparingCt03}
+        onDownloadCt4={handleDownloadCt04}
+        isDownloadingCt4={isPreparingCt04}
         locale="vi"
       />
 

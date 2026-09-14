@@ -220,11 +220,6 @@ const TEMPLATE_DOCUMENTS = [
     group: null,
   },
   {
-    file: "CT04_Phieu_danh_gia_phe_duyet_tuyen_dung.docx",
-    label: "CT04 – Phiếu đánh giá phê duyệt tuyển dụng",
-    group: "manager",
-  },
-  {
     file: "F-07_Danh_muc_ho_so_VN.docx",
     label: "F-07 – Danh mục hồ sơ",
     group: null,
@@ -251,6 +246,8 @@ export function RecruitmentFormFields({
   isDownloadingCt2,
   onDownloadCt3,
   isDownloadingCt3,
+  onDownloadCt4,
+  isDownloadingCt4,
   locale,
 }: {
   t: Dictionary;
@@ -270,6 +267,8 @@ export function RecruitmentFormFields({
   isDownloadingCt2?: boolean;
   onDownloadCt3?: () => void;
   isDownloadingCt3?: boolean;
+  onDownloadCt4?: () => void;
+  isDownloadingCt4?: boolean;
   locale?: Language;
 }) {
   const [uploading, setUploading] = useState(false);
@@ -2584,6 +2583,18 @@ export function RecruitmentFormFields({
                 >
                   <IconDownload className="text-muted-foreground size-3.5" />
                   CT03
+                </button>
+              )}
+              {group === "manager" && onDownloadCt4 && (
+                <button
+                  type="button"
+                  disabled={isDownloadingCt4}
+                  onClick={onDownloadCt4}
+                  title={t.pages.recruitmentPublic.printButtonCt04}
+                  className="border-input bg-background hover:bg-muted/50 flex items-center gap-1 rounded border px-2 py-0.5 text-xs font-medium disabled:opacity-60"
+                >
+                  <IconDownload className="text-muted-foreground size-3.5" />
+                  CT04
                 </button>
               )}
               {TEMPLATE_DOCUMENTS.filter(doc => doc.group === group).map(
