@@ -856,14 +856,6 @@ const CT02_COMMITMENTS = [
 
 const DOTS = "…………………………";
 
-// The form stores dates as ISO (yyyy-mm-dd); a printed Vietnamese form wants
-// dd/mm/yyyy. Anything that is not an ISO date is passed through untouched.
-function vnDate(value?: string | null): string {
-  if (!value) return "";
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  return m ? `${m[3]}/${m[2]}/${m[1]}` : value;
-}
-
 export async function buildCt02DocxBlob(
   data: RecruitmentValues
 ): Promise<Blob> {
@@ -880,17 +872,7 @@ export async function buildCt02DocxBlob(
   // always left blank for the candidate to fill in by hand.
   b.push(b.field("Lớp LPFC", DOTS.repeat(2)));
   b.push(
-    new Paragraph({
-      spacing: { ...LINE_SPACING, after: 50 },
-      children: [
-        new TextRun({ text: "Số CCCD: " }),
-        new TextRun({ text: data.idNumber || "" }),
-        new TextRun({ text: "    Ngày cấp: " }),
-        new TextRun({ text: vnDate(data.idIssueDate) }),
-        new TextRun({ text: "    Nơi cấp: " }),
-        new TextRun({ text: data.idIssuePlace || "" }),
-      ],
-    })
+    b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber)
   );
 
   b.push(b.sectionHeading("CAM KẾT CỦA ỨNG VIÊN", false, 120));
