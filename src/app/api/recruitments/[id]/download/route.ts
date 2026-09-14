@@ -3,9 +3,9 @@ import JSZip from "jszip";
 import { adminStorage } from "@/lib/firebase/admin";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import {
+  attachmentName,
   buildRecruitmentWorkbook,
-  sanitizeFilename,
-  uniqueName,
+  candidateSlug,
 } from "@/lib/recruitment-export";
 import { getRecruitmentSubmission } from "@/server/recruitment-actions";
 
@@ -26,6 +26,7 @@ export async function GET(
   const excelBuffer = await buildRecruitmentWorkbook(submission, dict);
   zip.file("cau-tra-loi.xlsx", excelBuffer);
 
+  const candidate = candidateSlug(submission);
   const attachmentsFolder = zip.folder("dinh-kem");
   const usedNames = new Set<string>();
   for (const attachment of submission.attachments ?? []) {
@@ -35,7 +36,7 @@ export async function GET(
         .file(attachment.storagePath)
         .download();
       attachmentsFolder?.file(
-        uniqueName(attachment.fileName, usedNames),
+        attachmentName(attachment, candidate, usedNames),
         buffer
       );
     } catch {
@@ -44,7 +45,7 @@ export async function GET(
   }
 
   const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
-  const filename = `${sanitizeFilename(submission.fullName)}-${submission.id.slice(0, 8)}.zip`;
+  const filename = `Ho-so_${candidate}.zip`;
 
   return new Response(new Uint8Array(zipBuffer), {
     headers: {

@@ -518,6 +518,90 @@ export function sanitizeFilename(name: string): string {
   return cleaned || "recruitment";
 }
 
+/**
+ * Short stand-ins for the document checklist labels, numbered as the checklist
+ * numbers them. The labels themselves carry the instructions to the candidate
+ * ("Hình chụp 2 mặt, hình chụp quét mã QR…") and are far too long to file under.
+ */
+const ATTACHMENT_SLUGS: Record<string, string> = {
+  ct01: "01_Phieu-thong-tin-tuyen-dung",
+  ct02: "02_Phieu-cam-ket-chu-ky-mau",
+  ct03_04: "03_Phieu-danh-gia-phe-duyet",
+  basic_cert: "04_Chung-chi-dai-ly-co-ban",
+  photo_4x6: "05_Anh-4x6",
+  cccd: "06_CCCD",
+  diploma: "07_Bang-cap",
+  phone_proof: "08_Xac-nhan-so-dien-thoai",
+  tax_proof: "09_Xac-nhan-ma-so-thue",
+  bank_qr: "10_QR-tai-khoan-ngan-hang",
+  persistency: "11_Ty-le-duy-tri-hop-dong",
+  mdrt_cert: "12_Giay-chung-nhan-MDRT",
+  achievements: "13_Ho-so-thanh-tich",
+};
+
+/**
+ * "14-09-2026_15h31" in Vietnam time — the server runs in UTC, so the parts
+ * have to be asked for in the timezone the office actually works in. Colons
+ * are illegal in a Windows filename, hence the h.
+ */
+function submittedStamp(submittedAt?: string | null): string | null {
+  if (!submittedAt) return null;
+  const at = new Date(submittedAt);
+  if (Number.isNaN(at.getTime())) return null;
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .formatToParts(at)
+    .reduce<Record<string, string>>((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+  return `${parts.day}-${parts.month}-${parts.year}_${parts.hour}h${parts.minute}`;
+}
+
+/**
+ * Candidate half of an export name, ending in the day they submitted:
+ * "Nguyen-Van-A_079192004567_14-09-2026_15h31". The same candidate can be
+ * submitted more than once, so the stamp keeps two of their folders apart.
+ */
+export function candidateSlug(submission: {
+  fullName?: string | null;
+  idNumber?: string | null;
+  submittedAt?: string | null;
+}): string {
+  const parts = [sanitizeFilename(submission.fullName || "ung-vien")];
+  if (submission.idNumber) parts.push(sanitizeFilename(submission.idNumber));
+  const stamp = submittedStamp(submission.submittedAt);
+  if (stamp) parts.push(stamp);
+  return parts.join("_");
+}
+
+/**
+ * Files arrive named by whatever the candidate's phone called them, which says
+ * nothing about which checklist row they answer. Rename them to the row, then
+ * the candidate, keeping the uploaded extension.
+ */
+export function attachmentName(
+  attachment: { fileName: string; documentType?: string | null },
+  candidate: string,
+  used: Set<string>
+): string {
+  const slug = attachment.documentType
+    ? ATTACHMENT_SLUGS[attachment.documentType]
+    : undefined;
+  if (!slug) return uniqueName(attachment.fileName, used);
+
+  const dot = attachment.fileName.lastIndexOf(".");
+  const ext = dot > 0 ? attachment.fileName.slice(dot) : "";
+  return uniqueName(`${slug}_${candidate}${ext}`, used);
+}
+
 export function uniqueName(fileName: string, used: Set<string>): string {
   if (!used.has(fileName)) {
     used.add(fileName);

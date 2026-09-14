@@ -3,9 +3,9 @@ import JSZip from "jszip";
 import { adminStorage } from "@/lib/firebase/admin";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import {
+  attachmentName,
   buildRecruitmentsWorkbook,
-  sanitizeFilename,
-  uniqueName,
+  candidateSlug,
 } from "@/lib/recruitment-export";
 import { getRecruitmentSubmissionsByIds } from "@/server/recruitment-actions";
 
@@ -39,9 +39,8 @@ export async function POST(request: Request) {
   for (const submission of result.data) {
     if (!submission.attachments?.length) continue;
 
-    const candidateFolder = attachmentsRoot?.folder(
-      `${sanitizeFilename(submission.fullName)}-${submission.id.slice(0, 8)}`
-    );
+    const candidate = candidateSlug(submission);
+    const candidateFolder = attachmentsRoot?.folder(candidate);
     const usedNames = new Set<string>();
     for (const attachment of submission.attachments) {
       try {
@@ -50,7 +49,7 @@ export async function POST(request: Request) {
           .file(attachment.storagePath)
           .download();
         candidateFolder?.file(
-          uniqueName(attachment.fileName, usedNames),
+          attachmentName(attachment, candidate, usedNames),
           buffer
         );
       } catch {
