@@ -713,7 +713,7 @@ export async function buildRecruitmentDocxBlob(
         }),
         new TableRow({
           children: [
-            sigBodyCell(data.fullName, undefined),
+            sigBodyCell(undefined, undefined),
             sigBodyCell(undefined, undefined),
           ],
         }),
