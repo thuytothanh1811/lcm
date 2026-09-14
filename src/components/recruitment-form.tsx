@@ -37,6 +37,17 @@ function todayIso(): string {
   return `${year}-${month}-${day}`;
 }
 
+/**
+ * Every printed form is filed under the candidate it belongs to, so the name
+ * carries the form code, what the form is, and who it is about:
+ * CT03_Phieu-danh-gia-ung-vien_Nguyen-Thi-Thanh-Huong_079192004567.docx
+ */
+function exportFilename(code: string, slug: string, values: RecruitmentValues) {
+  const parts = [code, slug, sanitizeFilename(values.fullName || "ung-vien")];
+  if (values.idNumber) parts.push(sanitizeFilename(values.idNumber));
+  return parts.join("_") + ".docx";
+}
+
 export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [submitted, setSubmitted] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -111,7 +122,11 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     try {
       const values = getValues();
       const blob = await buildRecruitmentDocxBlob(values, t);
-      const filename = `Phieu-thong-tin-tuyen-dung-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
+      const filename = exportFilename(
+        "CT01",
+        "Phieu-thong-tin-tuyen-dung",
+        values
+      );
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -134,7 +149,11 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     try {
       const values = getValues();
       const blob = await buildCt02DocxBlob(values);
-      const filename = `Phieu-cam-ket-chu-ky-mau-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
+      const filename = exportFilename(
+        "CT02",
+        "Phieu-cam-ket-chu-ky-mau",
+        values
+      );
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -157,7 +176,11 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     try {
       const values = getValues();
       const blob = await buildCt03DocxBlob(values, t);
-      const filename = `Phieu-danh-gia-ung-vien-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
+      const filename = exportFilename(
+        "CT03",
+        "Phieu-danh-gia-ung-vien",
+        values
+      );
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -180,7 +203,11 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     try {
       const values = getValues();
       const blob = await buildCt04DocxBlob(values, t);
-      const filename = `Phieu-danh-gia-phe-duyet-${sanitizeFilename(values.fullName || "ung-vien")}.docx`;
+      const filename = exportFilename(
+        "CT04",
+        "Phieu-danh-gia-phe-duyet-tuyen-dung",
+        values
+      );
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
