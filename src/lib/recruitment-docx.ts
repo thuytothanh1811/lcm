@@ -1299,11 +1299,24 @@ export async function buildCt04DocxBlob(
       labelFor(opt.income, data.averageMonthlyIncome)
     )
   );
-  b.push(b.field("Người giới thiệu (nếu có)", data.referrerName));
   b.push(
     b.twoField(
-      "Người tuyển dụng (nếu có)",
-      data.recruiterName,
+      "Mã số người tuyển dụng",
+      data.recruiterCode,
+      "Họ tên người tuyển dụng",
+      data.recruiterName
+    )
+  );
+  b.push(
+    b.twoField(
+      "Mã số người giới thiệu (nếu có)",
+      data.referrerCode,
+      "Họ tên người giới thiệu",
+      data.referrerName
+    )
+  );
+  b.push(
+    b.field(
       "Loại hình tuyển dụng",
       labelFor(opt.agencyType, data.agencyType) ??
         labelFor(opt.channel, data.channel)
