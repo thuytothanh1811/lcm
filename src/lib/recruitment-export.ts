@@ -39,12 +39,37 @@ function withOther(base: string, other: string | undefined) {
   return base;
 }
 
+/**
+ * The form stores dates as ISO (yyyy-mm-dd). A Vietnamese spreadsheet reads
+ * dd/mm/yyyy, and a value already in that shape — or the mm/yyyy the work
+ * history uses — is left exactly as it is.
+ */
+function formatDate(value: string | undefined) {
+  if (!value) return DASH;
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  return iso ? `${iso[3]}/${iso[2]}/${iso[1]}` : value;
+}
+
+/** Submission timestamps are UTC on the server; the office reads them in +07. */
 function formatDateTime(value: string | undefined) {
   if (!value) return DASH;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  })
+    .formatToParts(date)
+    .reduce<Record<string, string>>((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+  return `${parts.day}/${parts.month}/${parts.year} ${parts.hour}:${parts.minute}`;
 }
 
 export function buildAnswerBlocks(
@@ -94,9 +119,9 @@ export function buildAnswerBlocks(
       title: s1.title,
       columns: [
         { label: s1.fullName, getValue: s => s.fullName || DASH },
-        { label: s1.dateOfBirth, getValue: s => s.dateOfBirth || DASH },
+        { label: s1.dateOfBirth, getValue: s => formatDate(s.dateOfBirth) },
         { label: s1.idNumber, getValue: s => s.idNumber || DASH },
-        { label: s1.idIssueDate, getValue: s => s.idIssueDate || DASH },
+        { label: s1.idIssueDate, getValue: s => formatDate(s.idIssueDate) },
         { label: s1.idIssuePlace, getValue: s => s.idIssuePlace || DASH },
         {
           label: s1.genderLabel,
@@ -183,11 +208,11 @@ export function buildAnswerBlocks(
         { label: s2.rehireLabel, getValue: s => yesNo(s2, s.isRehire) },
         {
           label: s2.rehireFromDateLabel,
-          getValue: s => s.rehireFromDate || DASH,
+          getValue: s => formatDate(s.rehireFromDate),
         },
         {
           label: s2.rehireToDateLabel,
-          getValue: s => s.rehireToDate || DASH,
+          getValue: s => formatDate(s.rehireToDate),
         },
         {
           label: s2.rehireChannelLabel,
@@ -264,11 +289,11 @@ export function buildAnswerBlocks(
       columns: [
         {
           label: s5.fromDate,
-          getValue: s => s.workHistory?.[index]?.fromDate || DASH,
+          getValue: s => formatDate(s.workHistory?.[index]?.fromDate),
         },
         {
           label: s5.toDate,
-          getValue: s => s.workHistory?.[index]?.toDate || DASH,
+          getValue: s => formatDate(s.workHistory?.[index]?.toDate),
         },
         {
           label: s5.jobTitle,
@@ -377,7 +402,7 @@ export function buildAnswerBlocks(
           label: s11.consentThirdParty,
           getValue: s => yesNo(s11, s.consentThirdParty ? "yes" : "no"),
         },
-        { label: s11.signDateLabel, getValue: s => s.signDate || DASH },
+        { label: s11.signDateLabel, getValue: s => formatDate(s.signDate) },
       ],
     },
   ];
