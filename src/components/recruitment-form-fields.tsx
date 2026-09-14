@@ -215,14 +215,14 @@ type TRawDivision = {
 
 const TEMPLATE_DOCUMENTS = [
   {
-    file: "F-01_Phieu_thong_tin_tuyen_dung_VN_V2.docx",
-    label: "F-01 – Phiếu thông tin tuyển dụng (V2)",
-    group: null,
-  },
-  {
     file: "CT02_Phieu_cam_ket_chu_ky_mau.docx",
     label: "CT02 – Phiếu cam kết chữ ký mẫu",
     group: "candidate",
+  },
+  {
+    file: "F-01_Phieu_thong_tin_tuyen_dung_VN_V2.docx",
+    label: "F-01 – Phiếu thông tin tuyển dụng (V2)",
+    group: null,
   },
   {
     file: "CT03_Phieu_danh_gia_ung_vien.docx",
@@ -262,6 +262,8 @@ export function RecruitmentFormFields({
   onDownloadAttachment,
   onDownloadCt1,
   isDownloadingCt1,
+  onDownloadCt2,
+  isDownloadingCt2,
   locale,
 }: {
   t: Dictionary;
@@ -277,6 +279,8 @@ export function RecruitmentFormFields({
   // the admin's read-only detail view leaves it out.
   onDownloadCt1?: () => void;
   isDownloadingCt1?: boolean;
+  onDownloadCt2?: () => void;
+  isDownloadingCt2?: boolean;
   locale?: Language;
 }) {
   const [uploading, setUploading] = useState(false);
@@ -2567,6 +2571,18 @@ export function RecruitmentFormFields({
                 >
                   <IconDownload className="text-muted-foreground size-3.5" />
                   CT01
+                </button>
+              )}
+              {group === "candidate" && onDownloadCt2 && (
+                <button
+                  type="button"
+                  disabled={isDownloadingCt2}
+                  onClick={onDownloadCt2}
+                  title={t.pages.recruitmentPublic.printButtonCt02}
+                  className="border-input bg-background hover:bg-muted/50 flex items-center gap-1 rounded border px-2 py-0.5 text-xs font-medium disabled:opacity-60"
+                >
+                  <IconDownload className="text-muted-foreground size-3.5" />
+                  CT02
                 </button>
               )}
               {TEMPLATE_DOCUMENTS.filter(doc => doc.group === group).map(

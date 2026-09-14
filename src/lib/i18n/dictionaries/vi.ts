@@ -117,6 +117,7 @@ export const vi = {
         "Vui lòng điền đầy đủ và chính xác thông tin bên dưới. Các trường có dấu * là bắt buộc.",
       saveButton: "Lưu",
       printButton: "CT01 – Phiếu thông tin tuyển dụng",
+      printButtonCt02: "CT02 – Phiếu cam kết & đăng ký chữ ký mẫu",
       newEntryButton: "Nhập thông tin ứng viên mới",
       searchButton: "Tìm kiếm hồ sơ",
       documentChecklistButton: "Danh mục hồ sơ cần nộp",

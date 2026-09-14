@@ -113,13 +113,13 @@ class DocxBuilder {
    * heading, and if the previous page were full that stray line could spill
    * into a page of its own.
    */
-  sectionHeading(text: string, startsPage = false) {
+  sectionHeading(text: string, startsPage = false, before = 200) {
     return new Paragraph({
       pageBreakBefore: startsPage,
       border: {
         bottom: { style: BorderStyle.SINGLE, size: 6, color: BLUE, space: 2 },
       },
-      spacing: this.sp({ before: startsPage ? 0 : 200, after: 60 }),
+      spacing: this.sp({ before: startsPage ? 0 : before, after: 60 }),
       children: [new TextRun({ text, bold: true, color: BLUE })],
     });
   }
@@ -222,7 +222,7 @@ class DocxBuilder {
     });
   }
 
-  private headerCell(text: string, width: number) {
+  headerCell(text: string, width: number) {
     return new TableCell({
       width: { size: width, type: WidthType.DXA },
       shading: { type: ShadingType.CLEAR, fill: BLUE, color: "auto" },
@@ -811,6 +811,195 @@ export async function buildRecruitmentDocxBlob(
   );
 
   b.useNormalSpacing();
+
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            size: { width: 12240, height: 15840 },
+            margin: { top: 1300, bottom: 1300, left: 1440, right: 1440 },
+          },
+        },
+        footers: { default: b.footer() },
+        children: b.children,
+      },
+    ],
+    styles: {
+      default: {
+        document: {
+          run: { font: BODY_FONT, size: BODY_SIZE },
+          paragraph: { spacing: LINE_SPACING },
+        },
+      },
+    },
+  });
+
+  return Packer.toBlob(doc);
+}
+
+// ===========================================================================
+// CT-02: PHIẾU CAM KẾT & ĐĂNG KÝ CHỮ KÝ MẪU
+// ===========================================================================
+
+// The commitments are legal wording that only ever appears on the printed
+// page — never on screen — so they live here rather than in the dictionary
+// the form reads from.
+const CT02_COMMITMENTS = [
+  "Đồng ý nhận mọi thông báo từ MVI qua SMS/Zalo/email theo số điện thoại và email đã đăng ký trên Phiếu đăng ký Đại lý.",
+  "Cam kết là công dân Việt Nam thường trú tại Việt Nam; có năng lực hành vi dân sự đầy đủ; không đang làm đại lý bảo hiểm cho doanh nghiệp bảo hiểm nhân thọ khác trong thời gian là đại lý bảo hiểm của MVI; không đang bị truy cứu trách nhiệm hình sự, không đang chấp hành hình phạt tù, không đang chấp hành hình phạt cấm hành nghề liên quan đến lĩnh vực bảo hiểm.",
+  "Đồng ý để MVI thu thập, lưu trữ, xử lý dữ liệu cá nhân theo Chính sách Bảo vệ Dữ liệu Cá nhân.",
+  "Đã đọc, hiểu và đồng ý với toàn bộ Điều khoản & Điều kiện, các phụ lục Hợp đồng Đại lý của MVI tại thời điểm ký kết; các sửa đổi, bổ sung sau này (nếu có) sẽ được MVI thông báo và chỉ có hiệu lực với Anh/Chị sau khi được Anh/Chị xác nhận đồng ý theo cơ chế do MVI quy định.",
+  "Chịu trách nhiệm về tính chính xác, trung thực của thông tin đã cung cấp trong hồ sơ này.",
+  "Ứng viên chính thức trở thành đại lý của MVI sau khi hoàn tất chứng chỉ đại lý bảo hiểm theo quy định của Bộ Tài chính và được MVI phê duyệt hồ sơ đăng ký đại lý.",
+];
+
+const DOTS = "…………………………";
+
+// The form stores dates as ISO (yyyy-mm-dd); a printed Vietnamese form wants
+// dd/mm/yyyy. Anything that is not an ISO date is passed through untouched.
+function vnDate(value?: string | null): string {
+  if (!value) return "";
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : value;
+}
+
+export async function buildCt02DocxBlob(
+  data: RecruitmentValues
+): Promise<Blob> {
+  const b = new DocxBuilder();
+
+  b.push(
+    b.bannerLine("MVI – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
+    b.bannerLine("CT-02", { color: GRAY }),
+    b.title("PHIẾU CAM KẾT & ĐĂNG KÝ CHỮ KÝ MẪU")
+  );
+
+  b.push(b.field("Họ và tên ứng viên", data.fullName));
+  // The LPFC class is assigned after the application is processed, so it is
+  // always left blank for the candidate to fill in by hand.
+  b.push(b.field("Lớp LPFC", DOTS.repeat(2)));
+  b.push(
+    new Paragraph({
+      spacing: { ...LINE_SPACING, after: 50 },
+      children: [
+        new TextRun({ text: "Số CCCD: " }),
+        new TextRun({ text: data.idNumber || "" }),
+        new TextRun({ text: "    Ngày cấp: " }),
+        new TextRun({ text: vnDate(data.idIssueDate) }),
+        new TextRun({ text: "    Nơi cấp: " }),
+        new TextRun({ text: data.idIssuePlace || "" }),
+      ],
+    })
+  );
+
+  b.push(b.sectionHeading("CAM KẾT CỦA ỨNG VIÊN", false, 120));
+  for (const text of CT02_COMMITMENTS) {
+    b.push(
+      new Paragraph({
+        spacing: { ...LINE_SPACING, after: 40 },
+        indent: { left: 260, hanging: 260 },
+        children: [new TextRun({ text: "•   " + text })],
+      })
+    );
+  }
+
+  b.push(b.sectionHeading("ĐĂNG KÝ CHỮ KÝ MẪU", false, 120));
+  b.push(
+    b.bodyText(
+      "Tôi đồng ý và xác nhận MVI có thể sử dụng các chữ ký mẫu dưới đây để xác thực và xử lý các giao dịch liên quan đến Hợp đồng Đại lý giữa tôi và MVI.",
+      { after: 40 }
+    )
+  );
+
+  const third = Math.round(PAGE_W / 3);
+  const signatureBox = () =>
+    new TableCell({
+      width: { size: third, type: WidthType.DXA },
+      margins: { top: 55, bottom: 55, left: 105, right: 105 },
+      children: [b.spacer(), b.spacer()],
+    });
+  b.push(
+    new Table({
+      width: { size: PAGE_W, type: WidthType.DXA },
+      columnWidths: [third, third, third],
+      rows: [
+        new TableRow({
+          children: [
+            b.headerCell("Mẫu chữ ký 1 (*)", third),
+            b.headerCell("Mẫu chữ ký 2 (*)", third),
+            b.headerCell("Mẫu chữ ký 3 (*)", third),
+          ],
+        }),
+        new TableRow({
+          children: [signatureBox(), signatureBox(), signatureBox()],
+        }),
+      ],
+    })
+  );
+  b.push(
+    b.bodyText("(*) Phải trùng khớp với chữ ký trên Phiếu đăng ký đại lý.", {
+      italics: true,
+      size: 18,
+      after: 60,
+    })
+  );
+
+  const half = Math.round(PAGE_W / 2);
+  const signOffCell = (heading: string, note?: string) =>
+    new TableCell({
+      width: { size: half, type: WidthType.DXA },
+      margins: { top: 55, bottom: 55, left: 105, right: 105 },
+      children: [
+        new Paragraph({
+          spacing: { ...LINE_SPACING, after: 40 },
+          children: [new TextRun({ text: heading, bold: true })],
+        }),
+        ...(note
+          ? [
+              new Paragraph({
+                spacing: { ...LINE_SPACING, after: 40 },
+                children: [
+                  new TextRun({ text: note, italics: true, size: 18 }),
+                ],
+              }),
+            ]
+          : []),
+        new Paragraph({
+          spacing: { ...LINE_SPACING, after: 40 },
+          children: [
+            new TextRun({
+              text: "(ký, ghi rõ họ tên)",
+              italics: true,
+              size: 18,
+            }),
+          ],
+        }),
+        b.spacer(),
+        b.spacer(),
+        new Paragraph({
+          spacing: LINE_SPACING,
+          children: [new TextRun({ text: "Ngày: " + DOTS })],
+        }),
+      ],
+    });
+  b.push(
+    new Table({
+      width: { size: PAGE_W, type: WidthType.DXA },
+      columnWidths: [half, half],
+      rows: [
+        new TableRow({
+          children: [
+            signOffCell("ỨNG VIÊN"),
+            signOffCell(
+              "XÁC NHẬN CỦA SD/SH",
+              "Tôi xác nhận đã kiểm tra CCCD của ứng viên và ứng viên đã ký trực tiếp vào phiếu này."
+            ),
+          ],
+        }),
+      ],
+    })
+  );
 
   const doc = new Document({
     sections: [
