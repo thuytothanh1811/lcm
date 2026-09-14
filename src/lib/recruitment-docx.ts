@@ -1102,6 +1102,23 @@ export async function buildCt03DocxBlob(
   );
 
   b.push(
+    b.twoField(
+      "Mã số người tuyển dụng",
+      data.recruiterCode,
+      "Họ tên người tuyển dụng",
+      data.recruiterName
+    )
+  );
+  b.push(
+    b.twoField(
+      "Mã số người giới thiệu (nếu có)",
+      data.referrerCode,
+      "Họ tên người giới thiệu",
+      data.referrerName
+    )
+  );
+
+  b.push(
     b.bodyText(
       "Thang điểm: 1 – Rất kém; 2 – Trung bình; 3 – Khá; 4 – Tốt; 5 – Rất tốt",
       { italics: true, after: 120 }
