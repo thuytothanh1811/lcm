@@ -1343,14 +1343,25 @@ export async function buildCt04DocxBlob(
         new TableRow({
           children: [
             b.headerCell("TỔNG ĐIỂM (1) + (2) + (3)", criteriaW),
-            b.headerCell("", SCORE_W),
+            new TableCell({
+              width: { size: SCORE_W, type: WidthType.DXA },
+              margins: { top: 60, bottom: 60, left: 100, right: 100 },
+              children: [
+                new Paragraph({ spacing: LINE_SPACING, children: [] }),
+              ],
+            }),
           ],
         }),
       ],
     })
   );
 
-  b.push(b.sectionHeading("4. ĐÁNH GIÁ TỔNG THỂ & QUYẾT ĐỊNH", false, 200));
+  b.push(
+    b.bodyText("4. Đánh giá tổng thể & quyết định", {
+      bold: true,
+      after: 60,
+    })
+  );
   b.push(
     new Paragraph({
       spacing: { ...LINE_SPACING, after: 40 },
