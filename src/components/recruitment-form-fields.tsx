@@ -215,11 +215,6 @@ type TRawDivision = {
 
 const TEMPLATE_DOCUMENTS = [
   {
-    file: "CT02_Phieu_cam_ket_chu_ky_mau.docx",
-    label: "CT02 – Phiếu cam kết chữ ký mẫu",
-    group: "candidate",
-  },
-  {
     file: "F-01_Phieu_thong_tin_tuyen_dung_VN_V2.docx",
     label: "F-01 – Phiếu thông tin tuyển dụng (V2)",
     group: null,
