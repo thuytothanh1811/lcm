@@ -162,14 +162,14 @@ function TemplateCell({
 }) {
   if (!templates?.length) {
     return (
-      <td className="border-border text-muted-foreground border px-3 py-2 text-center">
+      <td className="border-border text-muted-foreground border px-2 py-2 text-center">
         —
       </td>
     );
   }
   return (
-    <td className="border-border border px-3 py-2">
-      <div className="flex flex-wrap justify-center gap-1.5">
+    <td className="border-border border px-2 py-2">
+      <div className="flex flex-wrap justify-center gap-1">
         {templates.map(t => (
           <a
             key={t.file}
@@ -189,7 +189,7 @@ function TemplateCell({
 
 function ChecklistCell({ applicable }: { applicable: boolean }) {
   return (
-    <td className="border-border px-3 py-2 text-center align-middle">
+    <td className="border-border px-1 py-2 text-center align-middle">
       {applicable ? (
         <span
           aria-hidden
@@ -212,22 +212,22 @@ export function DocumentChecklistTable() {
       <table className="w-full min-w-[560px] border-collapse text-sm">
         <thead>
           <tr className="bg-muted">
-            <th className="border-border w-12 border px-3 py-2 text-center">
+            <th className="border-border w-10 border px-2 py-2 text-center">
               STT
             </th>
             <th className="border-border border px-3 py-2 text-left">
               Hồ sơ / Tài liệu
             </th>
-            <th className="border-border w-20 border px-3 py-2 text-center">
+            <th className="border-border w-14 border px-1 py-2 text-center">
               LP/UM
             </th>
-            <th className="border-border w-20 border px-3 py-2 text-center">
+            <th className="border-border w-14 border px-1 py-2 text-center">
               MDRT
             </th>
-            <th className="border-border w-20 border px-3 py-2 text-center">
+            <th className="border-border w-14 border px-1 py-2 text-center">
               GAD
             </th>
-            <th className="border-border w-32 border px-3 py-2 text-center">
+            <th className="border-border w-28 border px-2 py-2 text-center">
               Tải mẫu
             </th>
           </tr>
@@ -235,7 +235,7 @@ export function DocumentChecklistTable() {
         <tbody>
           {CHECKLIST_ROWS.map(row => (
             <tr key={row.stt} className="border-border border">
-              <td className="border-border border px-3 py-2 text-center">
+              <td className="border-border border px-2 py-2 text-center">
                 {row.stt}
               </td>
               <td className="border-border border px-3 py-2">{row.label}</td>
