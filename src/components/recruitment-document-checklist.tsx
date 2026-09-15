@@ -266,10 +266,7 @@ export function DocumentChecklistTable() {
 export function RecruitmentDocumentChecklist() {
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm md:p-8">
-      <div className="mb-6 flex flex-col items-center gap-1 text-center">
-        <h2 className="text-xl font-semibold">DANH MỤC HỒ SƠ</h2>
-      </div>
-
+      {/* The page already names this section above the card. */}
       <DocumentChecklistTable />
 
       <div className="mt-6 space-y-1 text-sm">
