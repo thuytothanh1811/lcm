@@ -204,8 +204,12 @@ export function buildRecruitmentSchema(
     commitmentEligibility: z.literal(true, {
       error: t.commitmentRequired,
     }),
-    noticeOperational: z.boolean().optional(),
-    noticePrograms: z.boolean().optional(),
+    noticeOperational: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
+    noticePrograms: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
     consentBasicData: z.literal(true, {
       error: t.commitmentRequired,
     }),
