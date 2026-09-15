@@ -1,4 +1,4 @@
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconDownload } from "@tabler/icons-react";
 
 export const CHECKLIST_ROWS: {
   key: string;
@@ -7,6 +7,10 @@ export const CHECKLIST_ROWS: {
   lpUm: boolean;
   mdrt: boolean;
   gad: boolean;
+  // Blank, printable copies under public/templates — only the forms that
+  // are themselves paperwork (CT01–CT04) have one; a photo of a CCCD or a
+  // bank QR code has no template to hand out.
+  templates?: { file: string; label: string }[];
 }[] = [
   {
     key: "ct01",
@@ -15,6 +19,12 @@ export const CHECKLIST_ROWS: {
     lpUm: true,
     mdrt: true,
     gad: true,
+    templates: [
+      {
+        file: "CT01_Phieu-thong-tin-tuyen-dung_mau-trang.docx",
+        label: "CT-01",
+      },
+    ],
   },
   {
     key: "ct02",
@@ -23,6 +33,9 @@ export const CHECKLIST_ROWS: {
     lpUm: true,
     mdrt: true,
     gad: true,
+    templates: [
+      { file: "CT02_Dang-ky-chu-ky-mau_mau-trang.docx", label: "CT-02" },
+    ],
   },
   {
     key: "ct03_04",
@@ -31,6 +44,16 @@ export const CHECKLIST_ROWS: {
     lpUm: true,
     mdrt: true,
     gad: true,
+    templates: [
+      {
+        file: "CT03_Phieu-danh-gia-ung-vien_mau-trang.docx",
+        label: "CT-03",
+      },
+      {
+        file: "CT04_Phieu-danh-gia-phe-duyet-tuyen-dung_mau-trang.docx",
+        label: "CT-04",
+      },
+    ],
   },
   {
     key: "basic_cert",
@@ -132,6 +155,38 @@ export function visibleChecklistRows(
   );
 }
 
+function TemplateCell({
+  templates,
+}: {
+  templates?: { file: string; label: string }[];
+}) {
+  if (!templates?.length) {
+    return (
+      <td className="border-border text-muted-foreground border px-3 py-2 text-center">
+        —
+      </td>
+    );
+  }
+  return (
+    <td className="border-border border px-3 py-2">
+      <div className="flex flex-wrap justify-center gap-1.5">
+        {templates.map(t => (
+          <a
+            key={t.file}
+            href={`/templates/${t.file}`}
+            download
+            title={`Tải mẫu trắng ${t.label}`}
+            className="border-input bg-background hover:bg-muted/50 flex items-center gap-1 rounded border px-2 py-0.5 text-xs font-medium whitespace-nowrap"
+          >
+            <IconDownload className="text-muted-foreground size-3.5" />
+            {t.label}
+          </a>
+        ))}
+      </div>
+    </td>
+  );
+}
+
 function ChecklistCell({ applicable }: { applicable: boolean }) {
   return (
     <td className="border-border px-3 py-2 text-center align-middle">
@@ -172,6 +227,9 @@ export function DocumentChecklistTable() {
             <th className="border-border w-20 border px-3 py-2 text-center">
               GAD
             </th>
+            <th className="border-border w-32 border px-3 py-2 text-center">
+              Tải mẫu
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -184,6 +242,7 @@ export function DocumentChecklistTable() {
               <ChecklistCell applicable={row.lpUm} />
               <ChecklistCell applicable={row.mdrt} />
               <ChecklistCell applicable={row.gad} />
+              <TemplateCell templates={row.templates} />
             </tr>
           ))}
         </tbody>
