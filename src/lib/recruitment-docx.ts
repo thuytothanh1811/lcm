@@ -586,7 +586,7 @@ export async function buildRecruitmentDocxBlob(
       [f.section4.same, f.section4.different],
       labelsFor(
         { same: f.section4.same, different: f.section4.different },
-        data.sameAsPermanentAddress ? [data.sameAsPermanentAddress] : ["same"]
+        data.sameAsPermanentAddress ? [data.sameAsPermanentAddress] : []
       )
     )
   );
@@ -758,7 +758,7 @@ export async function buildRecruitmentDocxBlob(
       [s8.no, s8.yes],
       labelsFor(
         { no: s8.no, yes: s8.yes },
-        data.hasRelativeAtCompany === "yes" ? ["yes"] : ["no"]
+        data.hasRelativeAtCompany ? [data.hasRelativeAtCompany] : []
       )
     )
   );
