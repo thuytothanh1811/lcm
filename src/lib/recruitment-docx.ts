@@ -1,6 +1,7 @@
 import {
   AlignmentType,
   BorderStyle,
+  LeaderType,
   Document,
   Footer,
   LineRuleType,
@@ -10,6 +11,7 @@ import {
   Table,
   TableCell,
   TableRow,
+  TabStopType,
   TextRun,
   VerticalAlign,
   WidthType,
@@ -153,11 +155,34 @@ class DocxBuilder {
   field(label: string, value?: string | null, after = 50) {
     return new Paragraph({
       spacing: this.sp({ after }),
+      ...DocxBuilder.writeOn(PAGE_W, value),
       children: [
         new TextRun({ text: printableLabel(label) + ": " }),
-        new TextRun({ text: value || "" }),
+        ...DocxBuilder.answer(value),
       ],
     });
+  }
+
+  /**
+   * Tab stop that rules the rest of the line when there is no answer. It
+   * stops a little short of the edge: a right tab sitting exactly on the
+   * margin can tip the rule onto a second line.
+   */
+  private static writeOn(width: number, value?: string | null) {
+    if (value) return {};
+    return {
+      tabStops: [
+        {
+          type: TabStopType.RIGHT,
+          position: Math.max(width - 60, 200),
+          leader: LeaderType.DOT,
+        },
+      ],
+    };
+  }
+
+  private static answer(value?: string | null) {
+    return value ? [new TextRun({ text: value })] : [new TextRun({ text: "	" })];
   }
 
   /**
@@ -187,9 +212,10 @@ class DocxBuilder {
         children: [
           new Paragraph({
             spacing: this.sp({ after: 0 }),
+            ...DocxBuilder.writeOn(half - (last ? 0 : 160), value),
             children: [
               new TextRun({ text: printableLabel(label) + ": " }),
-              new TextRun({ text: value || "" }),
+              ...DocxBuilder.answer(value),
             ],
           }),
         ],
@@ -1086,7 +1112,7 @@ export async function buildCt02DocxBlob(
   b.push(b.field("Họ và tên ứng viên", data.fullName, 320));
   // The LPFC class is assigned after the application is processed, so it is
   // always left blank for the candidate to fill in by hand.
-  b.push(b.field("Lớp LPFC", DOTS.repeat(2), 320));
+  b.push(b.field("Lớp LPFC", undefined, 320));
   b.push(
     b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber, 360)
   );
@@ -1102,8 +1128,8 @@ export async function buildCt02DocxBlob(
   const signatureBox = () =>
     new TableCell({
       width: { size: third, type: WidthType.DXA },
-      margins: { top: 55, bottom: 55, left: 105, right: 105 },
-      children: [b.spacer(), b.spacer(), b.spacer()],
+      margins: { top: 110, bottom: 110, left: 105, right: 105 },
+      children: [b.spacer(), b.spacer(), b.spacer(), b.spacer(), b.spacer()],
     });
   b.push(
     new Table({
@@ -1139,19 +1165,19 @@ export async function buildCt02DocxBlob(
       margins: { top: 55, bottom: 55, left: 105, right: 105 },
       children: [
         new Paragraph({
-          spacing: { ...LINE_SPACING, after: 40 },
+          spacing: { ...LINE_SPACING, after: 100 },
           children: [new TextRun({ text: heading, bold: true })],
         }),
         ...(note
           ? [
               new Paragraph({
-                spacing: { ...LINE_SPACING, after: 40 },
+                spacing: { ...LINE_SPACING, after: 100 },
                 children: [new TextRun({ text: note, italics: true })],
               }),
             ]
           : []),
         new Paragraph({
-          spacing: { ...LINE_SPACING, after: 40 },
+          spacing: { ...LINE_SPACING, after: 120 },
           children: [
             new TextRun({
               text: "(ký, ghi rõ họ tên)",
@@ -1159,6 +1185,8 @@ export async function buildCt02DocxBlob(
             }),
           ],
         }),
+        b.spacer(),
+        b.spacer(),
         b.spacer(),
         b.spacer(),
         new Paragraph({
