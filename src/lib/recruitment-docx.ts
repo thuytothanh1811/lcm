@@ -1031,18 +1031,18 @@ export async function buildCt02DocxBlob(
   );
 
   b.push(b.spacer());
-  b.push(b.field("Họ và tên ứng viên", data.fullName, 220));
+  b.push(b.field("Họ và tên ứng viên", data.fullName, 320));
   // The LPFC class is assigned after the application is processed, so it is
   // always left blank for the candidate to fill in by hand.
-  b.push(b.field("Lớp LPFC", DOTS.repeat(2), 220));
+  b.push(b.field("Lớp LPFC", DOTS.repeat(2), 320));
   b.push(
-    b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber, 260)
+    b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber, 360)
   );
 
   b.push(
     b.bodyText(
       "Tôi đồng ý và xác nhận MVI có thể sử dụng các chữ ký mẫu dưới đây để xác thực và xử lý các giao dịch liên quan đến Hợp đồng Đại lý giữa tôi và MVI.",
-      { after: 200 }
+      { after: 280 }
     )
   );
 
