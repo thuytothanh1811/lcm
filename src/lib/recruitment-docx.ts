@@ -10,7 +10,6 @@ import {
   Table,
   TableCell,
   TableRow,
-  TabStopType,
   TextRun,
   VerticalAlign,
   WidthType,
@@ -161,6 +160,13 @@ class DocxBuilder {
     });
   }
 
+  /**
+   * Two fields side by side. A tab stop used to separate them, which held
+   * only while the first answer stayed short — a long one pushed past the
+   * stop and dropped the second field onto a line of its own. Each half now
+   * owns a column of an invisible table, so a long answer wraps inside its
+   * own column and the pair stays aligned whatever is typed into it.
+   */
   twoField(
     label1: string,
     value1: string | undefined | null,
@@ -169,15 +175,42 @@ class DocxBuilder {
     after = 50
   ) {
     const half = Math.round(PAGE_W / 2);
-    return new Paragraph({
-      tabStops: [{ type: TabStopType.LEFT, position: half + 120 }],
-      spacing: this.sp({ after }),
-      children: [
-        new TextRun({ text: printableLabel(label1) + ": " }),
-        new TextRun({ text: value1 || "" }),
-        new TextRun({ text: "\t" }),
-        new TextRun({ text: printableLabel(label2) + ": " }),
-        new TextRun({ text: value2 || "" }),
+    const noBorder = { style: BorderStyle.NONE, size: 0, color: "FFFFFF" };
+    const cell = (
+      label: string,
+      value: string | undefined | null,
+      last: boolean
+    ) =>
+      new TableCell({
+        width: { size: half, type: WidthType.DXA },
+        margins: { top: 0, bottom: 0, left: 0, right: last ? 0 : 160 },
+        children: [
+          new Paragraph({
+            spacing: this.sp({ after: 0 }),
+            children: [
+              new TextRun({ text: printableLabel(label) + ": " }),
+              new TextRun({ text: value || "" }),
+            ],
+          }),
+        ],
+      });
+    return new Table({
+      width: { size: PAGE_W, type: WidthType.DXA },
+      columnWidths: [half, half],
+      borders: {
+        top: noBorder,
+        bottom: noBorder,
+        left: noBorder,
+        right: noBorder,
+        insideHorizontal: noBorder,
+        insideVertical: noBorder,
+      },
+      margins: { bottom: after },
+      rows: [
+        new TableRow({
+          cantSplit: true,
+          children: [cell(label1, value1, false), cell(label2, value2, true)],
+        }),
       ],
     });
   }
