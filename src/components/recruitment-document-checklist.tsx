@@ -22,7 +22,7 @@ export const CHECKLIST_ROWS: {
     templates: [
       {
         file: "CT01_Phieu-thong-tin-tuyen-dung_mau-trang.docx",
-        label: "CT-01",
+        label: "CT01",
       },
     ],
   },
@@ -34,7 +34,7 @@ export const CHECKLIST_ROWS: {
     mdrt: true,
     gad: true,
     templates: [
-      { file: "CT02_Dang-ky-chu-ky-mau_mau-trang.docx", label: "CT-02" },
+      { file: "CT02_Dang-ky-chu-ky-mau_mau-trang.docx", label: "CT02" },
     ],
   },
   {
@@ -47,11 +47,11 @@ export const CHECKLIST_ROWS: {
     templates: [
       {
         file: "CT03_Phieu-danh-gia-ung-vien_mau-trang.docx",
-        label: "CT-03",
+        label: "CT03",
       },
       {
         file: "CT04_Phieu-danh-gia-phe-duyet-tuyen-dung_mau-trang.docx",
-        label: "CT-04",
+        label: "CT04",
       },
     ],
   },
