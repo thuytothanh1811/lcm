@@ -1158,6 +1158,11 @@ export async function buildCt02DocxBlob(
   );
 
   const half = Math.round(PAGE_W / 2);
+  // The SD/SH cell carries a note the candidate's cell does not, and the note
+  // wraps to three lines. Left as-is, the candidate's 'Ngày' line would sit
+  // three lines higher than the SD/SH one — pad with the same number of
+  // blank lines so both land at the same height regardless of note length.
+  const NOTE_LINES = 3;
   const signOffCell = (heading: string, note?: string) =>
     new TableCell({
       width: { size: half, type: WidthType.DXA },
@@ -1174,7 +1179,17 @@ export async function buildCt02DocxBlob(
                 children: [new TextRun({ text: note, italics: true })],
               }),
             ]
-          : []),
+          : Array.from(
+              { length: NOTE_LINES },
+              (_, i) =>
+                new Paragraph({
+                  spacing: {
+                    ...LINE_SPACING,
+                    after: i === NOTE_LINES - 1 ? 100 : 0,
+                  },
+                  children: [],
+                })
+            )),
         new Paragraph({
           spacing: { ...LINE_SPACING, after: 120 },
           children: [
