@@ -2566,7 +2566,7 @@ export function RecruitmentFormFields({
           <FieldLegend className="mb-0">
             {t.recruitmentForm.section11.pdpdHeading}
           </FieldLegend>
-          <div className="bg-muted text-muted-foreground flex flex-col gap-2 rounded-lg p-4 text-sm">
+          <div className="bg-muted text-muted-foreground flex flex-col gap-2 rounded-lg p-4 text-justify text-sm">
             <p className="italic">{t.recruitmentForm.section11.pdpdIntro}</p>
             {t.recruitmentForm.section11.pdpdInfo.map(item => (
               <div key={item.label} className="flex flex-col gap-1">
