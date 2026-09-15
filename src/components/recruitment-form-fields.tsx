@@ -1254,12 +1254,18 @@ export function RecruitmentFormFields({
                 control={control}
                 name="agencyType"
                 render={({ field }) => (
-                  <Field data-invalid={!!errors.agencyType}>
+                  <Field
+                    data-invalid={!!errors.agencyType}
+                    className="sm:col-span-2"
+                  >
                     <FieldLabel>
                       {t.recruitmentForm.section2.agencyTypeLabel}
                     </FieldLabel>
+                    <FieldDescription>
+                      {t.recruitmentForm.section2.agencyTypeNotice}
+                    </FieldDescription>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full sm:max-w-sm">
                         <SelectValue
                           placeholder={
                             t.recruitmentForm.section2.agencyTypePlaceholder

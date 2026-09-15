@@ -471,7 +471,9 @@ export const vi = {
       channelLabel: "Kênh *",
       channelPlaceholder: "Chọn kênh",
       agencyTypeLabel:
-        "Chương trình phát triển đại lý mong muốn tham gia nhằm mục đích định hướng đào tạo, phát triển và hỗ trợ hoạt động đại lý. Nội dung này không được hiểu là căn cứ xác lập quan hệ lao động giữa Công ty và ứng viên hoặc đại lý (nếu Agency) *",
+        "Chương trình phát triển đại lý mong muốn tham gia (nếu Agency) *",
+      agencyTypeNotice:
+        "Nhằm mục đích định hướng đào tạo, phát triển và hỗ trợ hoạt động đại lý. Nội dung này không được hiểu là căn cứ xác lập quan hệ lao động giữa Công ty và ứng viên hoặc đại lý.",
       agencyTypePlaceholder: "Chọn loại hình",
       positionLabel: "Vị trí ứng tuyển *",
       specifyOther: "Vui lòng ghi rõ",

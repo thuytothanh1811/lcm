@@ -471,8 +471,9 @@ export const en: typeof vi = {
       title: "Recruitment information",
       channelLabel: "Channel *",
       channelPlaceholder: "Select a channel",
-      agencyTypeLabel:
-        "Agent development programme the candidate wishes to join, for the purpose of training, development and support of agency activity. This is not to be construed as establishing an employment relationship between the Company and the candidate or agent (if Agency) *",
+      agencyTypeLabel: "Agent development programme to join (if Agency) *",
+      agencyTypeNotice:
+        "For the purpose of steering training, development and support of agency activity. This is not to be construed as establishing an employment relationship between the Company and the candidate or agent.",
       agencyTypePlaceholder: "Select a type",
       positionLabel: "Position applied *",
       specifyOther: "Please specify",
