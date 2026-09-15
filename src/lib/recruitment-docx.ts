@@ -7,7 +7,6 @@ import {
   Packer,
   PageNumber,
   Paragraph,
-  ShadingType,
   Table,
   TableCell,
   TableRow,
@@ -29,7 +28,6 @@ const BLUE = "004A7D";
 const RED = "C0392B";
 const GRAY = "595959";
 const FOOTER_GRAY = "808080";
-const WHITE = "FFFFFF";
 const PAGE_W = 9360; // usable width (12240 - 1440*2)
 const BODY_FONT = "Noto Sans";
 const BODY_SIZE = 22; // 11pt
@@ -242,14 +240,13 @@ class DocxBuilder {
   headerCell(text: string, width: number) {
     return new TableCell({
       width: { size: width, type: WidthType.DXA },
-      shading: { type: ShadingType.CLEAR, fill: BLUE, color: "auto" },
       verticalAlign: VerticalAlign.CENTER,
       margins: { top: 60, bottom: 60, left: 100, right: 100 },
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
           spacing: this.sp(),
-          children: [new TextRun({ text, bold: true, color: WHITE })],
+          children: [new TextRun({ text, bold: true, color: NAVY })],
         }),
       ],
     });
@@ -808,14 +805,13 @@ export async function buildRecruitmentDocxBlob(
   const sigHeaderCell = (text: string, declaration?: string) =>
     new TableCell({
       width: { size: sigWidth, type: WidthType.DXA },
-      shading: { type: ShadingType.CLEAR, fill: BLUE, color: "auto" },
       verticalAlign: VerticalAlign.CENTER,
       margins: { top: 55, bottom: 55, left: 105, right: 105 },
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
           spacing: { ...LINE_SPACING, after: declaration ? 60 : 0 },
-          children: [new TextRun({ text, bold: true, color: WHITE })],
+          children: [new TextRun({ text, bold: true, color: NAVY })],
         }),
         // What the manager is attesting to belongs above their signature, not
         // in a separate paragraph they can sign without reading.
@@ -828,7 +824,7 @@ export async function buildRecruitmentDocxBlob(
                   new TextRun({
                     text: declaration,
                     italics: true,
-                    color: WHITE,
+                    color: NAVY,
                   }),
                 ],
               }),
@@ -1020,15 +1016,6 @@ export async function buildRecruitmentDocxBlob(
 // The commitments are legal wording that only ever appears on the printed
 // page — never on screen — so they live here rather than in the dictionary
 // the form reads from.
-const CT02_COMMITMENTS = [
-  "Đồng ý nhận mọi thông báo từ MVI qua SMS/Zalo/email theo số điện thoại và email đã đăng ký trên Phiếu đăng ký Đại lý.",
-  "Cam kết là công dân Việt Nam thường trú tại Việt Nam; có năng lực hành vi dân sự đầy đủ; không đang làm đại lý bảo hiểm cho doanh nghiệp bảo hiểm nhân thọ khác trong thời gian là đại lý bảo hiểm của MVI; không đang bị truy cứu trách nhiệm hình sự, không đang chấp hành hình phạt tù, không đang chấp hành hình phạt cấm hành nghề liên quan đến lĩnh vực bảo hiểm.",
-  "Đồng ý để MVI thu thập, lưu trữ, xử lý dữ liệu cá nhân theo Chính sách Bảo vệ Dữ liệu Cá nhân.",
-  "Đã đọc, hiểu và đồng ý với toàn bộ Điều khoản & Điều kiện, các phụ lục Hợp đồng Đại lý của MVI tại thời điểm ký kết; các sửa đổi, bổ sung sau này (nếu có) sẽ được MVI thông báo và chỉ có hiệu lực với Anh/Chị sau khi được Anh/Chị xác nhận đồng ý theo cơ chế do MVI quy định.",
-  "Chịu trách nhiệm về tính chính xác, trung thực của thông tin đã cung cấp trong hồ sơ này.",
-  "Ứng viên chính thức trở thành đại lý của MVI sau khi hoàn tất chứng chỉ đại lý bảo hiểm theo quy định của Bộ Tài chính và được MVI phê duyệt hồ sơ đăng ký đại lý.",
-];
-
 const DOTS = "…………………………";
 
 export async function buildCt02DocxBlob(
@@ -1039,7 +1026,7 @@ export async function buildCt02DocxBlob(
   b.push(
     b.bannerLine("MVI – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
     b.bannerLine("CT-02", { color: GRAY }),
-    b.title("PHIẾU CAM KẾT & ĐĂNG KÝ CHỮ KÝ MẪU")
+    b.title("ĐĂNG KÝ CHỮ KÝ MẪU")
   );
 
   b.push(b.field("Họ và tên ứng viên", data.fullName));
@@ -1050,19 +1037,6 @@ export async function buildCt02DocxBlob(
     b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber)
   );
 
-  b.push(b.sectionHeading("CAM KẾT CỦA ỨNG VIÊN", false, 120));
-  for (const text of CT02_COMMITMENTS) {
-    b.push(
-      new Paragraph({
-        alignment: AlignmentType.BOTH,
-        spacing: { ...LINE_SPACING, after: 40 },
-        indent: { left: 260, hanging: 260 },
-        children: [new TextRun({ text: "•   " + text })],
-      })
-    );
-  }
-
-  b.push(b.sectionHeading("ĐĂNG KÝ CHỮ KÝ MẪU", false, 120));
   b.push(
     b.bodyText(
       "Tôi đồng ý và xác nhận MVI có thể sử dụng các chữ ký mẫu dưới đây để xác thực và xử lý các giao dịch liên quan đến Hợp đồng Đại lý giữa tôi và MVI.",
@@ -1075,7 +1049,7 @@ export async function buildCt02DocxBlob(
     new TableCell({
       width: { size: third, type: WidthType.DXA },
       margins: { top: 55, bottom: 55, left: 105, right: 105 },
-      children: [b.spacer(), b.spacer()],
+      children: [b.spacer(), b.spacer(), b.spacer()],
     });
   b.push(
     new Table({
@@ -1147,7 +1121,7 @@ export async function buildCt02DocxBlob(
             signOffCell("ỨNG VIÊN"),
             signOffCell(
               "XÁC NHẬN CỦA SD/SH",
-              "Tôi xác nhận đã kiểm tra CCCD của ứng viên và ứng viên đã ký trực tiếp vào phiếu này."
+              "Tôi xác nhận đã kiểm tra CCCD/CMND của ứng viên và ứng viên đã ký trực tiếp vào phiếu này."
             ),
           ],
         }),

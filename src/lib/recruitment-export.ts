@@ -547,7 +547,7 @@ export function sanitizeFilename(name: string): string {
  */
 const ATTACHMENT_SLUGS: Record<string, string> = {
   ct01: "01_Phieu-thong-tin-tuyen-dung",
-  ct02: "02_Phieu-cam-ket-chu-ky-mau",
+  ct02: "02_Dang-ky-chu-ky-mau",
   ct03_04: "03_Phieu-danh-gia-phe-duyet",
   basic_cert: "04_Chung-chi-dai-ly-co-ban",
   photo_4x6: "05_Anh-4x6",

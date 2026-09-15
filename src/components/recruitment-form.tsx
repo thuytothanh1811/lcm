@@ -156,11 +156,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     try {
       const values = getValues();
       const blob = await buildCt02DocxBlob(values);
-      const filename = exportFilename(
-        "CT02",
-        "Phieu-cam-ket-chu-ky-mau",
-        values
-      );
+      const filename = exportFilename("CT02", "Dang-ky-chu-ky-mau", values);
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
