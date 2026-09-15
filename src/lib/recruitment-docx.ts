@@ -246,6 +246,7 @@ class DocxBuilder {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
+          keepNext: true,
           spacing: this.sp({ after: declaration ? 60 : 0 }),
           children: [new TextRun({ text, bold: true, color: NAVY })],
         }),
@@ -288,8 +289,8 @@ class DocxBuilder {
       columnWidths: colWidths,
       rows: [
         new TableRow({
-          tableHeader: true,
           cantSplit: true,
+          tableHeader: true,
           children: headers.map((h, i) => this.headerCell(h, colWidths[i])),
         }),
         ...rows.map(
@@ -826,6 +827,7 @@ export async function buildRecruitmentDocxBlob(
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
+          keepNext: true,
           spacing: { ...LINE_SPACING, after: declaration ? 60 : 0 },
           children: [new TextRun({ text, bold: true, color: NAVY })],
         }),
@@ -883,12 +885,14 @@ export async function buildRecruitmentDocxBlob(
       columnWidths: [sigWidth, sigWidth],
       rows: [
         new TableRow({
+          cantSplit: true,
           children: [
             sigHeaderCell("ỨNG VIÊN"),
             sigHeaderCell("QUẢN LÝ TRỰC TIẾP", s11.managerDeclaration),
           ],
         }),
         new TableRow({
+          cantSplit: true,
           children: [
             sigBodyCell(undefined, undefined),
             sigBodyCell(undefined, undefined),
@@ -1074,6 +1078,7 @@ export async function buildCt02DocxBlob(
       columnWidths: [third, third, third],
       rows: [
         new TableRow({
+          cantSplit: true,
           children: [
             b.headerCell("Mẫu chữ ký 1 (*)", third),
             b.headerCell("Mẫu chữ ký 2 (*)", third),
@@ -1081,6 +1086,7 @@ export async function buildCt02DocxBlob(
           ],
         }),
         new TableRow({
+          cantSplit: true,
           children: [signatureBox(), signatureBox(), signatureBox()],
         }),
       ],
@@ -1134,6 +1140,7 @@ export async function buildCt02DocxBlob(
       columnWidths: [half, half],
       rows: [
         new TableRow({
+          cantSplit: true,
           children: [
             signOffCell("ỨNG VIÊN"),
             signOffCell(
@@ -1333,11 +1340,13 @@ export async function buildCt03DocxBlob(
       columnWidths: [PAGE_W],
       rows: [
         new TableRow({
+          cantSplit: true,
           children: [
             b.headerCell("QUẢN LÝ TRỰC TIẾP", PAGE_W, s11.managerDeclaration),
           ],
         }),
         new TableRow({
+          cantSplit: true,
           children: [
             new TableCell({
               width: { size: PAGE_W, type: WidthType.DXA },
@@ -1526,6 +1535,7 @@ export async function buildCt04DocxBlob(
       columnWidths: [criteriaW, SCORE_W],
       rows: [
         new TableRow({
+          cantSplit: true,
           children: [
             b.headerCell("TỔNG ĐIỂM (1) + (2) + (3)", criteriaW),
             new TableCell({
@@ -1582,9 +1592,11 @@ export async function buildCt04DocxBlob(
       columnWidths: [PAGE_W],
       rows: [
         new TableRow({
+          cantSplit: true,
           children: [b.headerCell("NGƯỜI PHÊ DUYỆT (SD/SH)", PAGE_W)],
         }),
         new TableRow({
+          cantSplit: true,
           children: [
             new TableCell({
               width: { size: PAGE_W, type: WidthType.DXA },
