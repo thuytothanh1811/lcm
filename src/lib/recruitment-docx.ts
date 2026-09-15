@@ -1434,6 +1434,7 @@ export async function buildCt04DocxBlob(
 ): Promise<Blob> {
   const opt = dict.recruitmentForm.options;
   const s1 = dict.recruitmentForm.section1;
+  const s11 = dict.recruitmentForm.section11;
   const b = new DocxBuilder();
   const criteriaW = PAGE_W - SCORE_W;
 
@@ -1449,7 +1450,8 @@ export async function buildCt04DocxBlob(
       "Họ và tên",
       data.fullName,
       "Số CCCD",
-      data.idNumber || data.oldIdNumber
+      data.idNumber || data.oldIdNumber,
+      200
     )
   );
   b.push(
@@ -1461,7 +1463,8 @@ export async function buildCt04DocxBlob(
         ? s1.genderMale
         : data.gender === "female"
           ? s1.genderFemale
-          : ""
+          : "",
+      200
     )
   );
   b.push(
@@ -1469,7 +1472,8 @@ export async function buildCt04DocxBlob(
       "Tình trạng hôn nhân",
       labelFor(opt.maritalStatus, data.maritalStatus),
       "Học vấn",
-      labelFor(opt.education, data.educationLevel)
+      labelFor(opt.education, data.educationLevel),
+      200
     )
   );
   b.push(
@@ -1477,7 +1481,8 @@ export async function buildCt04DocxBlob(
       "Kinh nghiệm làm việc",
       totalExperienceYears(data.workHistory),
       "Thu nhập",
-      labelFor(opt.income, data.averageMonthlyIncome)
+      labelFor(opt.income, data.averageMonthlyIncome),
+      200
     )
   );
   b.push(
@@ -1485,7 +1490,8 @@ export async function buildCt04DocxBlob(
       "Mã số người tuyển dụng",
       data.recruiterCode,
       "Họ tên người tuyển dụng",
-      data.recruiterName
+      data.recruiterName,
+      200
     )
   );
   b.push(
@@ -1493,14 +1499,16 @@ export async function buildCt04DocxBlob(
       "Mã số người giới thiệu (nếu có)",
       data.referrerCode,
       "Họ tên người giới thiệu",
-      data.referrerName
+      data.referrerName,
+      200
     )
   );
   b.push(
     b.field(
       "Loại hình tuyển dụng",
       labelFor(opt.agencyType, data.agencyType) ??
-        labelFor(opt.channel, data.channel)
+        labelFor(opt.channel, data.channel),
+      200
     )
   );
 
@@ -1593,7 +1601,13 @@ export async function buildCt04DocxBlob(
       rows: [
         new TableRow({
           cantSplit: true,
-          children: [b.headerCell("NGƯỜI PHÊ DUYỆT (SD/SH)", PAGE_W)],
+          children: [
+            b.headerCell(
+              "NGƯỜI PHÊ DUYỆT (SD/SH)",
+              PAGE_W,
+              s11.managerDeclaration
+            ),
+          ],
         }),
         new TableRow({
           cantSplit: true,
