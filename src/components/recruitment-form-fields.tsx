@@ -2643,6 +2643,34 @@ export function RecruitmentFormFields({
             {t.recruitmentForm.section11.consentThirdPartyNote}
           </p>
 
+          <FieldSeparator />
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="commitmentReviewedEntry"
+              render={({ field }) => (
+                <Checkbox
+                  id="commitmentReviewedEntry"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel
+              htmlFor="commitmentReviewedEntry"
+              className="font-normal"
+            >
+              {t.recruitmentForm.section11.reviewedEntry}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.commitmentReviewedEntry
+                ? [errors.commitmentReviewedEntry]
+                : undefined
+            }
+          />
+
           <Field data-invalid={!!errors.signDate}>
             <FieldLabel htmlFor="signDate">
               {t.recruitmentForm.section11.signDateLabel}

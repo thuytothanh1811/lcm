@@ -741,6 +741,13 @@ export async function buildRecruitmentDocxBlob(
     );
   }
   b.push(b.bodyText(s11.consentThirdPartyNote, { size: 18, after: 40 }));
+  b.push(
+    new Paragraph({
+      spacing: { before: 120, after: 60, ...LINE_SPACING },
+      indent: { left: 260 },
+      children: b.checkRun(s11.reviewedEntry, !!data.commitmentReviewedEntry),
+    })
+  );
   b.push(b.field("Ngày ký", "…………………………………………………"));
   b.push(b.spacer(), b.spacer());
 

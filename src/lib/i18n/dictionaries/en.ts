@@ -658,6 +658,8 @@ export const en: typeof vi = {
         "Recipients are responsible for applying personal-data protection measures required by law and/or by the data protection agreement signed with the Company.",
       managerDeclaration:
         "I confirm that I met the candidate in person, checked their identity documents and reviewed the application under the Company recruitment process. To the best of my knowledge, the information and documents the candidate provided show no sign of forgery or clear inaccuracy. I undertake to comply with the Company rules on recruitment and personal data protection.",
+      reviewedEntry:
+        "The candidate confirms having read, checked and agreed to all information entered on their behalf by the direct manager before signing this form.",
       methodLabel: "Confirmation method *",
       handwritten: "Handwritten signature",
       signDateLabel: "Data entry date *",

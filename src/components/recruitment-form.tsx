@@ -120,6 +120,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
       consentBasicData: undefined,
       consentSensitiveData: undefined,
       consentThirdParty: undefined,
+      commitmentReviewedEntry: undefined,
     },
   });
 

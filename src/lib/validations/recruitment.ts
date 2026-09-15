@@ -215,6 +215,9 @@ export function buildRecruitmentSchema(
     consentThirdParty: z.literal(true, {
       error: t.commitmentRequired,
     }),
+    commitmentReviewedEntry: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
     signDate: z.string().min(1, t.signDateRequired),
   });
 
@@ -518,6 +521,7 @@ export function buildRecruitmentDraftSchema(
     consentBasicData: z.boolean().optional(),
     consentSensitiveData: z.boolean().optional(),
     consentThirdParty: z.boolean().optional(),
+    commitmentReviewedEntry: z.boolean().optional(),
     signDate: z.string().optional(),
   });
 }
