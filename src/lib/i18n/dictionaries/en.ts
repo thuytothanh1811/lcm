@@ -554,7 +554,7 @@ export const en: typeof vi = {
       q3Label:
         "3) What would your family and friends say if you became a life insurance consultant? (multiple answers allowed)",
       q4Label:
-        "4) Who are the first 10 people you would talk to about life insurance?",
+        "4) Name the first 10 people you would talk to about life insurance after becoming an agent?",
       q5Label:
         "5) Are you willing to take part in the following training courses to develop yourself? *",
       q6Label:
@@ -613,7 +613,7 @@ export const en: typeof vi = {
         },
         {
           label: "Collection source:",
-          text: "directly from you through this form and the related forms in the recruitment file set (CT01, CT02, CT03, CT04, CT05).",
+          text: "directly from you through this form and the related forms in the recruitment file set (CT01, CT02, CT03, CT04, CT05, CT06).",
           items: [],
         },
         {

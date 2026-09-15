@@ -478,7 +478,7 @@ export const vi = {
       positionLabel: "Vị trí ứng tuyển *",
       specifyOther: "Vui lòng ghi rõ",
       basicAgentCertificateLabel:
-        "Bạn đã có Chứng chỉ đại lý bảo hiểm cơ bản chưa?",
+        "Anh/Chị đã có Chứng chỉ Đại lý bảo hiểm cơ bản chưa?",
       basicAgentCertificateCheckLink: "Kiểm tra tại đây",
       programLabel: "Chương trình tham gia (MDRT, Thu hút nhân tài ...)",
       no: "Không",
@@ -555,7 +555,7 @@ export const vi = {
       q3Label:
         "3) Anh chị nghĩ đối tượng nào sẽ cần đến bảo hiểm nhân thọ? (có thể chọn nhiều đáp án)",
       q4Label:
-        "4) Liệt kê 10 người đầu tiên mà Anh/Chị sẽ chia sẻ về BHNT sau khi trở thành Đại lý?",
+        "4) Liệt kê tên 10 người đầu tiên mà Anh/Chị sẽ chia sẻ về BHNT sau khi trở thành Đại lý?",
       q5Label:
         "5) Anh chị Cam Kết tham gia các khóa học-Đào tạo nào dưới đây? *",
       q6Label:
@@ -615,7 +615,7 @@ export const vi = {
         },
         {
           label: "Nguồn thu thập:",
-          text: "trực tiếp từ Anh/Chị qua Phiếu này và các phiếu liên quan trong bộ hồ sơ tuyển dụng (CT01, CT02, CT03, CT04, CT05).",
+          text: "trực tiếp từ Anh/Chị qua Phiếu này và các phiếu liên quan trong bộ hồ sơ tuyển dụng (CT01, CT02, CT03, CT04, CT05, CT06).",
           items: [],
         },
         {
