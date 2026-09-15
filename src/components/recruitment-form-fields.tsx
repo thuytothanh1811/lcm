@@ -2006,7 +2006,10 @@ export function RecruitmentFormFields({
                     />
                   )}
                 />
-                <FieldLabel htmlFor="relativeConsent" className="font-normal">
+                <FieldLabel
+                  htmlFor="relativeConsent"
+                  className="font-normal text-justify"
+                >
                   {t.recruitmentForm.section8.relativeConsent}
                 </FieldLabel>
               </Field>
@@ -2415,7 +2418,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="commitmentTruthful" className="font-normal">
+            <FieldLabel
+              htmlFor="commitmentTruthful"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.truthful}
             </FieldLabel>
           </Field>
@@ -2438,7 +2444,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="commitmentVoluntary" className="font-normal">
+            <FieldLabel
+              htmlFor="commitmentVoluntary"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.voluntary}
             </FieldLabel>
           </Field>
@@ -2462,7 +2471,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="commitmentMaskedData" className="font-normal">
+            <FieldLabel
+              htmlFor="commitmentMaskedData"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.maskedData}
             </FieldLabel>
           </Field>
@@ -2486,7 +2498,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="commitmentEligibility" className="font-normal">
+            <FieldLabel
+              htmlFor="commitmentEligibility"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.eligibility}
             </FieldLabel>
           </Field>
@@ -2511,7 +2526,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="noticeOperational" className="font-normal">
+            <FieldLabel
+              htmlFor="noticeOperational"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.noticeOperational}
             </FieldLabel>
           </Field>
@@ -2533,7 +2551,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="noticePrograms" className="font-normal">
+            <FieldLabel
+              htmlFor="noticePrograms"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.noticePrograms}
             </FieldLabel>
           </Field>
@@ -2579,7 +2600,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="consentBasicData" className="font-normal">
+            <FieldLabel
+              htmlFor="consentBasicData"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.consentBasicData}
             </FieldLabel>
           </Field>
@@ -2601,7 +2625,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="consentSensitiveData" className="font-normal">
+            <FieldLabel
+              htmlFor="consentSensitiveData"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.consentSensitiveData}
             </FieldLabel>
           </Field>
@@ -2625,7 +2652,10 @@ export function RecruitmentFormFields({
                 />
               )}
             />
-            <FieldLabel htmlFor="consentThirdParty" className="font-normal">
+            <FieldLabel
+              htmlFor="consentThirdParty"
+              className="font-normal text-justify"
+            >
               {t.recruitmentForm.section11.consentThirdParty}
             </FieldLabel>
           </Field>
@@ -2634,14 +2664,18 @@ export function RecruitmentFormFields({
               errors.consentThirdParty ? [errors.consentThirdParty] : undefined
             }
           />
-          <ul className="text-muted-foreground list-disc pl-10 text-sm">
-            {t.recruitmentForm.section11.consentThirdPartyParties.map(party => (
-              <li key={party}>{party}</li>
-            ))}
-          </ul>
-          <p className="text-muted-foreground pl-6 text-sm">
-            {t.recruitmentForm.section11.consentThirdPartyNote}
-          </p>
+          <div className="text-muted-foreground ml-7 flex flex-col gap-2 text-justify text-sm">
+            <ul className="flex list-disc flex-col gap-1 pl-4">
+              {t.recruitmentForm.section11.consentThirdPartyParties.map(
+                party => (
+                  <li key={party} className="pl-1">
+                    {party}
+                  </li>
+                )
+              )}
+            </ul>
+            <p>{t.recruitmentForm.section11.consentThirdPartyNote}</p>
+          </div>
 
           <FieldSeparator />
           <Field orientation="horizontal" className="items-start">
@@ -2658,7 +2692,7 @@ export function RecruitmentFormFields({
             />
             <FieldLabel
               htmlFor="commitmentReviewedEntry"
-              className="font-normal"
+              className="font-normal text-justify"
             >
               {t.recruitmentForm.section11.reviewedEntry}
             </FieldLabel>

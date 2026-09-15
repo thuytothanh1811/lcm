@@ -648,13 +648,13 @@ export const vi = {
       consentThirdParty:
         "(3) Tôi đồng ý để Công ty chia sẻ hoặc chuyển giao dữ liệu cá nhân của tôi, trong phạm vi cần thiết và phù hợp với mục đích tuyển dụng, đào tạo, quản lý hoạt động đại lý, chi trả thu nhập, tuân thủ pháp luật và hoạt động kinh doanh hợp pháp của Công ty, cho các bên sau:",
       consentThirdPartyParties: [
-        "cơ quan quản lý nhà nước có thẩm quyền;",
+        "Cơ quan quản lý nhà nước có thẩm quyền;",
         "Hiệp hội Bảo hiểm Việt Nam và các tổ chức nghề nghiệp có liên quan;",
-        "đơn vị đào tạo, tổ chức thi hoặc cấp chứng chỉ hành nghề đại lý;",
-        "nhà cung cấp hệ thống công nghệ thông tin, dịch vụ lưu trữ dữ liệu hoặc dịch vụ hỗ trợ vận hành;",
-        "tổ chức tín dụng, ngân hàng, đơn vị trung gian thanh toán phục vụ việc chi trả các khoản thu nhập, hoa hồng hoặc quyền lợi khác;",
-        "đơn vị xác minh thông tin, đánh giá hồ sơ hoặc nhà cung cấp dịch vụ được Công ty thuê hợp pháp;",
-        "công ty mẹ, công ty liên kết, công ty trong cùng tập đoàn hoặc đối tác kinh doanh của Công ty trong phạm vi cần thiết để thực hiện các mục đích nêu trên.",
+        "Đơn vị đào tạo, tổ chức thi hoặc cấp chứng chỉ hành nghề đại lý;",
+        "Nhà cung cấp hệ thống công nghệ thông tin, dịch vụ lưu trữ dữ liệu hoặc dịch vụ hỗ trợ vận hành;",
+        "Tổ chức tín dụng, ngân hàng, đơn vị trung gian thanh toán phục vụ việc chi trả các khoản thu nhập, hoa hồng hoặc quyền lợi khác;",
+        "Đơn vị xác minh thông tin, đánh giá hồ sơ hoặc nhà cung cấp dịch vụ được Công ty thuê hợp pháp;",
+        "Công ty mẹ, công ty liên kết, công ty trong cùng tập đoàn hoặc đối tác kinh doanh của Công ty trong phạm vi cần thiết để thực hiện các mục đích nêu trên.",
       ],
       consentThirdPartyNote:
         "Các bên nhận dữ liệu có trách nhiệm áp dụng các biện pháp bảo vệ dữ liệu cá nhân theo quy định pháp luật và/hoặc theo thỏa thuận bảo vệ dữ liệu được ký kết với Công ty.",

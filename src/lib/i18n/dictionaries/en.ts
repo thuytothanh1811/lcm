@@ -646,13 +646,13 @@ export const en: typeof vi = {
       consentThirdParty:
         "(3) I agree that the Company may share or transfer my personal data, so far as necessary and consistent with recruitment, training, management of agency activity, payment of income, legal compliance and the Company's lawful business, to the following parties:",
       consentThirdPartyParties: [
-        "competent state authorities;",
-        "the Insurance Association of Vietnam and related professional bodies;",
-        "training providers, examination bodies or agent-certificate issuers;",
-        "providers of IT systems, data storage or operational support services;",
-        "credit institutions, banks and payment intermediaries handling income, commission or other benefits;",
-        "verification and application-assessment providers, or other service providers lawfully engaged by the Company;",
-        "the parent company, affiliates, group companies or business partners of the Company, so far as necessary for the purposes above.",
+        "Competent state authorities;",
+        "The Insurance Association of Vietnam and related professional bodies;",
+        "Training providers, examination bodies or agent-certificate issuers;",
+        "Providers of IT systems, data storage or operational support services;",
+        "Credit institutions, banks and payment intermediaries handling income, commission or other benefits;",
+        "Verification and application-assessment providers, or other service providers lawfully engaged by the Company;",
+        "The parent company, affiliates, group companies or business partners of the Company, so far as necessary for the purposes above.",
       ],
       consentThirdPartyNote:
         "Recipients are responsible for applying personal-data protection measures required by law and/or by the data protection agreement signed with the Company.",
