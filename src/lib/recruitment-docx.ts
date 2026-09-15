@@ -285,9 +285,55 @@ class DocxBuilder {
     return new Paragraph({ spacing: this.sp({ after: 40 }), children: [] });
   }
 
-  footer() {
+  /**
+   * withInitials prints the per-page integrity box Legal asked for: the
+   * candidate signs every page, not only the last one, so a page cannot be
+   * swapped after signing. It sits in the footer so Word repeats it itself.
+   */
+  footer(withInitials = false) {
+    const initials = withInitials
+      ? [
+          new Paragraph({
+            border: {
+              top: {
+                style: BorderStyle.SINGLE,
+                size: 4,
+                color: "BFBFBF",
+                space: 4,
+              },
+            },
+            spacing: { ...this.lineSpacing, before: 60, after: 0 },
+            children: [
+              new TextRun({
+                text: "XÁC NHẬN TÍNH TOÀN VẸN NỘI DUNG",
+                bold: true,
+                size: 16,
+              }),
+            ],
+          }),
+          new Paragraph({
+            spacing: { ...this.lineSpacing, after: 0 },
+            children: [
+              new TextRun({
+                text: "Ứng viên xác nhận đã đọc, rà soát và đồng ý với toàn bộ nội dung thể hiện tại trang này.",
+                size: 16,
+              }),
+            ],
+          }),
+          new Paragraph({
+            spacing: { ...this.lineSpacing, after: 0 },
+            children: [
+              new TextRun({
+                text: "Ký nháy của ứng viên: ……………………………",
+                size: 16,
+              }),
+            ],
+          }),
+        ]
+      : [];
     return new Footer({
       children: [
+        ...initials,
         new Paragraph({
           alignment: AlignmentType.RIGHT,
           indent: { right: 260 },
@@ -625,13 +671,35 @@ export async function buildRecruitmentDocxBlob(
   // long address or extra work-history rows can split the signature table
   // across two pages.
   b.push(b.sectionHeading("3. " + f.section11.title.toUpperCase(), true));
-  b.push(
-    new Paragraph({
-      spacing: { after: 30, ...LINE_SPACING },
-      indent: { left: 260 },
-      children: b.checkRun(s11.voluntary, !!data.commitmentVoluntary),
-    })
-  );
+  const commitments: [string, boolean][] = [
+    [s11.truthful, !!data.commitmentTruthful],
+    [s11.voluntary, !!data.commitmentVoluntary],
+    [s11.maskedData, !!data.commitmentMaskedData],
+    [s11.eligibility, !!data.commitmentEligibility],
+  ];
+  for (const [label, checked] of commitments) {
+    b.push(
+      new Paragraph({
+        spacing: { after: 30, ...LINE_SPACING },
+        indent: { left: 260 },
+        children: b.checkRun(label, checked),
+      })
+    );
+  }
+  b.push(b.bodyText(s11.noticeIntro, { after: 40 }));
+  const notices: [string, boolean][] = [
+    [s11.noticeOperational, !!data.noticeOperational],
+    [s11.noticePrograms, !!data.noticePrograms],
+  ];
+  for (const [label, checked] of notices) {
+    b.push(
+      new Paragraph({
+        spacing: { after: 30, ...LINE_SPACING },
+        indent: { left: 260 },
+        children: b.checkRun(label, checked),
+      })
+    );
+  }
   b.push(b.subHeading(s11.pdpdHeading));
   b.push(b.bodyText(s11.pdpdIntro, { italics: true, size: 18, after: 40 }));
   for (const item of s11.pdpdInfo) {
@@ -832,7 +900,7 @@ export async function buildRecruitmentDocxBlob(
             margin: { top: 1300, bottom: 1300, left: 1440, right: 1440 },
           },
         },
-        footers: { default: b.footer() },
+        footers: { default: b.footer(true) },
         children: b.children,
       },
     ],

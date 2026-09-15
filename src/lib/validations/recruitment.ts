@@ -195,6 +195,17 @@ export function buildRecruitmentSchema(
     commitmentVoluntary: z.literal(true, {
       error: t.commitmentRequired,
     }),
+    commitmentTruthful: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
+    commitmentMaskedData: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
+    commitmentEligibility: z.literal(true, {
+      error: t.commitmentRequired,
+    }),
+    noticeOperational: z.boolean().optional(),
+    noticePrograms: z.boolean().optional(),
     consentBasicData: z.literal(true, {
       error: t.commitmentRequired,
     }),
@@ -499,6 +510,11 @@ export function buildRecruitmentDraftSchema(
       .optional(),
 
     commitmentVoluntary: z.boolean().optional(),
+    commitmentTruthful: z.boolean().optional(),
+    commitmentMaskedData: z.boolean().optional(),
+    commitmentEligibility: z.boolean().optional(),
+    noticeOperational: z.boolean().optional(),
+    noticePrograms: z.boolean().optional(),
     consentBasicData: z.boolean().optional(),
     consentSensitiveData: z.boolean().optional(),
     consentThirdParty: z.boolean().optional(),

@@ -589,8 +589,19 @@ export const en: typeof vi = {
     },
     section11: {
       title: "Candidate commitments",
+      truthful:
+        "I undertake that all information, documents and personal data I provide to the Company in this form and throughout my engagement are complete, accurate and truthful. I bear full responsibility before the Company and before the law for any consequence arising if the information I provide is false, forged or misleading, including where the Company has relied on it to assess my application, issue an agent code or grant related benefits.",
       voluntary:
-        "I confirm that exploring this career opportunity and applying to become an agent at MVI is entirely my own voluntary decision, not directed by any other individual or organization.",
+        "I confirm that exploring this career opportunity and applying to be an MVI life insurance agent is entirely my own voluntary decision, not directed by any individual or organisation.",
+      maskedData:
+        "I undertake that I have masked every customer name and identifying detail on the income and sales records exported from the website or app of the company I previously worked for.",
+      eligibility:
+        "I undertake that I am a Vietnamese citizen residing in Vietnam; have full civil capacity; am not acting as an insurance agent for another life insurer while I am an MVI agent; am not under criminal prosecution, not serving a prison sentence, and not serving a ban on practising in the insurance field.",
+      noticeIntro:
+        "I agree to receive notices from MVI by SMS/Zalo/email at the phone number and email registered on this recruitment information form.",
+      noticeOperational:
+        "Transaction, operational and contract notices: applications, training, exam schedules, contract status, commission, compliance;",
+      noticePrograms: "Information on contests and income policies.",
       pdpdHeading: "PERSONAL DATA PROCESSING NOTICE AND CONSENT",
       pdpdIntro:
         "(*) Under Article 9 of the Personal Data Protection Law and Article 8 of Decree 356/2025/ND-CP, you must be informed of the following before giving consent:",

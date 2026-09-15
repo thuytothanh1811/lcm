@@ -590,8 +590,20 @@ export const vi = {
     },
     section11: {
       title: "Cam kết của ứng viên",
+      truthful:
+        "Tôi cam kết toàn bộ thông tin, tài liệu và dữ liệu cá nhân mà tôi cung cấp cho Công ty tại văn bản này và trong suốt quá trình làm việc là đầy đủ, chính xác và trung thực. Tôi hoàn toàn chịu trách nhiệm trước Công ty và trước pháp luật đối với mọi hậu quả phát sinh nếu thông tin tôi cung cấp là sai sự thật, giả mạo hoặc gây hiểu nhầm, kể cả trong trường hợp Công ty đã căn cứ vào thông tin đó để thẩm định hồ sơ, cấp Mã số đại lý hoặc thực hiện các quyền lợi liên quan.",
       voluntary:
-        "Tôi xác nhận việc tìm hiểu cơ hội nghề nghiệp này và ứng tuyển làm đại lý tại MVI hoàn toàn là quyết định tự nguyện của cá nhân tôi, không do bất kỳ cá nhân hay tổ chức nào chi phối.",
+        "Tôi xác nhận việc tìm hiểu cơ hội nghề nghiệp này và ứng tuyển làm đại lý bảo hiểm nhân thọ MVI hoàn toàn là quyết định tự nguyện của cá nhân tôi, không do bất kỳ cá nhân hay tổ chức nào chi phối.",
+      maskedData:
+        "Tôi cam kết đã che toàn bộ tên khách hàng, thông tin định danh trên các chứng từ thu nhập/doanh số kết xuất từ trang web/app của doanh nghiệp tôi từng làm việc.",
+      eligibility:
+        "Tôi cam kết là công dân Việt Nam thường trú tại Việt Nam; có năng lực hành vi dân sự đầy đủ; không đang làm đại lý bảo hiểm cho doanh nghiệp bảo hiểm nhân thọ khác trong thời gian là đại lý bảo hiểm của MVI; không đang bị truy cứu trách nhiệm hình sự, không đang chấp hành hình phạt tù, không đang chấp hành hình phạt cấm hành nghề liên quan đến lĩnh vực bảo hiểm.",
+      noticeIntro:
+        "Tôi đồng ý nhận thông báo từ MVI qua SMS/Zalo/email theo số điện thoại và email đã đăng ký trên Phiếu Thông tin tuyển dụng.",
+      noticeOperational:
+        "Thông báo giao dịch/vận hành/hợp đồng: hồ sơ, đào tạo, lịch thi, tình trạng hợp đồng, hoa hồng, tuân thủ;",
+      noticePrograms:
+        "Thông tin các chương trình thi đua, chính sách thu nhập.",
       pdpdHeading: "THÔNG TIN VÀ SỰ ĐỒNG Ý XỬ LÝ DỮ LIỆU CÁ NHÂN",
       pdpdIntro:
         "(*) Theo Điều 9 Luật Bảo vệ dữ liệu cá nhân và Điều 8 Nghị định 356/2025/NĐ-CP, trước khi đồng ý, Anh/Chị cần được biết rõ các thông tin sau:",

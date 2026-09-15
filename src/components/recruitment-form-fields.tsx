@@ -2406,6 +2406,29 @@ export function RecruitmentFormFields({
           <Field orientation="horizontal" className="items-start">
             <Controller
               control={control}
+              name="commitmentTruthful"
+              render={({ field }) => (
+                <Checkbox
+                  id="commitmentTruthful"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="commitmentTruthful" className="font-normal">
+              {t.recruitmentForm.section11.truthful}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.commitmentTruthful
+                ? [errors.commitmentTruthful]
+                : undefined
+            }
+          />
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
               name="commitmentVoluntary"
               render={({ field }) => (
                 <Checkbox
@@ -2425,6 +2448,97 @@ export function RecruitmentFormFields({
                 ? [errors.commitmentVoluntary]
                 : undefined
             }
+          />
+
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="commitmentMaskedData"
+              render={({ field }) => (
+                <Checkbox
+                  id="commitmentMaskedData"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="commitmentMaskedData" className="font-normal">
+              {t.recruitmentForm.section11.maskedData}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.commitmentMaskedData
+                ? [errors.commitmentMaskedData]
+                : undefined
+            }
+          />
+
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="commitmentEligibility"
+              render={({ field }) => (
+                <Checkbox
+                  id="commitmentEligibility"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="commitmentEligibility" className="font-normal">
+              {t.recruitmentForm.section11.eligibility}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.commitmentEligibility
+                ? [errors.commitmentEligibility]
+                : undefined
+            }
+          />
+
+          <p className="text-sm">{t.recruitmentForm.section11.noticeIntro}</p>
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="noticeOperational"
+              render={({ field }) => (
+                <Checkbox
+                  id="noticeOperational"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="noticeOperational" className="font-normal">
+              {t.recruitmentForm.section11.noticeOperational}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={
+              errors.noticeOperational ? [errors.noticeOperational] : undefined
+            }
+          />
+
+          <Field orientation="horizontal" className="items-start">
+            <Controller
+              control={control}
+              name="noticePrograms"
+              render={({ field }) => (
+                <Checkbox
+                  id="noticePrograms"
+                  checked={field.value ?? false}
+                  onCheckedChange={v => field.onChange(v === true)}
+                />
+              )}
+            />
+            <FieldLabel htmlFor="noticePrograms" className="font-normal">
+              {t.recruitmentForm.section11.noticePrograms}
+            </FieldLabel>
+          </Field>
+          <FieldError
+            errors={errors.noticePrograms ? [errors.noticePrograms] : undefined}
           />
 
           <FieldSeparator />
