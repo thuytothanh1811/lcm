@@ -126,6 +126,8 @@ class DocxBuilder {
   sectionHeading(text: string, startsPage = false, before = 200) {
     return new Paragraph({
       pageBreakBefore: startsPage,
+      keepNext: true,
+      keepLines: true,
       border: {
         bottom: { style: BorderStyle.SINGLE, size: 6, color: BLUE, space: 2 },
       },
@@ -136,6 +138,8 @@ class DocxBuilder {
 
   subHeading(text: string) {
     return new Paragraph({
+      keepNext: true,
+      keepLines: true,
       border: {
         bottom: {
           style: BorderStyle.SINGLE,
@@ -222,6 +226,7 @@ class DocxBuilder {
   ) {
     return new Paragraph({
       alignment: opts.justify ? AlignmentType.BOTH : undefined,
+      keepNext: opts.bold === true,
       spacing: this.sp({ after: opts.after ?? 60 }),
       children: [
         new TextRun({
@@ -271,11 +276,13 @@ class DocxBuilder {
       rows: [
         new TableRow({
           tableHeader: true,
+          cantSplit: true,
           children: headers.map((h, i) => this.headerCell(h, colWidths[i])),
         }),
         ...rows.map(
           r =>
             new TableRow({
+              cantSplit: true,
               children: r.map((c, i) => this.bodyCell(c, colWidths[i])),
             })
         ),
@@ -528,7 +535,7 @@ export async function buildRecruitmentDocxBlob(
   }
 
   // ===== SECTION 2: THÔNG TIN TUYỂN DỤNG =====
-  b.push(b.sectionHeading("2. " + s2.title.toUpperCase(), true));
+  b.push(b.sectionHeading("2. " + s2.title.toUpperCase()));
   b.push(
     b.bodyText(printableLabel(s2.channelLabel) + ":", { bold: true, after: 40 })
   );
@@ -706,7 +713,7 @@ export async function buildRecruitmentDocxBlob(
   // so how much the candidate typed above decides where it lands — and a
   // long address or extra work-history rows can split the signature table
   // across two pages.
-  b.push(b.sectionHeading("3. " + f.section11.title.toUpperCase(), true));
+  b.push(b.sectionHeading("3. " + f.section11.title.toUpperCase()));
   const commitments: [string, boolean][] = [
     [s11.truthful, !!data.commitmentTruthful],
     [s11.voluntary, !!data.commitmentVoluntary],
