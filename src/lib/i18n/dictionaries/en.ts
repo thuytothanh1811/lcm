@@ -592,7 +592,7 @@ export const en: typeof vi = {
       truthful:
         "I undertake that all information, documents and personal data I provide to the Company in this form and throughout my engagement are complete, accurate and truthful. I bear full responsibility before the Company and before the law for any consequence arising if the information I provide is false, forged or misleading, including where the Company has relied on it to assess my application, issue an agent code or grant related benefits.",
       voluntary:
-        "I confirm that exploring this career opportunity and applying to be an MVI life insurance agent is entirely my own voluntary decision, not directed by any individual or organisation.",
+        "I confirm that exploring this career opportunity and applying to be a life insurance agent for MVI is entirely my own voluntary decision, not directed by any individual or organisation.",
       maskedData:
         "I undertake that I have masked every customer name and identifying detail on the income and sales records exported from the website or app of the company I previously worked for.",
       eligibility:
@@ -608,7 +608,7 @@ export const en: typeof vi = {
       pdpdInfo: [
         {
           label: "Personal data controller:",
-          text: "MVI Life Insurance Company Limited.",
+          text: "Công ty TNHH Bảo hiểm Nhân thọ MVI.",
           items: [],
         },
         {

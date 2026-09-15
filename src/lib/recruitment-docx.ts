@@ -372,6 +372,8 @@ export async function buildRecruitmentDocxBlob(
   const opt = f.options;
   const s1 = f.section1;
   const s2 = f.section2;
+  const s3 = f.section3;
+  const s4 = f.section4;
   const s5 = f.section5;
   const s8 = f.section8;
   const s9 = f.section9;
@@ -388,20 +390,22 @@ export async function buildRecruitmentDocxBlob(
 
   // ===== SECTION 1: THÔNG TIN CÁ NHÂN =====
   b.push(b.sectionHeading("1. " + s1.title.toUpperCase()));
-  b.push(b.field("Họ và tên", data.fullName));
+  b.push(b.field(s1.fullName, data.fullName));
   b.push(
     b.twoField(
-      "Ngày sinh",
+      s1.dateOfBirth,
       vnDate(data.dateOfBirth),
-      "Mã số thuế (nếu có)",
+      s1.taxCode,
       data.taxCode
     )
   );
   b.push(
-    b.twoField("Số CCCD", data.idNumber, "Số CMND (nếu có)", data.oldIdNumber)
+    b.twoField(s1.idNumber, data.idNumber, s1.oldIdNumber, data.oldIdNumber)
   );
-  b.push(b.twoField("Di động (chính chủ)", data.mobile1, "Email", data.email));
-  b.push(b.bodyText("Giới tính:", { bold: true, after: 40 }));
+  b.push(b.twoField(s1.mobile1, data.mobile1, s1.email, data.email));
+  b.push(
+    b.bodyText(printableLabel(s1.genderLabel) + ":", { bold: true, after: 40 })
+  );
   b.push(
     b.inlineChecks(
       [s1.genderMale, s1.genderFemale],
@@ -411,7 +415,12 @@ export async function buildRecruitmentDocxBlob(
       )
     )
   );
-  b.push(b.bodyText("Tình trạng hôn nhân:", { bold: true, after: 40 }));
+  b.push(
+    b.bodyText(printableLabel(s1.maritalStatusLabel) + ":", {
+      bold: true,
+      after: 40,
+    })
+  );
   b.push(
     b.inlineChecks(
       labelsOf(opt.maritalStatus),
@@ -421,7 +430,12 @@ export async function buildRecruitmentDocxBlob(
       )
     )
   );
-  b.push(b.bodyText("Trình độ học vấn:", { bold: true, after: 40 }));
+  b.push(
+    b.bodyText(printableLabel(s1.educationLevelLabel) + ":", {
+      bold: true,
+      after: 40,
+    })
+  );
   b.push(
     b.inlineChecks(
       labelsOf(opt.education),
@@ -429,7 +443,7 @@ export async function buildRecruitmentDocxBlob(
     )
   );
   b.push(
-    b.bodyText("Thu nhập bình quân 6 tháng gần nhất:", {
+    b.bodyText(printableLabel(s1.averageMonthlyIncomeLabel) + ":", {
       bold: true,
       after: 40,
     })
@@ -443,7 +457,12 @@ export async function buildRecruitmentDocxBlob(
       )
     )
   );
-  b.push(b.bodyText("Công chức/viên chức:", { bold: true, after: 40 }));
+  b.push(
+    b.bodyText(printableLabel(s1.civilServantLabel) + ":", {
+      bold: true,
+      after: 40,
+    })
+  );
   b.push(
     b.inlineChecks(
       [s1.civilServantNo, s1.civilServantYes],
@@ -454,7 +473,9 @@ export async function buildRecruitmentDocxBlob(
     )
   );
   if (data.isCivilServant === "yes" && data.civilServantType?.length) {
-    b.push(b.bodyText("Loại hình:", { after: 40 }));
+    b.push(
+      b.bodyText(printableLabel(s1.civilServantTypeLabel) + ":", { after: 40 })
+    );
     b.push(
       b.inlineChecks(
         labelsOf(opt.civilServantType),
@@ -462,9 +483,7 @@ export async function buildRecruitmentDocxBlob(
       )
     );
   }
-  b.push(
-    b.field("Chủ tài khoản ngân hàng (trùng tên CCCD)", data.accountHolderName)
-  );
+  b.push(b.field(s1.accountHolderNameLabel, data.accountHolderName));
   b.push(
     b.twoField(
       "Số tài khoản (không phải số thẻ ATM)",
@@ -473,12 +492,12 @@ export async function buildRecruitmentDocxBlob(
       data.bankName
     )
   );
-  b.push(b.field("Chi nhánh", data.branch));
-  b.push(b.bodyText("Địa chỉ thường trú:", { bold: true, after: 40 }));
-  b.push(b.field("Tỉnh/Thành phố", data.permanentProvince));
-  b.push(b.field("Phường/Xã", data.permanentWard));
-  b.push(b.field("Số nhà, tên đường", data.permanentStreetAddress));
-  b.push(b.bodyText("Địa chỉ liên lạc (nếu khác):", { bold: true, after: 40 }));
+  b.push(b.field(s1.branchLabel, data.branch));
+  b.push(b.bodyText(s3.title + ":", { bold: true, after: 40 }));
+  b.push(b.field(s3.provinceLabel, data.permanentProvince));
+  b.push(b.field(s3.wardLabel, data.permanentWard));
+  b.push(b.field(s3.streetLabel, data.permanentStreetAddress));
+  b.push(b.bodyText(s4.title + ":", { bold: true, after: 40 }));
   const isDifferentAddress = data.sameAsPermanentAddress === "different";
   b.push(
     b.inlineChecks(
@@ -490,9 +509,9 @@ export async function buildRecruitmentDocxBlob(
     )
   );
   if (isDifferentAddress) {
-    b.push(b.field("Tỉnh/Thành phố", data.temporaryProvince));
-    b.push(b.field("Phường/Xã", data.temporaryWard));
-    b.push(b.field("Số nhà, tên đường", data.temporaryStreetAddress));
+    b.push(b.field(s4.provinceLabel, data.temporaryProvince));
+    b.push(b.field(s4.wardLabel, data.temporaryWard));
+    b.push(b.field(s4.streetLabel, data.temporaryStreetAddress));
   }
   // SH manages the region the SD sits in, so the printed form lists them in
   // that order — same as the web form and the paper CT-01.
@@ -508,7 +527,9 @@ export async function buildRecruitmentDocxBlob(
 
   // ===== SECTION 2: THÔNG TIN TUYỂN DỤNG =====
   b.push(b.sectionHeading("2. " + s2.title.toUpperCase(), true));
-  b.push(b.bodyText("Kênh:", { bold: true, after: 40 }));
+  b.push(
+    b.bodyText(printableLabel(s2.channelLabel) + ":", { bold: true, after: 40 })
+  );
   b.push(
     b.inlineChecks(
       labelsOf(opt.channel),
@@ -516,7 +537,19 @@ export async function buildRecruitmentDocxBlob(
     )
   );
   if (data.channel === "agency") {
-    b.push(b.bodyText("Loại hình (nếu Agency):", { bold: true, after: 40 }));
+    b.push(
+      b.bodyText(printableLabel(s2.agencyTypeLabel) + ":", {
+        bold: true,
+        after: 40,
+      })
+    );
+    b.push(
+      b.bodyText(s2.agencyTypeNotice, {
+        italics: true,
+        size: 18,
+        after: 40,
+      })
+    );
     b.push(
       b.inlineChecks(
         labelsOf(opt.agencyType),
@@ -524,7 +557,12 @@ export async function buildRecruitmentDocxBlob(
       )
     );
   }
-  b.push(b.bodyText("Vị trí ứng tuyển:", { bold: true, after: 40 }));
+  b.push(
+    b.bodyText(printableLabel(s2.positionLabel) + ":", {
+      bold: true,
+      after: 40,
+    })
+  );
   // All four on one line measures 10895tw against a 9360tw text width, so they
   // go two per line the way the printed CT-01 lays them out.
   const positionSelected = labelsFor(
@@ -551,7 +589,7 @@ export async function buildRecruitmentDocxBlob(
     )
   );
   b.push(
-    b.bodyText("Chương trình tham gia (MDRT, Thu hút nhân tài ...):", {
+    b.bodyText(printableLabel(s2.programLabel) + ":", {
       bold: true,
       after: 40,
     })
@@ -573,9 +611,7 @@ export async function buildRecruitmentDocxBlob(
       )
     );
   }
-  b.push(
-    b.bodyText("Có phải tái tuyển dụng không?", { bold: true, after: 40 })
-  );
+  b.push(b.bodyText(printableLabel(s2.rehireLabel), { bold: true, after: 40 }));
   b.push(
     b.inlineChecks(
       [s2.no, s2.yes],
@@ -605,10 +641,14 @@ export async function buildRecruitmentDocxBlob(
       )
     );
   }
-  b.push(b.field("Số lượng khách hàng tiềm năng", data.potentialCustomers));
+  b.push(b.field(s1.potentialCustomers, data.potentialCustomers));
 
   b.push(b.subHeading(s5.title));
-  b.push(b.bodyText("Có kinh nghiệm bảo hiểm:", { after: 40 }));
+  b.push(
+    b.bodyText(printableLabel(s5.hasInsuranceExperienceLabel) + ":", {
+      after: 40,
+    })
+  );
   b.push(
     b.inlineChecks(
       [s5.no, s5.yes],
