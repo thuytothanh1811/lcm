@@ -19,12 +19,6 @@ export const CHECKLIST_ROWS: {
     lpUm: true,
     mdrt: true,
     gad: true,
-    templates: [
-      {
-        file: "CT01_Phieu-thong-tin-tuyen-dung_mau-trang.docx",
-        label: "CT01",
-      },
-    ],
   },
   {
     key: "ct02",
@@ -90,7 +84,7 @@ export const CHECKLIST_ROWS: {
   {
     key: "phone_proof",
     stt: 8,
-    label: "Xác nhận số điện thoại chính chủ (hình chụp) (*)",
+    label: "Xác nhận số điện thoại chính chủ (hình chụp)",
     lpUm: true,
     mdrt: true,
     gad: true,
@@ -98,7 +92,7 @@ export const CHECKLIST_ROWS: {
   {
     key: "tax_proof",
     stt: 9,
-    label: "Xác nhận Mã số thuế (hình chụp) (*)",
+    label: "Xác nhận Mã số thuế (hình chụp)",
     lpUm: true,
     mdrt: true,
     gad: true,
@@ -187,6 +181,22 @@ function TemplateCell({
   );
 }
 
+/**
+ * "(CT-02)" reads as one token, so it breaks badly when the column edge
+ * falls on its hyphen. The form code at the end of a label is held
+ * together; the rest of the label wraps as it likes.
+ */
+function ChecklistLabel({ label }: { label: string }) {
+  const code = /^(.*?)(\([^()]*CT[^()]*\))\s*$/.exec(label);
+  if (!code) return <>{label}</>;
+  return (
+    <>
+      {code[1]}
+      <span className="whitespace-nowrap">{code[2]}</span>
+    </>
+  );
+}
+
 function ChecklistCell({ applicable }: { applicable: boolean }) {
   return (
     <td className="border-border px-1 py-2 text-center align-middle">
@@ -238,7 +248,9 @@ export function DocumentChecklistTable() {
               <td className="border-border border px-2 py-2 text-center">
                 {row.stt}
               </td>
-              <td className="border-border border px-3 py-2">{row.label}</td>
+              <td className="border-border border px-3 py-2">
+                <ChecklistLabel label={row.label} />
+              </td>
               <ChecklistCell applicable={row.lpUm} />
               <ChecklistCell applicable={row.mdrt} />
               <ChecklistCell applicable={row.gad} />
