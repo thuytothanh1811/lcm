@@ -543,13 +543,7 @@ export async function buildRecruitmentDocxBlob(
         after: 40,
       })
     );
-    b.push(
-      b.bodyText(s2.agencyTypeNotice, {
-        italics: true,
-        size: 18,
-        after: 40,
-      })
-    );
+    b.push(b.bodyText(s2.agencyTypeNotice, { italics: true, after: 40 }));
     b.push(
       b.inlineChecks(
         labelsOf(opt.agencyType),
@@ -741,17 +735,15 @@ export async function buildRecruitmentDocxBlob(
     );
   }
   b.push(b.subHeading(s11.pdpdHeading));
-  b.push(b.bodyText(s11.pdpdIntro, { italics: true, size: 18, after: 40 }));
+  b.push(b.bodyText(s11.pdpdIntro, { italics: true, after: 40 }));
   for (const item of s11.pdpdInfo) {
-    b.push(
-      b.bodyText("- " + item.label + " " + item.text, { size: 18, after: 40 })
-    );
+    b.push(b.bodyText("- " + item.label + " " + item.text, { after: 40 }));
     for (const sub of item.items) {
       b.push(
         new Paragraph({
           spacing: { ...LINE_SPACING, after: 40 },
           indent: { left: 360 },
-          children: [new TextRun({ text: sub, size: 18 })],
+          children: [new TextRun({ text: sub })],
         })
       );
     }
@@ -776,11 +768,11 @@ export async function buildRecruitmentDocxBlob(
       new Paragraph({
         spacing: { after: 20, ...LINE_SPACING },
         indent: { left: 620, hanging: 200 },
-        children: [new TextRun({ text: "•   " + party, size: 18 })],
+        children: [new TextRun({ text: "•   " + party })],
       })
     );
   }
-  b.push(b.bodyText(s11.consentThirdPartyNote, { size: 18, after: 40 }));
+  b.push(b.bodyText(s11.consentThirdPartyNote, { after: 40 }));
   b.push(
     new Paragraph({
       spacing: { before: 120, after: 60, ...LINE_SPACING },
@@ -816,7 +808,6 @@ export async function buildRecruitmentDocxBlob(
                     text: declaration,
                     italics: true,
                     color: WHITE,
-                    size: 18,
                   }),
                 ],
               }),
@@ -1085,7 +1076,6 @@ export async function buildCt02DocxBlob(
   b.push(
     b.bodyText("(*) Phải trùng khớp với chữ ký trên Phiếu đăng ký đại lý.", {
       italics: true,
-      size: 18,
       after: 60,
     })
   );
@@ -1104,9 +1094,7 @@ export async function buildCt02DocxBlob(
           ? [
               new Paragraph({
                 spacing: { ...LINE_SPACING, after: 40 },
-                children: [
-                  new TextRun({ text: note, italics: true, size: 18 }),
-                ],
+                children: [new TextRun({ text: note, italics: true })],
               }),
             ]
           : []),
@@ -1116,7 +1104,6 @@ export async function buildCt02DocxBlob(
             new TextRun({
               text: "(ký, ghi rõ họ tên)",
               italics: true,
-              size: 18,
             }),
           ],
         }),
@@ -1299,7 +1286,6 @@ export async function buildCt03DocxBlob(
         new TextRun({
           text: "   (Đậu: Tổng điểm ≥15đ và không có tiêu chí nào có điểm =1)",
           italics: true,
-          size: 18,
         }),
       ],
     })
@@ -1542,7 +1528,7 @@ export async function buildCt04DocxBlob(
   b.push(
     b.bodyText(
       "(chấp nhận tuyển dụng: Tổng điểm ≥42đ và không có tiêu chí nào có điểm =1)",
-      { italics: true, size: 18, after: 80 }
+      { italics: true, after: 80 }
     )
   );
   b.push(b.bodyText("Chức danh: " + DOTS.repeat(3), { after: 80 }));
