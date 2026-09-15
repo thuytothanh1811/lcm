@@ -151,9 +151,9 @@ class DocxBuilder {
     });
   }
 
-  field(label: string, value?: string | null) {
+  field(label: string, value?: string | null, after = 50) {
     return new Paragraph({
-      spacing: this.sp({ after: 50 }),
+      spacing: this.sp({ after }),
       children: [
         new TextRun({ text: printableLabel(label) + ": " }),
         new TextRun({ text: value || "" }),
@@ -165,12 +165,13 @@ class DocxBuilder {
     label1: string,
     value1: string | undefined | null,
     label2: string,
-    value2: string | undefined | null
+    value2: string | undefined | null,
+    after = 50
   ) {
     const half = Math.round(PAGE_W / 2);
     return new Paragraph({
       tabStops: [{ type: TabStopType.LEFT, position: half + 120 }],
-      spacing: this.sp({ after: 50 }),
+      spacing: this.sp({ after }),
       children: [
         new TextRun({ text: printableLabel(label1) + ": " }),
         new TextRun({ text: value1 || "" }),
@@ -1029,18 +1030,19 @@ export async function buildCt02DocxBlob(
     b.title("ĐĂNG KÝ CHỮ KÝ MẪU")
   );
 
-  b.push(b.field("Họ và tên ứng viên", data.fullName));
+  b.push(b.spacer());
+  b.push(b.field("Họ và tên ứng viên", data.fullName, 220));
   // The LPFC class is assigned after the application is processed, so it is
   // always left blank for the candidate to fill in by hand.
-  b.push(b.field("Lớp LPFC", DOTS.repeat(2)));
+  b.push(b.field("Lớp LPFC", DOTS.repeat(2), 220));
   b.push(
-    b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber)
+    b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber, 260)
   );
 
   b.push(
     b.bodyText(
       "Tôi đồng ý và xác nhận MVI có thể sử dụng các chữ ký mẫu dưới đây để xác thực và xử lý các giao dịch liên quan đến Hợp đồng Đại lý giữa tôi và MVI.",
-      { after: 40 }
+      { after: 200 }
     )
   );
 
@@ -1072,7 +1074,7 @@ export async function buildCt02DocxBlob(
   b.push(
     b.bodyText("(*) Phải trùng khớp với chữ ký trên Phiếu đăng ký đại lý.", {
       italics: true,
-      after: 60,
+      after: 280,
     })
   );
 
