@@ -217,9 +217,11 @@ class DocxBuilder {
       italics?: boolean;
       size?: number;
       after?: number;
+      justify?: boolean;
     } = {}
   ) {
     return new Paragraph({
+      alignment: opts.justify ? AlignmentType.BOTH : undefined,
       spacing: this.sp({ after: opts.after ?? 60 }),
       children: [
         new TextRun({
@@ -714,13 +716,14 @@ export async function buildRecruitmentDocxBlob(
   for (const [label, checked] of commitments) {
     b.push(
       new Paragraph({
+        alignment: AlignmentType.BOTH,
         spacing: { after: 30, ...LINE_SPACING },
         indent: { left: 260 },
         children: b.checkRun(label, checked),
       })
     );
   }
-  b.push(b.bodyText(s11.noticeIntro, { after: 40 }));
+  b.push(b.bodyText(s11.noticeIntro, { after: 40, justify: true }));
   const notices: [string, boolean][] = [
     [s11.noticeOperational, !!data.noticeOperational],
     [s11.noticePrograms, !!data.noticePrograms],
@@ -728,6 +731,7 @@ export async function buildRecruitmentDocxBlob(
   for (const [label, checked] of notices) {
     b.push(
       new Paragraph({
+        alignment: AlignmentType.BOTH,
         spacing: { after: 30, ...LINE_SPACING },
         indent: { left: 260 },
         children: b.checkRun(label, checked),
@@ -735,12 +739,20 @@ export async function buildRecruitmentDocxBlob(
     );
   }
   b.push(b.subHeading(s11.pdpdHeading));
-  b.push(b.bodyText(s11.pdpdIntro, { italics: true, after: 40 }));
+  b.push(
+    b.bodyText(s11.pdpdIntro, { italics: true, after: 40, justify: true })
+  );
   for (const item of s11.pdpdInfo) {
-    b.push(b.bodyText("- " + item.label + " " + item.text, { after: 40 }));
+    b.push(
+      b.bodyText("- " + item.label + " " + item.text, {
+        after: 40,
+        justify: true,
+      })
+    );
     for (const sub of item.items) {
       b.push(
         new Paragraph({
+          alignment: AlignmentType.BOTH,
           spacing: { ...LINE_SPACING, after: 40 },
           indent: { left: 360 },
           children: [new TextRun({ text: sub })],
@@ -757,6 +769,7 @@ export async function buildRecruitmentDocxBlob(
   for (const [label, checked] of consents) {
     b.push(
       new Paragraph({
+        alignment: AlignmentType.BOTH,
         spacing: { after: 30, ...LINE_SPACING },
         indent: { left: 260 },
         children: b.checkRun(label, checked),
@@ -766,15 +779,17 @@ export async function buildRecruitmentDocxBlob(
   for (const party of s11.consentThirdPartyParties) {
     b.push(
       new Paragraph({
+        alignment: AlignmentType.BOTH,
         spacing: { after: 20, ...LINE_SPACING },
         indent: { left: 620, hanging: 200 },
         children: [new TextRun({ text: "•   " + party })],
       })
     );
   }
-  b.push(b.bodyText(s11.consentThirdPartyNote, { after: 40 }));
+  b.push(b.bodyText(s11.consentThirdPartyNote, { after: 40, justify: true }));
   b.push(
     new Paragraph({
+      alignment: AlignmentType.BOTH,
       spacing: { before: 120, after: 60, ...LINE_SPACING },
       indent: { left: 260 },
       children: b.checkRun(s11.reviewedEntry, !!data.commitmentReviewedEntry),
@@ -1033,6 +1048,7 @@ export async function buildCt02DocxBlob(
   for (const text of CT02_COMMITMENTS) {
     b.push(
       new Paragraph({
+        alignment: AlignmentType.BOTH,
         spacing: { ...LINE_SPACING, after: 40 },
         indent: { left: 260, hanging: 260 },
         children: [new TextRun({ text: "•   " + text })],
