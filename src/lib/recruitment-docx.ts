@@ -238,7 +238,7 @@ class DocxBuilder {
     });
   }
 
-  headerCell(text: string, width: number) {
+  headerCell(text: string, width: number, declaration?: string) {
     return new TableCell({
       width: { size: width, type: WidthType.DXA },
       verticalAlign: VerticalAlign.CENTER,
@@ -246,9 +246,24 @@ class DocxBuilder {
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          spacing: this.sp(),
+          spacing: this.sp({ after: declaration ? 60 : 0 }),
           children: [new TextRun({ text, bold: true, color: NAVY })],
         }),
+        ...(declaration
+          ? [
+              new Paragraph({
+                alignment: AlignmentType.BOTH,
+                spacing: this.sp(),
+                children: [
+                  new TextRun({
+                    text: declaration,
+                    italics: true,
+                    color: NAVY,
+                  }),
+                ],
+              }),
+            ]
+          : []),
       ],
     });
   }
@@ -1158,7 +1173,7 @@ export async function buildCt02DocxBlob(
 }
 
 const CT03_CRITERIA = [
-  "1. Giới thiệu bản thân & kinh nghiệm (giao tiếp, kinh nghiệm bán hàng; ngoại hình, tác phong)",
+  "1. Giới thiệu bản thân & kinh nghiệm (giao tiếp, kinh nghiệm bán hàng; ngoại hình, tác phong chuyên nghiệp phù hợp với hoạt động tư vấn trực tiếp)",
   "2. Lý do quan tâm công ty & vị trí ứng tuyển; sự phù hợp văn hóa; mục tiêu nghề nghiệp rõ ràng",
   "3. Mức độ tham gia cộng đồng; khả năng mở rộng quan hệ; thị trường khách hàng tiềm năng",
   "4. Tình huống thuyết phục thành công; kỹ năng thuyết phục & xử lý từ chối",
@@ -1193,12 +1208,24 @@ export async function buildCt03DocxBlob(
 ): Promise<Blob> {
   const opt = dict.recruitmentForm.options;
   const s1 = dict.recruitmentForm.section1;
+  const s11 = dict.recruitmentForm.section11;
   const b = new DocxBuilder();
 
   b.push(
     b.bannerLine("MVI – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
     b.bannerLine("CT-03", { color: GRAY }),
-    b.title("PHIẾU ĐÁNH GIÁ ỨNG VIÊN")
+    b.title("PHIẾU ĐÁNH GIÁ ỨNG VIÊN"),
+    new Paragraph({
+      alignment: AlignmentType.CENTER,
+      spacing: { ...LINE_SPACING, after: 60 },
+      children: [
+        new TextRun({
+          text: "(Đánh giá phê duyệt nội bộ của Người Quản lý trực tiếp)",
+          italics: true,
+          color: GRAY,
+        }),
+      ],
+    })
   );
 
   b.push(b.sectionHeading("THÔNG TIN ỨNG VIÊN", false, 120));
@@ -1207,7 +1234,8 @@ export async function buildCt03DocxBlob(
       "Họ và tên",
       data.fullName,
       "Số CCCD/CMND",
-      data.idNumber || data.oldIdNumber
+      data.idNumber || data.oldIdNumber,
+      200
     )
   );
   b.push(
@@ -1219,7 +1247,8 @@ export async function buildCt03DocxBlob(
         ? s1.genderMale
         : data.gender === "female"
           ? s1.genderFemale
-          : ""
+          : "",
+      200
     )
   );
   b.push(
@@ -1227,7 +1256,8 @@ export async function buildCt03DocxBlob(
       "Tình trạng hôn nhân",
       labelFor(opt.maritalStatus, data.maritalStatus),
       "Học vấn",
-      labelFor(opt.education, data.educationLevel)
+      labelFor(opt.education, data.educationLevel),
+      200
     )
   );
   b.push(
@@ -1235,7 +1265,8 @@ export async function buildCt03DocxBlob(
       "Kinh nghiệm làm việc (số năm)",
       totalExperienceYears(data.workHistory),
       "Thu nhập",
-      labelFor(opt.income, data.averageMonthlyIncome)
+      labelFor(opt.income, data.averageMonthlyIncome),
+      200
     )
   );
 
@@ -1244,7 +1275,8 @@ export async function buildCt03DocxBlob(
       "Mã số người tuyển dụng",
       data.recruiterCode,
       "Họ tên người tuyển dụng",
-      data.recruiterName
+      data.recruiterName,
+      200
     )
   );
   b.push(
@@ -1252,7 +1284,8 @@ export async function buildCt03DocxBlob(
       "Mã số người giới thiệu (nếu có)",
       data.referrerCode,
       "Họ tên người giới thiệu",
-      data.referrerName
+      data.referrerName,
+      200
     )
   );
 
@@ -1300,7 +1333,9 @@ export async function buildCt03DocxBlob(
       columnWidths: [PAGE_W],
       rows: [
         new TableRow({
-          children: [b.headerCell("QUẢN LÝ TRỰC TIẾP", PAGE_W)],
+          children: [
+            b.headerCell("QUẢN LÝ TRỰC TIẾP", PAGE_W, s11.managerDeclaration),
+          ],
         }),
         new TableRow({
           children: [
