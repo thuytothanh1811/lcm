@@ -1687,15 +1687,6 @@ export function RecruitmentFormFields({
               </FieldLabel>
               <Input id="recruiterName" {...register("recruiterName")} />
             </Field>
-            <Field>
-              <FieldLabel htmlFor="recruiterIdNumber">
-                {t.recruitmentForm.section2.recruiterIdNumber}
-              </FieldLabel>
-              <Input
-                id="recruiterIdNumber"
-                {...register("recruiterIdNumber")}
-              />
-            </Field>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -2001,6 +1992,34 @@ export function RecruitmentFormFields({
               </div>
             ))}
 
+          {hasRelativeAtCompany === "yes" && (
+            <>
+              <Field orientation="horizontal" className="items-start">
+                <Controller
+                  control={control}
+                  name="relativeConsent"
+                  render={({ field }) => (
+                    <Checkbox
+                      id="relativeConsent"
+                      checked={field.value ?? false}
+                      onCheckedChange={v => field.onChange(v === true)}
+                    />
+                  )}
+                />
+                <FieldLabel htmlFor="relativeConsent" className="font-normal">
+                  {t.recruitmentForm.section8.relativeConsent}
+                </FieldLabel>
+              </Field>
+              <FieldError
+                errors={
+                  errors.relativeConsent ? [errors.relativeConsent] : undefined
+                }
+              />
+              <FieldDescription>
+                {t.recruitmentForm.section8.relativeUseNotice}
+              </FieldDescription>
+            </>
+          )}
           {hasRelativeAtCompany === "yes" && familyMemberFields.length < 4 && (
             <Button
               type="button"

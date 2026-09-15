@@ -110,6 +110,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
       q6Support: [],
       attachments: [],
       hasRelativeAtCompany: undefined,
+      relativeConsent: undefined,
       commitmentVoluntary: undefined,
       consentBasicData: undefined,
       consentSensitiveData: undefined,

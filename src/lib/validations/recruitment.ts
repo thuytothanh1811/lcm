@@ -87,7 +87,6 @@ export function buildRecruitmentSchema(
 
     recruiterCode: z.string().optional(),
     recruiterName: z.string().optional(),
-    recruiterIdNumber: z.string().optional(),
     referrerCode: z.string().optional(),
     referrerName: z.string().optional(),
 
@@ -126,6 +125,7 @@ export function buildRecruitmentSchema(
     referralOther: z.string().optional(),
 
     hasRelativeAtCompany: z.enum(["no", "yes"]).optional(),
+    relativeConsent: z.boolean().optional(),
     familyMembers: z
       .array(
         z.object({
@@ -208,6 +208,15 @@ export function buildRecruitmentSchema(
   });
 
   return recruitmentObjectSchema.superRefine((data, ctx) => {
+    // Relatives never fill this form themselves, so the only lawful basis for
+    // their data is the candidate confirming they may hand it over.
+    if (data.hasRelativeAtCompany === "yes" && data.relativeConsent !== true) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["relativeConsent"],
+        message: t.commitmentRequired,
+      });
+    }
     if (data.channel === "agency" && !data.agencyType) {
       ctx.addIssue({
         code: "custom",
@@ -384,7 +393,6 @@ export function buildRecruitmentDraftSchema(
 
     recruiterCode: z.string().optional(),
     recruiterName: z.string().optional(),
-    recruiterIdNumber: z.string().optional(),
     referrerCode: z.string().optional(),
     referrerName: z.string().optional(),
 
@@ -423,6 +431,7 @@ export function buildRecruitmentDraftSchema(
     referralOther: z.string().optional(),
 
     hasRelativeAtCompany: z.enum(["no", "yes"]).optional(),
+    relativeConsent: z.boolean().optional(),
     familyMembers: z
       .array(
         z.object({

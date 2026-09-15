@@ -490,7 +490,6 @@ export const en: typeof vi = {
       rehireChannelPlaceholder: "Select channel",
       recruiterCode: "Recruiter code",
       recruiterName: "Recruiter full name",
-      recruiterIdNumber: "Recruiter ID number (if no agent code)",
       referrerCode: "Referrer code (if any)",
       referrerName: "Referrer full name",
     },
@@ -541,6 +540,10 @@ export const en: typeof vi = {
       relationshipPlaceholder: "Select a relationship",
       occupation: "Occupation",
       addMember: "Add family member",
+      relativeConsent:
+        "I undertake that: (i) the information about my relatives given in this form is accurate to the best of my knowledge; (ii) before providing it to the Company, I informed the relatives concerned that their information may be given to the Company for conflict-of-interest checks, fraud prevention or other lawful internal governance purposes; (iii) I have a lawful basis under applicable law to provide this information to the Company.",
+      relativeUseNotice:
+        "The Company uses the above information only so far as necessary to assess conflicts of interest, comply with internal rules and meet related legal obligations.",
       removeMember: "Remove family member",
     },
     section9: {

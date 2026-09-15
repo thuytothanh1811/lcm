@@ -224,10 +224,6 @@ export function buildAnswerBlocks(
         },
         { label: s2.recruiterCode, getValue: s => s.recruiterCode || DASH },
         { label: s2.recruiterName, getValue: s => s.recruiterName || DASH },
-        {
-          label: s2.recruiterIdNumber,
-          getValue: s => s.recruiterIdNumber || DASH,
-        },
         { label: s2.referrerCode, getValue: s => s.referrerCode || DASH },
         { label: s2.referrerName, getValue: s => s.referrerName || DASH },
       ],

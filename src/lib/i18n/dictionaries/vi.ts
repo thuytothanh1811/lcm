@@ -490,7 +490,6 @@ export const vi = {
       rehireChannelPlaceholder: "Chọn kênh",
       recruiterCode: "Mã số người tuyển dụng",
       recruiterName: "Họ tên người tuyển dụng",
-      recruiterIdNumber: "CCCD Người Tuyển Dụng (nếu chưa có MSĐL)",
       referrerCode: "Mã số người giới thiệu (nếu có)",
       referrerName: "Họ tên người giới thiệu",
     },
@@ -541,6 +540,10 @@ export const vi = {
       relationshipPlaceholder: "Chọn quan hệ",
       occupation: "Nghề nghiệp",
       addMember: "Thêm thân nhân",
+      relativeConsent:
+        "Tôi cam kết rằng: (i) các thông tin liên quan đến người thân được tôi cung cấp trong Phiếu này là chính xác theo hiểu biết của tôi; (ii) trước khi cung cấp thông tin đó cho Công ty, tôi đã thông báo cho người thân liên quan về việc thông tin của họ có thể được cung cấp cho Công ty để phục vụ mục đích kiểm tra xung đột lợi ích, phòng chống gian lận hoặc các yêu cầu quản trị nội bộ hợp pháp khác; (iii) tôi có cơ sở hợp pháp theo quy định của pháp luật để cung cấp các thông tin này cho Công ty.",
+      relativeUseNotice:
+        "Công ty chỉ sử dụng các thông tin nêu trên trong phạm vi cần thiết nhằm phục vụ việc đánh giá xung đột lợi ích, tuân thủ quy định nội bộ và các nghĩa vụ pháp lý có liên quan.",
       removeMember: "Xóa thân nhân",
     },
     section9: {
