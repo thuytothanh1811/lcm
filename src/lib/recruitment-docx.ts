@@ -795,7 +795,6 @@ export async function buildRecruitmentDocxBlob(
       children: b.checkRun(s11.reviewedEntry, !!data.commitmentReviewedEntry),
     })
   );
-  b.push(b.field("Ngày ký", "…………………………………………………"));
   b.push(b.spacer(), b.spacer());
 
   const sigWidth = Math.round(PAGE_W / 2);
