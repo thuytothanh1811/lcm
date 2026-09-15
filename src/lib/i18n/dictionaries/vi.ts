@@ -615,7 +615,7 @@ export const vi = {
         },
         {
           label: "Nguồn thu thập:",
-          text: "trực tiếp từ Anh/Chị qua Phiếu này và các phiếu liên quan trong bộ hồ sơ tuyển dụng (CT01, CT02, CT03, CT04, CT05, CT06).",
+          text: "trực tiếp từ Anh/Chị qua Phiếu này và các phiếu liên quan trong bộ hồ sơ tuyển dụng (CT01, CT02, CT03, CT04).",
           items: [],
         },
         {

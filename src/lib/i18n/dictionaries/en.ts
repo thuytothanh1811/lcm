@@ -613,7 +613,7 @@ export const en: typeof vi = {
         },
         {
           label: "Collection source:",
-          text: "directly from you through this form and the related forms in the recruitment file set (CT01, CT02, CT03, CT04, CT05, CT06).",
+          text: "directly from you through this form and the related forms in the recruitment file set (CT01, CT02, CT03, CT04).",
           items: [],
         },
         {
