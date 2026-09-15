@@ -609,22 +609,32 @@ export const en: typeof vi = {
         {
           label: "Personal data controller:",
           text: "MVI Life Insurance Company Limited.",
+          items: [],
         },
         {
           label: "Collection source:",
           text: "directly from you through this form and the related forms in the recruitment file set (CT01, CT02, CT03, CT04, CT05).",
+          items: [],
         },
         {
           label: "Retention period:",
-          text: "throughout your time as an agent of the Company and thereafter for the periods required by the laws on accounting, taxation and the resolution of related disputes.",
+          text: "Your personal data is retained by group, as follows:",
+          items: [
+            "(i) Candidates who are not recruited, or who do not complete their application: retained for as long as needed for the recruitment process, for handling any complaint or dispute, and under the Company's internal records-retention rules;",
+            "(ii) Candidates who become agents of the Company: retained throughout the agency relationship and for the further period required by applicable law;",
+            "(iii) Data that must be retained under accounting, tax, insurance, anti-money-laundering or other sector-specific law: retained for the period that law prescribes;",
+            "(iv) Where a complaint, dispute, request from a competent state authority or legal proceedings arises: data may be retained until the matter is fully resolved and the statutory retention period has expired.",
+          ],
         },
         {
           label: "Your rights and obligations:",
           text: "to be informed, to consent or withhold consent, to access, to request correction or deletion of data, to withdraw consent, to complain, and other rights under the Personal Data Protection Law.",
+          items: [],
         },
         {
           label: "How to withdraw consent:",
           text: "send a written notice or email to the Company's recruitment HR department. Withdrawal does not affect the lawfulness of processing carried out beforehand.",
+          items: [],
         },
       ],
       consentInstruction:
@@ -634,7 +644,20 @@ export const en: typeof vi = {
       consentSensitiveData:
         "(2) I consent to the Company collecting and processing my sensitive personal data (where applicable: criminal record status, bank account details) for the purpose of screening agent eligibility as required by law and paying agent income.",
       consentThirdParty:
-        "(3) I consent to the Company sharing my personal data with the Insurance Association of Vietnam, the agent training/examination body (MOF) and other relevant third parties for the purpose of screening, training and issuing the agent practising certificate.",
+        "(3) I agree that the Company may share or transfer my personal data, so far as necessary and consistent with recruitment, training, management of agency activity, payment of income, legal compliance and the Company's lawful business, to the following parties:",
+      consentThirdPartyParties: [
+        "competent state authorities;",
+        "the Insurance Association of Vietnam and related professional bodies;",
+        "training providers, examination bodies or agent-certificate issuers;",
+        "providers of IT systems, data storage or operational support services;",
+        "credit institutions, banks and payment intermediaries handling income, commission or other benefits;",
+        "verification and application-assessment providers, or other service providers lawfully engaged by the Company;",
+        "the parent company, affiliates, group companies or business partners of the Company, so far as necessary for the purposes above.",
+      ],
+      consentThirdPartyNote:
+        "Recipients are responsible for applying personal-data protection measures required by law and/or by the data protection agreement signed with the Company.",
+      managerDeclaration:
+        "I confirm that I met the candidate in person, checked their identity documents and reviewed the application under the Company recruitment process. To the best of my knowledge, the information and documents the candidate provided show no sign of forgery or clear inaccuracy. I undertake to comply with the Company rules on recruitment and personal data protection.",
       methodLabel: "Confirmation method *",
       handwritten: "Handwritten signature",
       signDateLabel: "Data entry date *",

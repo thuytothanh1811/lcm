@@ -706,6 +706,15 @@ export async function buildRecruitmentDocxBlob(
     b.push(
       b.bodyText("- " + item.label + " " + item.text, { size: 18, after: 40 })
     );
+    for (const sub of item.items) {
+      b.push(
+        new Paragraph({
+          spacing: { ...LINE_SPACING, after: 40 },
+          indent: { left: 360 },
+          children: [new TextRun({ text: sub, size: 18 })],
+        })
+      );
+    }
   }
   b.push(b.bodyText(s11.consentInstruction, { bold: true, after: 60 }));
   const consents: [string, boolean][] = [
@@ -722,11 +731,21 @@ export async function buildRecruitmentDocxBlob(
       })
     );
   }
+  for (const party of s11.consentThirdPartyParties) {
+    b.push(
+      new Paragraph({
+        spacing: { after: 20, ...LINE_SPACING },
+        indent: { left: 620, hanging: 200 },
+        children: [new TextRun({ text: "•   " + party, size: 18 })],
+      })
+    );
+  }
+  b.push(b.bodyText(s11.consentThirdPartyNote, { size: 18, after: 40 }));
   b.push(b.field("Ngày ký", "…………………………………………………"));
   b.push(b.spacer(), b.spacer());
 
   const sigWidth = Math.round(PAGE_W / 2);
-  const sigHeaderCell = (text: string) =>
+  const sigHeaderCell = (text: string, declaration?: string) =>
     new TableCell({
       width: { size: sigWidth, type: WidthType.DXA },
       shading: { type: ShadingType.CLEAR, fill: BLUE, color: "auto" },
@@ -735,9 +754,27 @@ export async function buildRecruitmentDocxBlob(
       children: [
         new Paragraph({
           alignment: AlignmentType.CENTER,
-          spacing: LINE_SPACING,
+          spacing: { ...LINE_SPACING, after: declaration ? 60 : 0 },
           children: [new TextRun({ text, bold: true, color: WHITE })],
         }),
+        // What the manager is attesting to belongs above their signature, not
+        // in a separate paragraph they can sign without reading.
+        ...(declaration
+          ? [
+              new Paragraph({
+                alignment: AlignmentType.BOTH,
+                spacing: LINE_SPACING,
+                children: [
+                  new TextRun({
+                    text: declaration,
+                    italics: true,
+                    color: WHITE,
+                    size: 18,
+                  }),
+                ],
+              }),
+            ]
+          : []),
       ],
     });
   const sigBodyCell = (name: string | undefined, time: string | undefined) =>
@@ -777,7 +814,7 @@ export async function buildRecruitmentDocxBlob(
         new TableRow({
           children: [
             sigHeaderCell("ỨNG VIÊN"),
-            sigHeaderCell("QUẢN LÝ TRỰC TIẾP"),
+            sigHeaderCell("QUẢN LÝ TRỰC TIẾP", s11.managerDeclaration),
           ],
         }),
         new TableRow({

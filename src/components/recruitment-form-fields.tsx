@@ -2548,12 +2548,19 @@ export function RecruitmentFormFields({
           <div className="bg-muted text-muted-foreground flex flex-col gap-2 rounded-lg p-4 text-sm">
             <p className="italic">{t.recruitmentForm.section11.pdpdIntro}</p>
             {t.recruitmentForm.section11.pdpdInfo.map(item => (
-              <p key={item.label}>
-                <span className="text-foreground font-semibold">
-                  - {item.label}
-                </span>{" "}
-                {item.text}
-              </p>
+              <div key={item.label} className="flex flex-col gap-1">
+                <p>
+                  <span className="text-foreground font-semibold">
+                    - {item.label}
+                  </span>{" "}
+                  {item.text}
+                </p>
+                {item.items.map(sub => (
+                  <p key={sub} className="pl-4">
+                    {sub}
+                  </p>
+                ))}
+              </div>
             ))}
           </div>
           <p className="text-sm font-semibold">
@@ -2627,6 +2634,14 @@ export function RecruitmentFormFields({
               errors.consentThirdParty ? [errors.consentThirdParty] : undefined
             }
           />
+          <ul className="text-muted-foreground list-disc pl-10 text-sm">
+            {t.recruitmentForm.section11.consentThirdPartyParties.map(party => (
+              <li key={party}>{party}</li>
+            ))}
+          </ul>
+          <p className="text-muted-foreground pl-6 text-sm">
+            {t.recruitmentForm.section11.consentThirdPartyNote}
+          </p>
 
           <Field data-invalid={!!errors.signDate}>
             <FieldLabel htmlFor="signDate">

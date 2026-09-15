@@ -611,22 +611,32 @@ export const vi = {
         {
           label: "Bên kiểm soát dữ liệu cá nhân:",
           text: "Công ty TNHH Bảo hiểm Nhân thọ MVI.",
+          items: [],
         },
         {
           label: "Nguồn thu thập:",
           text: "trực tiếp từ Anh/Chị qua Phiếu này và các phiếu liên quan trong bộ hồ sơ tuyển dụng (CT01, CT02, CT03, CT04, CT05).",
+          items: [],
         },
         {
           label: "Thời gian lưu trữ:",
-          text: "trong suốt thời gian Anh/Chị là đại lý của Công ty và tiếp tục lưu trữ sau khi chấm dứt hợp đồng theo thời hạn quy định của pháp luật về kế toán, thuế và giải quyết tranh chấp có liên quan.",
+          text: "Dữ liệu cá nhân của Anh/Chị được lưu trữ theo từng nhóm đối tượng như sau:",
+          items: [
+            "(i) Đối với ứng viên không được tuyển dụng hoặc không tiếp tục hoàn tất hồ sơ tuyển dụng: dữ liệu được lưu trữ trong thời gian cần thiết để phục vụ hoạt động tuyển dụng, giải quyết khiếu nại, tranh chấp (nếu có) và theo quy định lưu trữ hồ sơ nội bộ của Công ty;",
+            "(ii) Đối với ứng viên trở thành đại lý của Công ty: dữ liệu được lưu trữ trong suốt thời gian tồn tại quan hệ đại lý và trong thời hạn tiếp theo theo yêu cầu của pháp luật hiện hành;",
+            "(iii) Đối với dữ liệu phải lưu trữ theo quy định của pháp luật về kế toán, thuế, bảo hiểm, phòng chống rửa tiền hoặc quy định chuyên ngành khác: dữ liệu được lưu trữ theo thời hạn pháp luật tương ứng;",
+            "(iv) Trong trường hợp phát sinh khiếu nại, tranh chấp, yêu cầu của cơ quan nhà nước có thẩm quyền hoặc các thủ tục tố tụng, dữ liệu có thể được lưu giữ cho đến khi vụ việc được xử lý dứt điểm và hết thời hiệu lưu giữ theo quy định pháp luật.",
+          ],
         },
         {
           label: "Quyền, nghĩa vụ của Anh/Chị:",
           text: "được biết, đồng ý/không đồng ý, truy cập, yêu cầu chỉnh sửa hoặc xóa dữ liệu, rút lại sự đồng ý, khiếu nại và các quyền khác theo Luật Bảo vệ dữ liệu cá nhân.",
+          items: [],
         },
         {
           label: "Cách thức rút lại sự đồng ý:",
           text: "gửi văn bản hoặc email đến bộ phận Nhân sự phụ trách tuyển dụng của Công ty. Việc rút lại không ảnh hưởng đến tính hợp pháp của việc xử lý dữ liệu đã thực hiện trước đó.",
+          items: [],
         },
       ],
       consentInstruction:
@@ -636,7 +646,20 @@ export const vi = {
       consentSensitiveData:
         "(2) Tôi đồng ý để Công ty thu thập, xử lý dữ liệu cá nhân nhạy cảm của tôi (nếu có: tình trạng án tích/hình sự, thông tin tài khoản ngân hàng) nhằm mục đích sàng lọc điều kiện hành nghề đại lý theo quy định pháp luật và phục vụ chi trả thu nhập đại lý.",
       consentThirdParty:
-        "(3) Tôi đồng ý để Công ty chia sẻ dữ liệu cá nhân của tôi với Hiệp hội Bảo hiểm Việt Nam, đơn vị tổ chức đào tạo/thi chứng chỉ đại lý (MOF) và các bên thứ ba có liên quan nhằm mục đích sàng lọc, đào tạo và cấp chứng chỉ hành nghề đại lý.",
+        "(3) Tôi đồng ý để Công ty chia sẻ hoặc chuyển giao dữ liệu cá nhân của tôi, trong phạm vi cần thiết và phù hợp với mục đích tuyển dụng, đào tạo, quản lý hoạt động đại lý, chi trả thu nhập, tuân thủ pháp luật và hoạt động kinh doanh hợp pháp của Công ty, cho các bên sau:",
+      consentThirdPartyParties: [
+        "cơ quan quản lý nhà nước có thẩm quyền;",
+        "Hiệp hội Bảo hiểm Việt Nam và các tổ chức nghề nghiệp có liên quan;",
+        "đơn vị đào tạo, tổ chức thi hoặc cấp chứng chỉ hành nghề đại lý;",
+        "nhà cung cấp hệ thống công nghệ thông tin, dịch vụ lưu trữ dữ liệu hoặc dịch vụ hỗ trợ vận hành;",
+        "tổ chức tín dụng, ngân hàng, đơn vị trung gian thanh toán phục vụ việc chi trả các khoản thu nhập, hoa hồng hoặc quyền lợi khác;",
+        "đơn vị xác minh thông tin, đánh giá hồ sơ hoặc nhà cung cấp dịch vụ được Công ty thuê hợp pháp;",
+        "công ty mẹ, công ty liên kết, công ty trong cùng tập đoàn hoặc đối tác kinh doanh của Công ty trong phạm vi cần thiết để thực hiện các mục đích nêu trên.",
+      ],
+      consentThirdPartyNote:
+        "Các bên nhận dữ liệu có trách nhiệm áp dụng các biện pháp bảo vệ dữ liệu cá nhân theo quy định pháp luật và/hoặc theo thỏa thuận bảo vệ dữ liệu được ký kết với Công ty.",
+      managerDeclaration:
+        "Tôi xác nhận đã trực tiếp gặp ứng viên, kiểm tra giấy tờ nhận dạng và rà soát hồ sơ theo quy trình tuyển dụng của Công ty. Theo hiểu biết của tôi, các thông tin và tài liệu do ứng viên cung cấp không có dấu hiệu giả mạo hoặc sai lệch rõ ràng. Tôi cam kết tuân thủ các quy định của Công ty về tuyển dụng và bảo vệ dữ liệu cá nhân.",
       methodLabel: "Hình thức xác nhận *",
       handwritten: "Chữ ký tay",
       signDateLabel: "Ngày nhập dữ liệu *",
