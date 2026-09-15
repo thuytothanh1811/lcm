@@ -208,7 +208,7 @@ class DocxBuilder {
     ) =>
       new TableCell({
         width: { size: half, type: WidthType.DXA },
-        margins: { top: 0, bottom: 0, left: 0, right: last ? 0 : 160 },
+        margins: { top: 0, bottom: after, left: 0, right: last ? 0 : 160 },
         children: [
           new Paragraph({
             spacing: this.sp({ after: 0 }),
@@ -231,7 +231,6 @@ class DocxBuilder {
         insideHorizontal: noBorder,
         insideVertical: noBorder,
       },
-      margins: { bottom: after },
       rows: [
         new TableRow({
           cantSplit: true,
