@@ -492,6 +492,7 @@ export const vi = {
       recruiterName: "Họ tên người tuyển dụng",
       referrerCode: "Mã số người giới thiệu (nếu có)",
       referrerName: "Họ tên người giới thiệu",
+      classStartDate: "Ngày khai giảng",
     },
     section3: {
       title: "Địa chỉ thường trú",

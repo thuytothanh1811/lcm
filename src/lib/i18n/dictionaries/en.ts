@@ -492,6 +492,7 @@ export const en: typeof vi = {
       recruiterName: "Recruiter full name",
       referrerCode: "Referrer code (if any)",
       referrerName: "Referrer full name",
+      classStartDate: "Class start date",
     },
     section3: {
       title: "Permanent address",

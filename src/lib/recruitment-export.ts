@@ -226,6 +226,10 @@ export function buildAnswerBlocks(
         { label: s2.recruiterName, getValue: s => s.recruiterName || DASH },
         { label: s2.referrerCode, getValue: s => s.referrerCode || DASH },
         { label: s2.referrerName, getValue: s => s.referrerName || DASH },
+        {
+          label: s2.classStartDate,
+          getValue: s => formatDate(s.classStartDate),
+        },
       ],
     },
     {

@@ -74,6 +74,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
       dateOfBirth: "",
       idIssueDate: "",
       signDate: todayIso(),
+      classStartDate: "",
       managerUid: "",
       managerName: "",
       secondManagerUid: "",

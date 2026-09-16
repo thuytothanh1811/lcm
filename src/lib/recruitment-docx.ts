@@ -716,7 +716,14 @@ export async function buildRecruitmentDocxBlob(
       )
     );
   }
-  b.push(b.field(s1.potentialCustomers, data.potentialCustomers));
+  b.push(
+    b.twoField(
+      s1.potentialCustomers,
+      data.potentialCustomers,
+      s2.classStartDate,
+      vnDate(data.classStartDate)
+    )
+  );
 
   b.push(b.subHeading(s5.title));
   b.push(

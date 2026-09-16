@@ -1704,25 +1704,47 @@ export function RecruitmentFormFields({
             </Field>
           </div>
 
-          <Field data-invalid={!!errors.potentialCustomers}>
-            <FieldLabel htmlFor="potentialCustomers">
-              {t.recruitmentForm.section1.potentialCustomers}
-            </FieldLabel>
-            <Input
-              id="potentialCustomers"
-              type="number"
-              inputMode="numeric"
-              min={0}
-              {...register("potentialCustomers")}
-            />
-            <FieldError
-              errors={
-                errors.potentialCustomers
-                  ? [errors.potentialCustomers]
-                  : undefined
-              }
-            />
-          </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field data-invalid={!!errors.potentialCustomers}>
+              <FieldLabel htmlFor="potentialCustomers">
+                {t.recruitmentForm.section1.potentialCustomers}
+              </FieldLabel>
+              <Input
+                id="potentialCustomers"
+                type="number"
+                inputMode="numeric"
+                min={0}
+                {...register("potentialCustomers")}
+              />
+              <FieldError
+                errors={
+                  errors.potentialCustomers
+                    ? [errors.potentialCustomers]
+                    : undefined
+                }
+              />
+            </Field>
+            <Field data-invalid={!!errors.classStartDate}>
+              <Controller
+                control={control}
+                name="classStartDate"
+                render={({ field }) => (
+                  <DatePicker
+                    id="classStartDate"
+                    label={t.recruitmentForm.section2.classStartDate}
+                    className="!mx-0 !max-w-none"
+                    initialDate={parseIsoDate(field.value)}
+                    onChange={date => field.onChange(toIsoDate(date))}
+                  />
+                )}
+              />
+              <FieldError
+                errors={
+                  errors.classStartDate ? [errors.classStartDate] : undefined
+                }
+              />
+            </Field>
+          </div>
 
           <FieldSeparator />
           <FieldLegend className="mb-0">
