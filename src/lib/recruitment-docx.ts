@@ -922,7 +922,7 @@ export async function buildRecruitmentDocxBlob(
         new TableRow({
           cantSplit: true,
           children: [
-            sigHeaderCell("ỨNG VIÊN"),
+            sigHeaderCell("ỨNG VIÊN", s11.candidateDeclaration),
             sigHeaderCell("QUẢN LÝ TRỰC TIẾP", s11.managerDeclaration),
           ],
         }),

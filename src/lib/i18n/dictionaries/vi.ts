@@ -660,6 +660,8 @@ export const vi = {
       ],
       consentThirdPartyNote:
         "Các bên nhận dữ liệu có trách nhiệm áp dụng các biện pháp bảo vệ dữ liệu cá nhân theo quy định pháp luật và/hoặc theo thỏa thuận bảo vệ dữ liệu được ký kết với Công ty.",
+      candidateDeclaration:
+        "Tôi xác nhận đã đọc, hiểu rõ và đồng ý với toàn bộ nội dung của Phiếu này, bao gồm các cam kết và nội dung đồng ý xử lý dữ liệu cá nhân nêu trên.",
       managerDeclaration:
         "Tôi xác nhận đã trực tiếp gặp ứng viên, kiểm tra giấy tờ nhận dạng và rà soát hồ sơ theo quy trình tuyển dụng của Công ty. Theo hiểu biết của tôi, các thông tin và tài liệu do ứng viên cung cấp không có dấu hiệu giả mạo hoặc sai lệch rõ ràng. Tôi cam kết tuân thủ các quy định của Công ty về tuyển dụng và bảo vệ dữ liệu cá nhân.",
       reviewedEntry:

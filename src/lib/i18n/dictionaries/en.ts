@@ -658,6 +658,8 @@ export const en: typeof vi = {
       ],
       consentThirdPartyNote:
         "Recipients are responsible for applying personal-data protection measures required by law and/or by the data protection agreement signed with the Company.",
+      candidateDeclaration:
+        "I confirm that I have read, understood and agreed to the entire content of this form, including the commitments and the personal-data processing consents set out above.",
       managerDeclaration:
         "I confirm that I met the candidate in person, checked their identity documents and reviewed the application under the Company recruitment process. To the best of my knowledge, the information and documents the candidate provided show no sign of forgery or clear inaccuracy. I undertake to comply with the Company rules on recruitment and personal data protection.",
       reviewedEntry:
