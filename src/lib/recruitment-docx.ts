@@ -1081,7 +1081,7 @@ export async function buildCt02DocxBlob(
   b.push(
     b.bannerLine("MVI – HỒ SƠ ĐẠI LÝ", { bold: true, color: RED }),
     b.bannerLine("CT-02", { color: GRAY }),
-    b.title("ĐĂNG KÝ CHỮ KÝ MẪU")
+    b.title("PHIẾU CAM KẾT VÀ ĐĂNG KÝ CHỮ KÝ MẪU")
   );
 
   b.push(b.spacer());
@@ -1091,6 +1091,14 @@ export async function buildCt02DocxBlob(
   b.push(b.field("Lớp LPFC", undefined, 320));
   b.push(
     b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber, 460)
+  );
+
+  b.push(b.sectionHeading("1. ĐĂNG KÝ CHỮ KÝ MẪU", false, 260));
+  b.push(
+    b.bodyText(
+      "Tôi đăng ký các chữ ký mẫu dưới đây với Công ty và xác nhận rằng đây là chữ ký do chính tôi thực hiện.",
+      { after: 140, justify: true }
+    )
   );
 
   const third = Math.round(PAGE_W / 3);
@@ -1121,11 +1129,32 @@ export async function buildCt02DocxBlob(
     })
   );
   b.push(
-    b.bodyText("(*) Phải trùng khớp với chữ ký trên Phiếu đăng ký đại lý.", {
-      italics: true,
-      after: 280,
-    })
+    b.bodyText(
+      "(*) Ba chữ ký mẫu phải thống nhất với nhau và trùng khớp với chữ ký của ứng viên trên các tài liệu khác trong bộ hồ sơ đăng ký ứng tuyển đại lý.",
+      { italics: true, after: 80, justify: true }
+    )
   );
+
+  b.push(b.sectionHeading("2. CAM KẾT VỀ CHỮ KÝ", false, 260));
+  // Legal's wording, kept as a bulleted list so each undertaking reads as its
+  // own promise rather than one paragraph the candidate skims.
+  for (const commitment of [
+    "Tôi cam kết các chữ ký mẫu đăng ký tại Mục 1 là chữ ký do chính tôi thực hiện và được tôi sử dụng thống nhất trong quá trình giao dịch với Công ty.",
+    "Tôi đồng ý để Công ty lưu giữ và sử dụng các chữ ký mẫu này nhằm mục đích duy nhất là đối chiếu, xác thực chữ ký của tôi trên các tài liệu, hồ sơ, biểu mẫu và chứng từ mà tôi ký với Công ty. Việc đăng ký chữ ký mẫu không đồng nghĩa với việc chấp thuận nội dung của bất kỳ tài liệu hay giao dịch cụ thể nào.",
+    "Tôi chịu trách nhiệm đối với mọi tài liệu, hồ sơ, biểu mẫu và chứng từ được ký bằng chữ ký phù hợp với chữ ký mẫu đã đăng ký tại Phiếu này.",
+    "Trường hợp có nhu cầu thay đổi chữ ký mẫu, tôi sẽ đăng ký lại với Công ty theo quy định của Công ty. Chữ ký mẫu mới chỉ có hiệu lực kể từ thời điểm được Công ty ghi nhận và không làm ảnh hưởng đến hiệu lực của các tài liệu đã được ký trước đó.",
+    "Tôi hiểu rằng chữ ký là dữ liệu cá nhân cơ bản theo quy định của pháp luật về bảo vệ dữ liệu cá nhân. Việc xử lý dữ liệu cá nhân của tôi liên quan đến Phiếu này được thực hiện theo nội dung thông tin và sự đồng ý xử lý dữ liệu cá nhân mà tôi đã cung cấp tại Phiếu Thông tin tuyển dụng (CT-01).",
+  ]) {
+    b.push(
+      new Paragraph({
+        alignment: AlignmentType.BOTH,
+        spacing: { after: 100, ...LINE_SPACING },
+        indent: { left: 360, hanging: 200 },
+        children: [new TextRun({ text: "•   " + commitment })],
+      })
+    );
+  }
+  b.push(b.spacer());
 
   const half = Math.round(PAGE_W / 2);
   // The SD/SH cell carries a note the candidate's cell does not, and the note
