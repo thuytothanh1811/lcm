@@ -468,7 +468,7 @@ export const vi = {
       managerLabel: "Họ và tên Quản lý trực tiếp",
     },
     section2: {
-      title: "Thông tin tuyển dụng",
+      title: "Thông tin đăng ký đại lý",
       channelLabel: "Kênh *",
       channelPlaceholder: "Chọn kênh",
       agencyTypeLabel:

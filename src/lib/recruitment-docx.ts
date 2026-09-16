@@ -1090,14 +1090,7 @@ export async function buildCt02DocxBlob(
   // always left blank for the candidate to fill in by hand.
   b.push(b.field("Lớp LPFC", undefined, 320));
   b.push(
-    b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber, 360)
-  );
-
-  b.push(
-    b.bodyText(
-      "Tôi đồng ý và xác nhận MVI có thể sử dụng các chữ ký mẫu dưới đây để xác thực và xử lý các giao dịch liên quan đến Hợp đồng Đại lý giữa tôi và MVI.",
-      { after: 280 }
-    )
+    b.twoField("Số CCCD", data.idNumber, "CMND (nếu có)", data.oldIdNumber, 460)
   );
 
   const third = Math.round(PAGE_W / 3);

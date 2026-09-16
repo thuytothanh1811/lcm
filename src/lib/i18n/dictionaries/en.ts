@@ -469,7 +469,7 @@ export const en: typeof vi = {
       managerLabel: "Direct manager full name",
     },
     section2: {
-      title: "Recruitment information",
+      title: "Agent registration information",
       channelLabel: "Channel *",
       channelPlaceholder: "Select a channel",
       agencyTypeLabel: "Agent development programme to join (if Agency) *",
