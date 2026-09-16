@@ -1,7 +1,9 @@
 /*
-label: Asahi Life
+label: MVI
 value: asahi-livwell
-Colors sourced from https://home.asahilivwell.com/ (brand navy #002364, accent pink #f1005f)
+Brand navy #002364, accent pink #f1005f. The preset key stays asahi-livwell:
+it is stored in every existing preference cookie and renaming it would drop
+those users back to an unstyled default.
 */
 
 :root[data-theme-preset="asahi-livwell"] {
