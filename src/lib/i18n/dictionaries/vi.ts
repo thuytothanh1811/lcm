@@ -194,6 +194,7 @@ export const vi = {
       `Hồ sơ của ${name ?? ""} sẽ bị xóa vĩnh viễn, bao gồm mọi tệp đính kèm. Hành động này không thể hoàn tác.`,
     columns: {
       candidateCode: "Mã số ứng viên",
+      classStartDate: "Ngày khai giảng",
       name: "Họ và tên",
       phone: "Điện thoại",
       email: "Email",

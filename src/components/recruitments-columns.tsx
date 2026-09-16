@@ -115,6 +115,18 @@ export function createRecruitmentsColumns({
       cell: ({ row }) => row.original.candidateCode ?? "—",
     },
     {
+      accessorKey: "classStartDate",
+      header: t.recruitmentsList.columns.classStartDate,
+      // Stored as ISO and read as dd/mm/yyyy here, the way the form asks for
+      // it — reparsing it as a Date would only invite a timezone to move it.
+      cell: ({ row }) => {
+        const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(
+          row.original.classStartDate ?? ""
+        );
+        return iso ? `${iso[3]}/${iso[2]}/${iso[1]}` : "—";
+      },
+    },
+    {
       accessorKey: "fullName",
       header: t.recruitmentsList.columns.name,
     },

@@ -196,6 +196,7 @@ export const en: typeof vi = {
       `${name ?? "This candidate"}'s submission will be permanently deleted, including all attachments. This action cannot be undone.`,
     columns: {
       candidateCode: "Candidate code",
+      classStartDate: "Class start date",
       name: "Full name",
       phone: "Phone",
       email: "Email",
