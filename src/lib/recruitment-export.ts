@@ -8,7 +8,7 @@ type Column = {
   getValue: (submission: TRecruitmentSubmission) => string;
 };
 type Block = { title: string; columns: Column[] };
-type RepeatCounts = { workHistory: number; familyMembers: number };
+type RepeatCounts = { workHistory: number };
 
 const DASH = "—";
 
@@ -319,40 +319,6 @@ export function buildAnswerBlocks(
       ],
     },
     {
-      title: f.section8.title,
-      columns: [
-        {
-          label: f.section8.title,
-          getValue: s => yesNo(f.section8, s.hasRelativeAtCompany),
-        },
-      ],
-    },
-    ...Array.from(
-      { length: repeatCounts.familyMembers },
-      (_, index): Block => ({
-        title: f.section8.memberHeading(index + 1),
-        columns: [
-          {
-            label: f.section8.name,
-            getValue: s => s.familyMembers?.[index]?.name || DASH,
-          },
-          {
-            label: f.section8.idNumber,
-            getValue: s => s.familyMembers?.[index]?.idNumber || DASH,
-          },
-          {
-            label: f.section8.relationshipLabel,
-            getValue: s =>
-              lookup(opt.relationship, s.familyMembers?.[index]?.relationship),
-          },
-          {
-            label: f.section8.occupation,
-            getValue: s => s.familyMembers?.[index]?.occupation || DASH,
-          },
-        ],
-      })
-    ),
-    {
       title: s9.title,
       columns: [
         {
@@ -413,7 +379,6 @@ export function buildAnswerBlocks(
 function repeatCountsFor(submission: TRecruitmentSubmission): RepeatCounts {
   return {
     workHistory: submission.workHistory?.length ?? 0,
-    familyMembers: submission.familyMembers?.length ?? 0,
   };
 }
 
@@ -517,10 +482,6 @@ export async function buildRecruitmentsWorkbook(
     workHistory: Math.max(
       0,
       ...submissions.map(s => s.workHistory?.length ?? 0)
-    ),
-    familyMembers: Math.max(
-      0,
-      ...submissions.map(s => s.familyMembers?.length ?? 0)
     ),
   };
 

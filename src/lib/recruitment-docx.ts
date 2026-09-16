@@ -456,7 +456,6 @@ export async function buildRecruitmentDocxBlob(
   const s3 = f.section3;
   const s4 = f.section4;
   const s5 = f.section5;
-  const s8 = f.section8;
   const s9 = f.section9;
   const s11 = f.section11;
 
@@ -757,35 +756,6 @@ export async function buildRecruitmentDocxBlob(
       workRows
     )
   );
-
-  b.push(b.bodyText(s8.title, { bold: true, after: 40 }));
-  b.push(
-    b.inlineChecks(
-      [s8.no, s8.yes],
-      labelsFor(
-        { no: s8.no, yes: s8.yes },
-        data.hasRelativeAtCompany ? [data.hasRelativeAtCompany] : []
-      )
-    )
-  );
-  if (data.hasRelativeAtCompany === "yes") {
-    const familyRows = (
-      data.familyMembers?.length ? data.familyMembers : [{}]
-    ).map((m, i) => [
-      String(i + 1),
-      m.name || "",
-      labelFor(opt.relationship, m.relationship) || "",
-      m.idNumber || "",
-      m.occupation || "",
-    ]);
-    b.push(
-      b.dataTable(
-        [700, 3000, 2160, 1500, 2000],
-        ["STT", s8.name, s8.relationshipLabel, s8.idNumber, s8.occupation],
-        familyRows
-      )
-    );
-  }
 
   // ===== SECTION 3: CAM KẾT CỦA ỨNG VIÊN =====
   // Pinned to its own page. Without the break it flows on from section 2,
