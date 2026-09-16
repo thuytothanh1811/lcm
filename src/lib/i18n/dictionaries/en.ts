@@ -592,7 +592,7 @@ export const en: typeof vi = {
     section11: {
       title: "Candidate commitments",
       truthful:
-        "I undertake that all information, documents and personal data I provide to the Company in this form and throughout my engagement are complete, accurate and truthful. I bear full responsibility before the Company and before the law for any consequence arising if the information I provide is false, forged or misleading, including where the Company has relied on it to assess my application, issue an agent code or grant related benefits.",
+        "I undertake that all information, documents and personal data I provide to the Company in this form and throughout our cooperation are complete, accurate, truthful and still valid at the time they are provided. I bear full responsibility before the Company and before the law for any consequence arising if the information I provide is false, forged or misleading, including where the Company has relied on it to assess my application, issue an agent code or grant related benefits.",
       voluntary:
         "I confirm that exploring this career opportunity and applying to be a life insurance agent for MVI is entirely my own voluntary decision, not directed by any individual or organisation.",
       maskedData:

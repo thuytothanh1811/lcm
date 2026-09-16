@@ -593,7 +593,7 @@ export const vi = {
     section11: {
       title: "Cam kết của ứng viên",
       truthful:
-        "Tôi cam kết toàn bộ thông tin, tài liệu và dữ liệu cá nhân mà tôi cung cấp cho Công ty tại văn bản này và trong suốt quá trình làm việc là đầy đủ, chính xác và trung thực. Tôi hoàn toàn chịu trách nhiệm trước Công ty và trước pháp luật đối với mọi hậu quả phát sinh nếu thông tin tôi cung cấp là sai sự thật, giả mạo hoặc gây hiểu nhầm, kể cả trong trường hợp Công ty đã căn cứ vào thông tin đó để thẩm định hồ sơ, cấp Mã số đại lý hoặc thực hiện các quyền lợi liên quan.",
+        "Tôi cam kết toàn bộ thông tin, tài liệu và dữ liệu cá nhân mà tôi cung cấp cho Công ty tại văn bản này và trong suốt quá trình hợp tác là đầy đủ, chính xác, trung thực và còn hiệu lực tại thời điểm cung cấp. Tôi hoàn toàn chịu trách nhiệm trước Công ty và trước pháp luật đối với mọi hậu quả phát sinh nếu thông tin tôi cung cấp là sai sự thật, giả mạo hoặc gây hiểu nhầm, kể cả trong trường hợp Công ty đã căn cứ vào thông tin đó để thẩm định hồ sơ, cấp Mã số đại lý hoặc thực hiện các quyền lợi liên quan.",
       voluntary:
         "Tôi xác nhận việc tìm hiểu cơ hội nghề nghiệp này và ứng tuyển làm đại lý bảo hiểm nhân thọ MVI hoàn toàn là quyết định tự nguyện của cá nhân tôi, không do bất kỳ cá nhân hay tổ chức nào chi phối.",
       maskedData:
