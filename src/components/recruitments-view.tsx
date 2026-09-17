@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { IconDownload, IconLoader2 } from "@tabler/icons-react";
 import { toast } from "sonner";
@@ -274,8 +274,20 @@ export function RecruitmentsView({
   // A draft is a form somebody is still filling in — it has no decision to
   // make on it yet, so it sits in its own tab instead of padding out the
   // list of applications a reviewer is meant to act on.
-  const submitted = submissions.filter(s => s.status !== "draft");
-  const drafts = submissions.filter(s => s.status === "draft");
+  //
+  // Memoised because DataTable watches `data` by identity: it copies the
+  // array into state and reports the selection back up. Filtering inline
+  // handed it a new array on every render, so it kept copying and
+  // reporting, which re-rendered this component, which built another new
+  // array — a loop React eventually gives up on, taking the page with it.
+  const submitted = useMemo(
+    () => submissions.filter(s => s.status !== "draft"),
+    [submissions]
+  );
+  const drafts = useMemo(
+    () => submissions.filter(s => s.status === "draft"),
+    [submissions]
+  );
 
   const table = (rows: TRecruitmentSubmission[], emptyMessage: string) => (
     <DataTable
