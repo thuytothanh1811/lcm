@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { FieldError } from "@/components/ui/field";
-import { visibleChecklistRows } from "@/components/recruitment-document-checklist";
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { vi } from "@/lib/i18n/dictionaries/vi";
 import {
@@ -55,7 +54,6 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const [isPreparingCt02, setIsPreparingCt02] = useState(false);
   const [isPreparingCt03, setIsPreparingCt03] = useState(false);
   const [isPreparingCt04, setIsPreparingCt04] = useState(false);
-  const [missingDocuments, setMissingDocuments] = useState<string[]>([]);
   const schema = useMemo(
     () => buildRecruitmentSchema(t.recruitmentForm.validation),
     []
@@ -222,21 +220,10 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
   const onSubmit = async (values: RecruitmentValues) => {
     setFormError(null);
 
-    // Every document on the checklist is required, and which ones apply
-    // depends on the position and programme chosen above — so a submission
-    // is only accepted once all of them are attached.
-    const attached = new Set(
-      (values.attachments ?? []).map(a => a.documentType)
-    );
-    const missing = visibleChecklistRows(
-      values.positionApplied,
-      values.participatingProgram
-    ).filter(row => !attached.has(row.key));
-    if (missing.length > 0) {
-      setMissingDocuments(missing.map(row => row.label));
-      return;
-    }
-    setMissingDocuments([]);
+    // Missing documents no longer hold the form back: a candidate can send
+    // what they have and hand the rest in later, which is what the reviewer's
+    // "yêu cầu bổ sung hồ sơ" status is for. Section 5 warns them on the way
+    // past, next to the upload controls.
     const result = await submitRecruitmentForm(values, "vi", "new");
     if (!result.ok) {
       setFormError(result.error);
@@ -278,22 +265,6 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
         isDownloadingCt4={isPreparingCt04}
         locale="vi"
       />
-
-      {missingDocuments.length > 0 && (
-        <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-4">
-          <p className="text-sm font-medium">
-            {t.recruitmentForm.missingDocumentsTitle(missingDocuments.length)}
-          </p>
-          <ul className="mt-2 list-disc space-y-0.5 pl-5 text-sm">
-            {missingDocuments.map(label => (
-              <li key={label}>{label}</li>
-            ))}
-          </ul>
-          <p className="text-muted-foreground mt-3 text-sm">
-            {t.recruitmentForm.missingDocumentsHint}
-          </p>
-        </div>
-      )}
 
       <FieldError>{formError}</FieldError>
 
