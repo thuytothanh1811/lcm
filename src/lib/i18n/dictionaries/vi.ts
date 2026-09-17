@@ -703,7 +703,7 @@ export const vi = {
         "Vui lòng xác nhận cam kết & đồng ý PDPD (chọn Có) để gửi hồ sơ",
       confirmationMethodRequired: "Vui lòng chọn hình thức xác nhận",
       signDateRequired: "Vui lòng nhập ngày ký đơn",
-      attachmentsMax: "Tối đa 15 tệp",
+      attachmentsMax: "Tối đa 30 tệp",
       commitmentRequired: "Vui lòng xác nhận cam kết này",
     },
   },

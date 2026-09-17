@@ -702,7 +702,7 @@ export const en: typeof vi = {
         "Please confirm the commitment & PDPD consent (choose Yes) to submit",
       confirmationMethodRequired: "Please select a confirmation method",
       signDateRequired: "Please enter the signature date",
-      attachmentsMax: "Maximum 15 files",
+      attachmentsMax: "Maximum 30 files",
       commitmentRequired: "Please confirm this commitment",
     },
   },
