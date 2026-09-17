@@ -1578,15 +1578,6 @@ export async function buildCt04DocxBlob(
     )
   );
   b.push(
-    b.field(
-      "Loại hình tuyển dụng",
-      labelFor(opt.agencyType, data.agencyType) ??
-        labelFor(opt.channel, data.channel),
-      200
-    )
-  );
-
-  b.push(
     b.bodyText(
       "Thang điểm: 1 – Chưa đạt; 2 – Trung bình; 3 – Tốt; 4 – Rất tốt; 5 – Xuất sắc",
       { italics: true, after: 120 }
