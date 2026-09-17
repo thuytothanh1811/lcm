@@ -282,6 +282,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
         onDownloadCt4={handleDownloadCt04}
         isDownloadingCt4={isPreparingCt04}
         locale="vi"
+        mirrorAccountHolderName
       />
 
       <FieldError>{formError}</FieldError>

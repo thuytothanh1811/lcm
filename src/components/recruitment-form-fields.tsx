@@ -249,6 +249,7 @@ export function RecruitmentFormFields({
   onDownloadCt4,
   isDownloadingCt4,
   locale,
+  mirrorAccountHolderName,
 }: {
   t: Dictionary;
   control: Control<RecruitmentValues>;
@@ -270,6 +271,11 @@ export function RecruitmentFormFields({
   onDownloadCt4?: () => void;
   isDownloadingCt4?: boolean;
   locale?: Language;
+  // The public form keeps the bank account holder identical to the name on
+  // the CCCD, which is what the label asks for. The reviewer's edit screen
+  // leaves the stored value alone, so opening a record cannot quietly
+  // rewrite an account name that legitimately differs.
+  mirrorAccountHolderName?: boolean;
 }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -511,6 +517,15 @@ export function RecruitmentFormFields({
   const q3TargetAudience = watch("q3TargetAudience");
   const q6Support = watch("q6Support");
   const attachments = watch("attachments");
+  const fullName = watch("fullName");
+
+  // Typing the same name twice is how the two end up disagreeing, and the
+  // bank rejects a transfer when they do. The account holder follows the
+  // name field instead, and the input is read-only so it stays that way.
+  useEffect(() => {
+    if (!mirrorAccountHolderName) return;
+    setValue("accountHolderName", fullName ?? "", { shouldValidate: true });
+  }, [mirrorAccountHolderName, fullName, setValue]);
   const CHECKLIST_KEYS = new Set(CHECKLIST_ROWS.map(r => r.key));
   const VISIBLE_CHECKLIST_ROWS = visibleChecklistRows(
     positionApplied,
@@ -950,8 +965,15 @@ export function RecruitmentFormFields({
                 placeholder={
                   t.recruitmentForm.section1.accountHolderNamePlaceholder
                 }
+                readOnly={mirrorAccountHolderName}
+                className={mirrorAccountHolderName ? "bg-muted" : undefined}
                 {...register("accountHolderName")}
               />
+              {mirrorAccountHolderName && (
+                <FieldDescription>
+                  {t.recruitmentForm.section1.accountHolderNameMirrored}
+                </FieldDescription>
+              )}
               <FieldError
                 errors={
                   errors.accountHolderName

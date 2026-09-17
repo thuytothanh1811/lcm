@@ -450,6 +450,7 @@ export const en: typeof vi = {
       civilServantYes: "Yes",
       civilServantTypeLabel: "Type of civil servant / public official",
       accountHolderNameLabel: "Bank account holder (must match ID card name) *",
+      accountHolderNameMirrored: "Taken from the full name above.",
       accountHolderNamePlaceholder: "Nguyen Van A",
       bankAccountNumberLabel: "Account number (not an ATM card number) *",
       bankNameLabel: "Bank *",
