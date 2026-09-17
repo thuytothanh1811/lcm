@@ -173,15 +173,19 @@ export async function submitRecruitmentForm(
       : adminDb.collection(COLLECTION).doc();
 
     if (existingId) {
-      // Lightweight ownership check: resuming a draft only reaches this
-      // path with an existingId learned from a prior CCCD lookup, so
-      // require the CCCD in the payload to still match what's on file —
-      // that keeps a crafted request from overwriting an unrelated record
-      // by guessing its id.
+      // This path exists to carry on an unfinished form, and nothing else.
+      // The write below replaces the whole document, so without the status
+      // check an id plus a matching CCCD would let a crafted request
+      // overwrite an application that was already submitted — wiping the
+      // reviewer's decision, the admin status and the agent code with it.
+      // Anyone holding a resume code knows the CCCD on the form, so the
+      // CCCD alone was never the barrier it looked like.
       const existing = await ref.get();
+      const record = existing.data();
       if (
         !existing.exists ||
-        existing.data()?.idNumber !== parsed.data.idNumber
+        record?.status !== "draft" ||
+        record?.idNumber !== parsed.data.idNumber
       ) {
         return { ok: false, error: dict.errors.forbidden };
       }
