@@ -121,6 +121,7 @@ export function buildAnswerBlocks(
         { label: s1.fullName, getValue: s => s.fullName || DASH },
         { label: s1.dateOfBirth, getValue: s => formatDate(s.dateOfBirth) },
         { label: s1.idNumber, getValue: s => s.idNumber || DASH },
+        { label: s1.oldIdNumber, getValue: s => s.oldIdNumber || DASH },
         { label: s1.idIssueDate, getValue: s => formatDate(s.idIssueDate) },
         { label: s1.idIssuePlace, getValue: s => s.idIssuePlace || DASH },
         {
