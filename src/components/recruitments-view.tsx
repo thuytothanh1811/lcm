@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { IconDownload, IconLoader2 } from "@tabler/icons-react";
 import { toast } from "sonner";
@@ -25,7 +25,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { createRecruitmentsColumns } from "@/components/recruitments-columns";
 import { useDictionary } from "@/hooks/use-dictionary";
@@ -271,53 +270,33 @@ export function RecruitmentsView({
     updatingStatusId,
   });
 
-  // A draft is a form somebody is still filling in — it has no decision to
-  // make on it yet, so it sits in its own tab instead of padding out the
-  // list of applications a reviewer is meant to act on.
-  //
-  // Memoised because DataTable watches `data` by identity: it copies the
-  // array into state and reports the selection back up. Filtering inline
-  // handed it a new array on every render, so it kept copying and
-  // reporting, which re-rendered this component, which built another new
-  // array — a loop React eventually gives up on, taking the page with it.
-  const submitted = useMemo(
-    () => submissions.filter(s => s.status !== "draft"),
-    [submissions]
-  );
-  const drafts = useMemo(
-    () => submissions.filter(s => s.status === "draft"),
-    [submissions]
-  );
+  return (
+    <div className="flex flex-col gap-4">
+      <DataTable
+        data={submissions}
+        columns={columns}
+        emptyMessage={t.recruitmentsList.empty}
+        enableColumnVisibility={false}
+        enableRowSelection
+        onSelectionChange={setSelectedSubmissions}
+        rightContent={
+          selectedSubmissions.length > 0 && (
+            <Button
+              size="sm"
+              disabled={isExporting}
+              onClick={handleExportSelected}
+            >
+              {isExporting ? (
+                <IconLoader2 className="size-4 animate-spin" />
+              ) : (
+                <IconDownload className="size-4" />
+              )}
+              {t.recruitmentsList.exportSelected(selectedSubmissions.length)}
+            </Button>
+          )
+        }
+      />
 
-  const table = (rows: TRecruitmentSubmission[], emptyMessage: string) => (
-    <DataTable
-      data={rows}
-      columns={columns}
-      emptyMessage={emptyMessage}
-      enableColumnVisibility={false}
-      enableRowSelection
-      onSelectionChange={setSelectedSubmissions}
-      rightContent={
-        selectedSubmissions.length > 0 && (
-          <Button
-            size="sm"
-            disabled={isExporting}
-            onClick={handleExportSelected}
-          >
-            {isExporting ? (
-              <IconLoader2 className="size-4 animate-spin" />
-            ) : (
-              <IconDownload className="size-4" />
-            )}
-            {t.recruitmentsList.exportSelected(selectedSubmissions.length)}
-          </Button>
-        )
-      }
-    />
-  );
-
-  const dialogs = (
-    <>
       <AlertDialog
         open={!!deleting}
         onOpenChange={open => !open && setDeleting(null)}
@@ -373,44 +352,6 @@ export function RecruitmentsView({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </>
-  );
-
-  // Drafts are admin-only. Everyone else gets the plain list they had
-  // before, with the unfinished forms filtered out rather than hidden
-  // behind a tab they cannot open.
-  if (currentUserRole !== "admin") {
-    return (
-      <div className="flex flex-col gap-4">
-        {table(submitted, t.recruitmentsList.empty)}
-        {dialogs}
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-4">
-      <Tabs
-        defaultValue="submitted"
-        onValueChange={() => setSelectedSubmissions([])}
-      >
-        <TabsList>
-          <TabsTrigger value="submitted">
-            {t.recruitmentsList.tabs.submitted(submitted.length)}
-          </TabsTrigger>
-          <TabsTrigger value="drafts">
-            {t.recruitmentsList.tabs.drafts(drafts.length)}
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="submitted">
-          {table(submitted, t.recruitmentsList.empty)}
-        </TabsContent>
-        <TabsContent value="drafts">
-          {table(drafts, t.recruitmentsList.draftsEmpty)}
-        </TabsContent>
-      </Tabs>
-
-      {dialogs}
     </div>
   );
 }

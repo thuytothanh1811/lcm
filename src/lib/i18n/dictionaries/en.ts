@@ -190,11 +190,6 @@ export const en: typeof vi = {
   },
   recruitmentsList: {
     empty: "No candidate submissions yet.",
-    draftsEmpty: "No drafts yet.",
-    tabs: {
-      submitted: (count: number) => `Submitted (${count})`,
-      drafts: (count: number) => `Drafts (${count})`,
-    },
     deleted: "Submission deleted",
     deleteDialogTitle: "Delete submission?",
     deleteDialogDescription: (name?: string) =>

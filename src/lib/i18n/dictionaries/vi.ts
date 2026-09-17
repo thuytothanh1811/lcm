@@ -188,11 +188,6 @@ export const vi = {
   },
   recruitmentsList: {
     empty: "Chưa có hồ sơ ứng viên nào.",
-    draftsEmpty: "Chưa có bản nháp nào.",
-    tabs: {
-      submitted: (count: number) => `Hồ sơ đã nộp (${count})`,
-      drafts: (count: number) => `Bản nháp (${count})`,
-    },
     deleted: "Đã xóa hồ sơ ứng viên",
     deleteDialogTitle: "Xóa hồ sơ ứng viên?",
     deleteDialogDescription: (name?: string) =>
