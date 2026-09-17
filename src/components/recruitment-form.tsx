@@ -65,6 +65,7 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     watch,
     setValue,
     getValues,
+    trigger,
     formState: { errors, isSubmitting },
   } = useForm<RecruitmentValues>({
     resolver: zodResolver(schema),
@@ -113,7 +114,24 @@ export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {
     },
   });
 
+  /**
+   * CT-01 is the form itself on paper — printing it half-filled produces a
+   * sheet the candidate signs with blanks in it. So the export waits until
+   * everything the form asks for is there, and points at the first gap.
+   */
+  const ensureComplete = async () => {
+    if (await trigger()) return true;
+    toast.error(t.recruitmentForm.exportIncomplete);
+    requestAnimationFrame(() => {
+      document
+        .querySelector('[data-invalid="true"]')
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    return false;
+  };
+
   const handleDownloadDocx = async () => {
+    if (!(await ensureComplete())) return;
     setIsPreparingDocx(true);
     try {
       const values = getValues();

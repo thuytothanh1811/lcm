@@ -293,6 +293,8 @@ export const vi = {
     submit: "Nộp phiếu thông tin",
     saving: "Đang lưu...",
     draftSaved: "Đã lưu phiếu thông tin.",
+    exportIncomplete:
+      "Chưa nhập đủ thông tin bắt buộc. Vui lòng hoàn tất các mục còn thiếu rồi in CT01.",
     maxFilesError: (n: number) => `Tối đa ${n} tệp.`,
     maxFileSizeError: "Mỗi tệp tối đa 15MB.",
     uploadFailedFile: (fileName: string) =>

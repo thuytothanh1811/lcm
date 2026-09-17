@@ -295,6 +295,8 @@ export const en: typeof vi = {
     submit: "Submit application",
     saving: "Saving...",
     draftSaved: "Your information has been saved.",
+    exportIncomplete:
+      "Required information is still missing. Please complete it before printing CT01.",
     maxFilesError: (n: number) => `Maximum ${n} files.`,
     maxFileSizeError: "Each file must be 15MB or smaller.",
     uploadFailedFile: (fileName: string) =>
