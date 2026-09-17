@@ -162,7 +162,7 @@ function AddressCombobox({
 }
 
 const MAX_FILES = 15;
-const MAX_FILE_BYTES = 10 * 1024 * 1024;
+const MAX_FILE_BYTES = 15 * 1024 * 1024;
 const ACCEPTED_TYPES =
   "image/jpeg,image/png,image/webp,image/heic,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
