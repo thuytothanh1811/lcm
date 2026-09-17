@@ -15,7 +15,7 @@ import {
   buildCt03DocxBlob,
   buildCt04DocxBlob,
   buildRecruitmentDocxBlob,
-  sanitizeFilename,
+  exportFilename,
 } from "@/lib/recruitment-docx";
 import { submitRecruitmentForm } from "@/server/recruitment-actions";
 import type { TManagerGroups } from "@/server/user-actions";
@@ -34,17 +34,6 @@ function todayIso(): string {
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
-}
-
-/**
- * Every printed form is filed under the candidate it belongs to, so the name
- * carries the form code, what the form is, and who it is about:
- * CT03_Phieu-danh-gia-ung-vien_Nguyen-Thi-Thanh-Huong_079192004567.docx
- */
-function exportFilename(code: string, slug: string, values: RecruitmentValues) {
-  const parts = [code, slug, sanitizeFilename(values.fullName || "ung-vien")];
-  if (values.idNumber) parts.push(sanitizeFilename(values.idNumber));
-  return parts.join("_") + ".docx";
 }
 
 export function RecruitmentForm({ managers }: { managers: TManagerGroups }) {

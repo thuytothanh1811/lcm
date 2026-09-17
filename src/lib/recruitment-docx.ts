@@ -445,6 +445,33 @@ export function sanitizeFilename(name: string): string {
   return cleaned || "phieu-thong-tin-tuyen-dung";
 }
 
+/**
+ * Every printed form is filed under the candidate it belongs to, so the name
+ * carries the form code, what the form is, and who it is about:
+ * CT03_Phieu-danh-gia-ung-vien_Nguyen-Thi-Thanh-Huong_079192004567.docx
+ */
+export function exportFilename(
+  code: string,
+  slug: string,
+  values: RecruitmentValues
+): string {
+  const parts = [code, slug, sanitizeFilename(values.fullName || "ung-vien")];
+  if (values.idNumber) parts.push(sanitizeFilename(values.idNumber));
+  return parts.join("_") + ".docx";
+}
+
+/** Hands a generated document to the browser as a download. */
+export function saveBlob(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
 export async function buildRecruitmentDocxBlob(
   data: RecruitmentValues,
   dict: Dictionary

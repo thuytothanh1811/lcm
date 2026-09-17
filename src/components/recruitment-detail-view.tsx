@@ -34,6 +34,14 @@ import {
 import { RecruitmentFormFields } from "@/components/recruitment-form-fields";
 import { useDictionary } from "@/hooks/use-dictionary";
 import type { Role } from "@/lib/permissions";
+import {
+  buildCt02DocxBlob,
+  buildCt03DocxBlob,
+  buildCt04DocxBlob,
+  buildRecruitmentDocxBlob,
+  exportFilename,
+  saveBlob,
+} from "@/lib/recruitment-docx";
 import { formatDate } from "@/lib/utils";
 import {
   buildRecruitmentSchema,
@@ -84,11 +92,33 @@ export function RecruitmentDetailView({
     control,
     watch,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<RecruitmentValues>({
     resolver: zodResolver(schema),
     defaultValues: submission,
   });
+
+  // The reviewer needs the same four printable forms the candidate had —
+  // CT-03 and CT-04 are theirs to fill in, and CT-01/CT-02 get reprinted
+  // whenever a signed copy has to be produced again. Built from whatever
+  // is on screen, so an edit made here shows up in the printout.
+  const [preparing, setPreparing] = useState<string | null>(null);
+  const downloadDocx = async (
+    code: string,
+    slug: string,
+    build: (values: RecruitmentValues) => Promise<Blob>
+  ) => {
+    setPreparing(code);
+    try {
+      const values = getValues();
+      saveBlob(await build(values), exportFilename(code, slug, values));
+    } catch {
+      toast.error(t.errors.recruitment.exportFailed);
+    } finally {
+      setPreparing(null);
+    }
+  };
 
   const handleDownload = async (attachment: TAttachment) => {
     const result = await getRecruitmentAttachmentUrl(attachment.storagePath);
@@ -302,6 +332,28 @@ export function RecruitmentDetailView({
           setValue={setValue}
           managers={managers}
           onDownloadAttachment={handleDownload}
+          onDownloadCt1={() =>
+            downloadDocx("CT01", "Phieu-thong-tin-tuyen-dung", v =>
+              buildRecruitmentDocxBlob(v, t)
+            )
+          }
+          isDownloadingCt1={preparing === "CT01"}
+          onDownloadCt2={() =>
+            downloadDocx("CT02", "Dang-ky-chu-ky-mau", buildCt02DocxBlob)
+          }
+          isDownloadingCt2={preparing === "CT02"}
+          onDownloadCt3={() =>
+            downloadDocx("CT03", "Phieu-danh-gia-ung-vien", v =>
+              buildCt03DocxBlob(v, t)
+            )
+          }
+          isDownloadingCt3={preparing === "CT03"}
+          onDownloadCt4={() =>
+            downloadDocx("CT04", "Phieu-danh-gia-phe-duyet-tuyen-dung", v =>
+              buildCt04DocxBlob(v, t)
+            )
+          }
+          isDownloadingCt4={preparing === "CT04"}
         />
       </div>
 
