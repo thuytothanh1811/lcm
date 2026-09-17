@@ -297,6 +297,8 @@ export const en: typeof vi = {
     draftSaved: "Your information has been saved.",
     maxFilesError: (n: number) => `Maximum ${n} files.`,
     maxFileSizeError: "Each file must be 15MB or smaller.",
+    uploadFailedFile: (fileName: string) =>
+      `Could not upload "${fileName}". It has not been attached — please try again or use a smaller file.`,
     search: {
       idNumberLabel: "ID number *",
       idNumberPlaceholder: "9 or 12 digits",

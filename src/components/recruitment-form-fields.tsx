@@ -571,12 +571,20 @@ export function RecruitmentFormFields({
         const formData = new FormData();
         formData.set("file", file);
         if (documentType) formData.set("documentType", documentType);
-        const result = await uploadRecruitmentAttachment(formData, locale);
-        if (!result.ok) {
-          setUploadError(result.error);
-          continue;
+        try {
+          const result = await uploadRecruitmentAttachment(formData, locale);
+          if (!result.ok) {
+            setUploadError(result.error);
+            continue;
+          }
+          setValue("attachments", [...watch("attachments"), result.data]);
+        } catch {
+          // A request the host rejects outright — a body over the platform's
+          // limit comes back as a bare 413 — never reaches the action, so it
+          // throws instead of returning an error. Without this the file just
+          // silently fails to appear and the candidate believes it uploaded.
+          setUploadError(t.recruitmentForm.uploadFailedFile(file.name));
         }
-        setValue("attachments", [...watch("attachments"), result.data]);
       }
     } finally {
       setUploading(false);

@@ -295,6 +295,8 @@ export const vi = {
     draftSaved: "Đã lưu phiếu thông tin.",
     maxFilesError: (n: number) => `Tối đa ${n} tệp.`,
     maxFileSizeError: "Mỗi tệp tối đa 15MB.",
+    uploadFailedFile: (fileName: string) =>
+      `Không tải lên được "${fileName}". Tệp chưa được đính kèm — vui lòng thử lại hoặc dùng tệp nhỏ hơn.`,
     search: {
       idNumberLabel: "Số CCCD *",
       idNumberPlaceholder: "9 hoặc 12 số",
